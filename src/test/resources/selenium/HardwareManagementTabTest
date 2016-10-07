@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:2990/" />
+<title>HardwareManagementTabTest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">HardwareManagementTabTest</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/jira/secure/Dashboard.jspa</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=hardware_management_link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#aui-uid-5 &gt; strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#tabs-hardware-management &gt; div.left-from-search-field &gt; h3</td>
+	<td>Hardware Management</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-management &gt; tr &gt; td.name</td>
+	<td>Nexus 4</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-management &gt; tr &gt; td.version</td>
+	<td>8 GB</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-management &gt; tr &gt; td.type</td>
+	<td>Smartphone</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-management &gt; tr &gt; td.os</td>
+	<td>Android</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr/td[5]</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr[2]/td</td>
+	<td>Nexus 7</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr[2]/td[2]</td>
+	<td>8 GB</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr[2]/td[3]</td>
+	<td>Smartphone</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr[2]/td[4]</td>
+	<td>Android</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-management']/tr[2]/td[5]</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=new_model</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Create/Edit Hardware Model</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=new_device</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Create New Device</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Create/Edit Hardware Model</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=name</td>
+	<td>Nexus 4</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Remove</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Remove Hardware Model</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Edit')])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Create/Edit Hardware Model</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=name</td>
+	<td>Nexus 7</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Remove')])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Remove Hardware Model</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Cancel</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
