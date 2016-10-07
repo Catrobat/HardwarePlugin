@@ -67,7 +67,7 @@ public class UserRest extends RestHelper {
     private final DirectoryManager directoryManager;
     private final LendingService lendingService;
 
-    public UserRest(final com.atlassian.sal.api.user.UserManager userManager, final UserPreferencesManager userPreferencesManager,
+    public UserRest(final UserManager userManager, final UserPreferencesManager userPreferencesManager,
                     final AdminHelperConfigService configService, final PermissionManager permissionManager,
                     final GroupManager groupManager, final DirectoryManager directoryManager,
                     final LendingService lendingService) {

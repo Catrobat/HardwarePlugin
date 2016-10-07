@@ -23,7 +23,7 @@ import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
-import com.atlassian.sal.api.user.UserManager;
+import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Team;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;

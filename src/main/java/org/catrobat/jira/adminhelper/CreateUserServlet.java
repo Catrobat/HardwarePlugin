@@ -17,8 +17,8 @@
 package org.catrobat.jira.adminhelper;
 
 import com.atlassian.jira.security.groups.GroupManager;
+import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;

@@ -17,8 +17,8 @@
 package org.catrobat.jira.adminhelper;
 
 import com.atlassian.jira.security.groups.GroupManager;
+import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.DeviceService;
@@ -28,7 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 public class DownloadCsvServlet extends HelperServlet {

@@ -18,9 +18,8 @@ package org.catrobat.jira.adminhelper;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.security.groups.GroupManager;
+import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
-import com.atlassian.sal.api.transaction.TransactionCallback;
-import com.atlassian.sal.api.user.UserManager;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.CsvImporter;
@@ -37,19 +36,19 @@ public class UploadCsvServlet extends HelperServlet {
     private final LendingService lendingService;
     private final DeviceService deviceService;
     private final DeviceCommentService deviceCommentService;
-    private final ActiveObjects activeObjects;
+    private final ActiveObjects ao;
 
     public UploadCsvServlet(UserManager userManager, LoginUriProvider loginUriProvider, WebSudoManager webSudoManager,
-                            GroupManager groupManager, AdminHelperConfigService configurationService,
-                            DeviceService deviceService, LendingService lendingService,
-                            DeviceCommentService deviceCommentService, HardwareModelService hardwareModelService,
-                            ActiveObjects activeObjects) {
+            GroupManager groupManager, AdminHelperConfigService configurationService,
+            DeviceService deviceService, LendingService lendingService,
+            DeviceCommentService deviceCommentService, HardwareModelService hardwareModelService,
+            ActiveObjects activeObjects) {
         super(userManager, loginUriProvider, webSudoManager, groupManager, configurationService);
         this.deviceService = deviceService;
         this.lendingService = lendingService;
         this.deviceCommentService = deviceCommentService;
         this.hardwareModelService = hardwareModelService;
-        this.activeObjects = activeObjects;
+        this.ao = activeObjects;
     }
 
     @Override
@@ -109,33 +108,29 @@ public class UploadCsvServlet extends HelperServlet {
     }
 
     private void dropEntries() {
-        activeObjects.executeInTransaction(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction() {
-                for (DeviceComment deviceComment : activeObjects.find(DeviceComment.class)) {
-                    activeObjects.delete(deviceComment);
-                }
-                for (Lending lending : activeObjects.find(Lending.class)) {
-                    activeObjects.delete(lending);
-                }
-                for (Device device : activeObjects.find(Device.class)) {
-                    activeObjects.delete(device);
-                }
-                for (HardwareModel hardwareModel : activeObjects.find(HardwareModel.class)) {
-                    activeObjects.delete(hardwareModel);
-                }
-                for (TypeOfDevice typeOfDevice : activeObjects.find(TypeOfDevice.class)) {
-                    activeObjects.delete(typeOfDevice);
-                }
-                for (Producer producer : activeObjects.find(Producer.class)) {
-                    activeObjects.delete(producer);
-                }
-                for (OperatingSystem operatingSystem : activeObjects.find(OperatingSystem.class)) {
-                    activeObjects.delete(operatingSystem);
-                }
-
-                return null;
+        ao.executeInTransaction(() -> {
+            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
+                ao.delete(deviceComment);
             }
+            for (Lending lending : ao.find(Lending.class)) {
+                ao.delete(lending);
+            }
+            for (Device device : ao.find(Device.class)) {
+                ao.delete(device);
+            }
+            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
+                ao.delete(hardwareModel);
+            }
+            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
+                ao.delete(typeOfDevice);
+            }
+            for (Producer producer : ao.find(Producer.class)) {
+                ao.delete(producer);
+            }
+            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
+                ao.delete(operatingSystem);
+            }
+            return null;
         });
     }
 }

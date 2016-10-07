@@ -19,13 +19,11 @@ package org.catrobat.jira.adminhelper.rest;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
-import com.atlassian.jira.user.ApplicationUser;
-import com.atlassian.sal.api.user.UserManager;
+import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.helper.PermissionCondition;
 import org.catrobat.jira.adminhelper.rest.json.JsonDevice;
-import org.catrobat.jira.adminhelper.rest.json.JsonDeviceComment;
 import org.catrobat.jira.adminhelper.rest.json.JsonHardwareModel;
 import org.catrobat.jira.adminhelper.rest.json.JsonLending;
 
@@ -34,7 +32,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -267,6 +268,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/{deviceId}/lend-out")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response lendOutDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId, JsonLending jsonLending) {
+        /* TODO: fix it
         Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
@@ -305,6 +307,8 @@ public class HardwareRest extends RestHelper {
                 jsonLending.getDevice().getComments().size() != 0 && jsonLending.getDevice().getComments().get(0) != null) {
             deviceCommentService.addDeviceComment(device, lendingIssuerUser.getKey(), jsonLending.getDevice().getComments().get(0).getComment());
         }
+
+        */
 
         return Response.noContent().build();
     }
@@ -377,6 +381,7 @@ public class HardwareRest extends RestHelper {
         }
 
 
+        /* TODO: fix it
         if (jsonLending.getDevice() != null && jsonLending.getDevice().getComments() != null &&
                 jsonLending.getDevice().getComments().size() != 0 && jsonLending.getDevice().getComments().get(0) != null) {
             JsonDeviceComment comment = jsonLending.getDevice().getComments().get(0);
@@ -385,6 +390,7 @@ public class HardwareRest extends RestHelper {
             String userKey = user == null ? username : user.getKey();
             deviceCommentService.addDeviceComment(currentLending.getDevice(), userKey, comment.getComment());
         }
+        */
 
         return Response.noContent().build();
     }
