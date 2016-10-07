@@ -116,16 +116,6 @@
             <version>2.7.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.sal</groupId>
-            <artifactId>sal-api</artifactId>
-            <version>3.0.5</version>
-        </dependency>
 
         <!-- Uncomment to use TestKit in your project. Details at https://bitbucket.org/atlassian/jira-testkit -->
 		<!-- You can read more about TestKit at https://developer.atlassian.com/display/JIRADEV/Plugin+Tutorial+-+Smarter+integration+testing+with+TestKit -->
@@ -182,14 +172,7 @@
                             *;version="0";resolution:=optional,
                             org.springframework*;version="2.5",
                             junit*;version="[4.10,5)",
-                            COM.jrockit.*;
-                            COM.newmonics.*;
-                            com.google.protobuf;
-                            com.informix.jdbc;
-                            com.kenai.jnr.x86asm;
-                            groovy.lang;
-                            resolution:=optional,
-                            *
+                            org.kohsuke*;version="1.59"
                         </Import-Package>
 
                         <!-- Ensure plugin is spring powered -->
