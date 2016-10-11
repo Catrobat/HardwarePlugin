@@ -212,15 +212,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.kohsuke</groupId>
-            <artifactId>github-api</artifactId>
-            <version>1.59</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.atlassian.templaterenderer</groupId>
             <artifactId>atlassian-template-renderer-api</artifactId>
             <version>1.5.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.59</version>
         </dependency>
     </dependencies>
 
@@ -254,6 +255,7 @@
                         <!-- Add package to export here -->
                         <Export-Package>
                             org.catrobat.jira.adminhelper.api,
+                            com.squareup.okhttp
                         </Export-Package>
 
                         <!-- Add package import here -->
@@ -267,7 +269,6 @@
                             *;version="0";resolution:=optional,
                             org.springframework*;version="2.5",
                             junit*;version="[4.10,5)",
-                            com.squareup*;version="[1,5]"
                         </Import-Package>
 
                         <!-- Ensure plugin is spring powered -->
