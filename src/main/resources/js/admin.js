@@ -22,7 +22,7 @@ AJS.toInit(function () {
     //AJS.$(document).ajaxStop(function () {
     //    AJS.$(".loadingDiv").hide();
     //});
-
+    alert("resource loaded");
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var teams = [];
     var localTempResources = [];

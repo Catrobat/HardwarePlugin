@@ -21,6 +21,7 @@ import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
+import com.atlassian.webresource.api.assembler.PageBuilderService;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 
 import javax.servlet.ServletException;
@@ -31,16 +32,20 @@ import java.io.IOException;
 public class HardwareServlet extends HelperServlet {
 
     private final TemplateRenderer renderer;
+    private final PageBuilderService pageBuilderService;
 
     public HardwareServlet(UserManager userManager, LoginUriProvider loginUriProvider, TemplateRenderer renderer,
-                           WebSudoManager webSudoManager, GroupManager groupManager, AdminHelperConfigService configurationService) {
+                           WebSudoManager webSudoManager, GroupManager groupManager,
+                           AdminHelperConfigService configurationService, PageBuilderService page_service) {
         super(userManager, loginUriProvider, webSudoManager, groupManager, configurationService);
         this.renderer = renderer;
+        this.pageBuilderService = page_service;
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
+        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminhelper:hardware-resources");
         renderer.render("hardware_overview.vm", response.getWriter());
     }
 }

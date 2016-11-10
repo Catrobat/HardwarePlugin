@@ -19,7 +19,7 @@
     <title>$i18n.getText("admin_helper.admin.label")</title>
     <meta name="decorator" content="atl.admin"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
-    $webResourceManager.requireResource("org.catrobat.jira.AdminHelper:admin-resources")
+    $webResourceManager.requireResource("org.catrobat.jira.adminHelper:admin-resources")
 </head>
 <body>
 <a name="top"></a>

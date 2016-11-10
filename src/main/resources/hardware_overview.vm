@@ -20,7 +20,7 @@
     <meta name="decorator" content="atl.general"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
-    $webResourceManager.requireResource("org.catrobat.jira.AdminHelper:hardware-resources")
+    #*$webResourceManager.requireResource("org.catrobat.jira.adminHelper:hardware-resources")*#
 </head>
 <body>
 <div id="aui-message-bar">
@@ -61,7 +61,7 @@
                        title="search-filter-overview" autocomplete="off">
             </form>
         </div>
-        <table id="table-overview" class="aui aui-table-interactive aui-table-sortable">
+        <table id="table-overview" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -77,6 +77,7 @@
             <tr><td colspan="6"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
             </tbody>
         </table>
+        <button name ="test" onclick=cool()>Check wiring</button>
     </div>
 
     <div class="tabs-pane" id="tabs-lent-out">
@@ -90,7 +91,7 @@
                        title="search-filter-lent-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -121,7 +122,7 @@
                        title="search-filter-sorted-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -152,7 +153,7 @@
                        title="search-filter-sorted-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -181,7 +182,7 @@
                        title="search-filter-all-devices" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -213,7 +214,7 @@
                        title="search-filter-management" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>
@@ -252,7 +253,7 @@
                 <input autocomplete="off" class="text" type="text" id="individual-lending-search" name="user" title="username">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive aui-table-sortable">
+        <table id="mySortableTable" class="aui aui-table-interactive  ">
             <thead>
             <tr>
                 <th class="aui-table-column-issue-key">Name</th>

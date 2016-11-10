@@ -235,6 +235,7 @@
                 <configuration>
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
+                    <productDataPath>${basedir}/src/test/resources/generated-test-resources.zip</productDataPath>
                     <!-- Uncomment to install TestKit backdoor in JIRA. -->
                     <!--
                     <pluginArtifacts>
@@ -248,6 +249,7 @@
                     <enableQuickReload>true</enableQuickReload>
                     <enableFastdev>false</enableFastdev>
                     <allowGoogleTracking>false</allowGoogleTracking>
+                    <compressResources>false</compressResources>
 
                     <!-- See here for an explanation of default instructions: -->
                     <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
@@ -316,6 +318,8 @@
         <jira.version>7.2.2</jira.version>
         <amps.version>6.2.6</amps.version>
         <ao.version>1.2.0</ao.version>
+        <atlassian.dev.mode>false</atlassian.dev.mode>
+        <atlassian.webresource.disable.minification>true</atlassian.webresource.disable.minification>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->

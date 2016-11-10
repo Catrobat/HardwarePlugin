@@ -1,0 +1,12 @@
+<html>
+    <title>testites</title>
+    <head>
+        <meta name="decorator" content="atl.general">
+        $webResourceManager.requireResource("org.catrobat.jira.adminHelper:test-resources")
+    </head>
+        <body>
+            <h1> you created your servlet yay</h1>
+            <button name="halloz" onclick=cool()> Servus</button>
+            <button name="test" onclick=another()>Another</button>
+        </body>
+</html>
