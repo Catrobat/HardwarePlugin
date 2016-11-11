@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:2990/" />
+<title>ReturnDialogTest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ReturnDialogTest</td></tr>
+</thead><tbody>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=hardware_management_link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-overview-body']/tr[2]/td[5]</td>
+	<td>1/2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#aui-uid-1 &gt; strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-lent-out &gt; tr &gt; td.name</td>
+	<td>Nexus 7 (8 GB)</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.serial</td>
+	<td>666</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.imei</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.inventory</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.lent-out-by</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.lent-out-since</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td</td>
+	<td>Nexus 4 (8 GB)</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td[2]</td>
+	<td>333</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td[3]</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td[4]</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td[5]</td>
+	<td>stephanfellhofer</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-lent-out']/tr[2]/td[6]</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Return</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=device-comment</td>
+	<td>selenium device comment</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=lending-purpose</td>
+	<td>selenium purpose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=lending-comment</td>
+	<td>selenium lending comment</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.button-panel-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-lent-out &gt; tr &gt; td.name</td>
+	<td>Nexus 4 (8 GB)</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.serial</td>
+	<td>333</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.imei</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.inventory</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.lent-out-by</td>
+	<td>stephanfellhofer</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.lent-out-since</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=p.title &gt; strong</td>
+	<td>Success!</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='aui-message-bar']/div</td>
+	<td>Success!<br />Device brought back successfully</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#aui-uid-0 &gt; strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-overview-body']/tr[2]/td[5]</td>
+	<td>2/2</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#aui-uid-4 &gt; strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Details')])[15]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='device-details-dialog']/div/ul/li[3]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[3]/table/tbody/tr/td</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=nobr</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[3]/table/tbody/tr/td[3]</td>
+	<td>lending out comment in the device comment section :D</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[3]/table/tbody/tr[2]/td</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[3]/table/tbody/tr[2]/td[2]/nobr</td>
+	<td>2015-01-14</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[3]/table/tbody/tr[2]/td[3]</td>
+	<td>selenium device comment</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='device-details-dialog']/div/ul/li[4]/button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td[2]</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td[3]/nobr</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td[4]/nobr</td>
+	<td>2015-01-14</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td[5]</td>
+	<td>selenium purpose</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div[4]/table/tbody/tr/td[6]</td>
+	<td>selenium lending comment</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.button-panel-button</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

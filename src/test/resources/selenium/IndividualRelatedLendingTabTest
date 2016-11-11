@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:2990/" />
+<title>IndividualRelatedLendingTabTest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">IndividualRelatedLendingTabTest</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/jira/secure/Dashboard.jspa</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=hardware_management_link</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=aui-uid-6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-individual &gt; tr &gt; td</td>
+	<td>Please use above input mask to search for an user.</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=span.select2-chosen</td>
+	<td>Search for user</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>css=span.select2-chosen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>typeKeys</td>
+	<td>css=input.select2-input.select2-focused</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>css=input.select2-input.select2-focused</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>css=li.select2-highlighted</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=li.select2-highlighted</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>keyPress</td>
+	<td>css=#select2-drop input.select2-input</td>
+	<td>\13</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-individual &gt; tr &gt; td.name</td>
+	<td>Nexus 4 (8 GB)</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-individual &gt; tr &gt; td.serial</td>
+	<td>111</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-individual &gt; tr &gt; td.imei</td>
+	<td>111</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=#table-individual &gt; tr &gt; td.inventory</td>
+	<td>111</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.issuer</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.begin</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.end</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.purpose</td>
+	<td>just4fun</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.comment</td>
+	<td>&lt;script&gt;alert('xss');&lt;/script&gt;</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td</td>
+	<td>Nexus 7 (8 GB)</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td[2]</td>
+	<td>666</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td[3]</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td[4]</td>
+	<td>undefined</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td[5]</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//tbody[@id='table-individual']/tr[2]/td[6]</td>
+	<td>2014-09-23</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Details')])[17]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Device Details</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div/table/tbody/tr/td[2]</td>
+	<td>Nexus 4</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.button-panel-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Details')])[18]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.item-button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h2.dialog-title</td>
+	<td>Device Details</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='device-details-dialog']/div/div/div/table/tbody/tr/td[2]</td>
+	<td>Nexus 7</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button.button-panel-button</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
