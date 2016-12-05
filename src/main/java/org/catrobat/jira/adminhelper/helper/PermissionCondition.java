@@ -56,9 +56,10 @@ public class PermissionCondition extends AbstractPermissionCondition {
 
     public boolean isApproved(ApplicationUser applicationUser) {
         //Todo: fix it
-       /* if (applicationUser == null || !userManager.isSystemAdmin(applicationUser.getUsername())) {
+
+        if (applicationUser == null || !ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(applicationUser)) {
             return false;
-        }*/
+        }
 
         // check if permissions are set
         AdminHelperConfig config = configurationService.getConfiguration();

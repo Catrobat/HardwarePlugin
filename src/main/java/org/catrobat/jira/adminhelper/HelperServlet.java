@@ -16,11 +16,15 @@
 
 package org.catrobat.jira.adminhelper;
 
+import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import com.atlassian.jira.user.ApplicationUser;
+import org.catrobat.jira.adminhelper.helper.PermissionCondition;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -59,20 +63,20 @@ public abstract class HelperServlet extends HttpServlet {
     }
 
     private void checkPermission(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        /* TODO: fix it
+         //TODO: fix it
         PermissionCondition permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
-        String username = userManager.getRemoteUsername(request);
-        if (username == null) {
+        ApplicationUser currently_logged_in = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+
+        if (currently_logged_in.getUsername() == null) {
             redirectToLogin(request, response);
             return;
-        } else if (!userManager.isSystemAdmin(username)) {
+        } else if (ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(currently_logged_in)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
-        } else if (!permissionCondition.isApproved(username)) {
+        } else if (!permissionCondition.isApproved(currently_logged_in.getUsername())) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-        */
 
         if (!webSudoManager.canExecuteRequest(request)) {
             webSudoManager.enforceWebSudoProtection(request, response);

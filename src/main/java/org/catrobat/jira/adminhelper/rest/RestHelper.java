@@ -16,9 +16,12 @@
 
 package org.catrobat.jira.adminhelper.rest;
 
+import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
+import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
+import com.atlassian.jira.web.dispatcher.PluginsAwareViewMapping;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.helper.PermissionCondition;
 
@@ -38,18 +41,17 @@ public abstract class RestHelper {
 
     protected Response checkPermission(HttpServletRequest request) {
 
-        /* TODO: fix it
-        String username = userManager.getRemoteUsername(request);
+        // TODO: fix it
+        ApplicationUser currently_logged_in_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
 
-        if (username == null) {
+        if (currently_logged_in_user.getUsername() == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        } else if (!userManager.isSystemAdmin(username)) {
+        } else if (!ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(currently_logged_in_user)) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
-        } else if (!permissionCondition.isApproved(username)) {
+        } else if (!permissionCondition.isApproved(currently_logged_in_user.getUsername())) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-*/
         return null;
     }
 }
