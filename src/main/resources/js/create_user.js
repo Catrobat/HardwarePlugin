@@ -23,6 +23,7 @@ AJS.toInit(function () {
     //    AJS.$(".loadingDiv").hide();
     //});
 
+    alert("resources loaded");
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var config;
 

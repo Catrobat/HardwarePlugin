@@ -19,12 +19,14 @@
     <title>$i18n.getText("admin_helper.admin.label")</title>
     <meta name="decorator" content="atl.admin"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
-    $webResourceManager.requireResource("org.catrobat.jira.adminHelper:admin-resources")
+    #*$webResourceManager.requireResource("org.catrobat.jira.adminHelper:admin-resources")*#
+    752d59b6430abbc8aaacb8f5cac51602cfc17e72
+    523763d93316b5e73b669042ca11e4f837b3f797
 </head>
 <body>
 <a name="top"></a>
 <div id="aui-message-bar"></div>
-<div class="loadingDiv"><span class="aui-icon aui-icon-wait">Loading...</span></div>
+#*<div class="loadingDiv"><span class="aui-icon aui-icon-wait">Loading...</span></div>*#
 <div class="aui-tabs horizontal-tabs">
     <ul class="tabs-menu">
         <li class="menu-item active-tab">

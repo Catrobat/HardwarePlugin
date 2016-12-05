@@ -70,7 +70,7 @@ public abstract class HelperServlet extends HttpServlet {
         if (currently_logged_in.getUsername() == null) {
             redirectToLogin(request, response);
             return;
-        } else if (ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(currently_logged_in)) {
+        } else if (!ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(currently_logged_in)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         } else if (!permissionCondition.isApproved(currently_logged_in.getUsername())) {

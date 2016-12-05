@@ -1,7 +1,7 @@
 <html>
     <title>testites</title>
     <head>
-        <meta name="decorator" content="atl.general">
+        <meta name="decorator" content="atl.admin">
         $webResourceManager.requireResource("org.catrobat.jira.adminHelper:test-resources")
     </head>
         <body>

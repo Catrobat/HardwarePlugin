@@ -45,7 +45,7 @@ public class AdminServlet extends HelperServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
-        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminHelper:admin-resources");
+        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminhelper:admin-resources");
         renderer.render("admin.vm", response.getWriter());
     }
 }

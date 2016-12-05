@@ -45,7 +45,7 @@ public class CreateUserServlet extends HelperServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
-        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminHelper:create-resources");
+        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminhelper:create-resources");
         renderer.render("create_user.vm", response.getWriter());
     }
 }
