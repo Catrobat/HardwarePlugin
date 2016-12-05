@@ -45,7 +45,7 @@ public class ModifyUserServlet extends HelperServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
-        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminHelper:modify-resources");
+        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminhelper:modify-resources");
         renderer.render("modify_user.vm", response.getWriter());
     }
 }
