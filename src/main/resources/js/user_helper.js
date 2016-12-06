@@ -53,6 +53,7 @@ function getTeamList(baseUrl, callme) {
 
 function getConfigAndCallback(baseUrl, callback) {
     AJS.$(".loadingDiv").show();
+    var rest_url = baseUrl + "/rest/admin-helper/latest/config/getConfig";
     AJS.$.ajax({
         url: baseUrl + "/rest/admin-helper/latest/config/getConfig",
         dataType: "json",

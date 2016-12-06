@@ -77,6 +77,8 @@ public class ConfigResourceRest extends RestHelper {
         }
 
         List<Directory> directoryList = directoryManager.findAllDirectories();
+        System.out.println("printing directory list");
+        System.out.println(directoryList);
         List<JsonConfig> jsonDirectoryList = new ArrayList<JsonConfig>();
         for (Directory directory : directoryList) {
             JsonConfig config = new JsonConfig();
@@ -109,6 +111,10 @@ public class ConfigResourceRest extends RestHelper {
     @Path("/saveConfig")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
+        System.out.println("--------------------------------------");
+        System.out.println("config to save is");
+        System.out.println(jsonConfig);
+
         Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
@@ -123,8 +129,11 @@ public class ConfigResourceRest extends RestHelper {
         configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
                 jsonConfig.getMailSubject(), jsonConfig.getMailBody());
 
-        for (JsonResource jsonResource : jsonConfig.getResources()) {
-            configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+        if(jsonConfig.getResources() != null)
+        {
+            for (JsonResource jsonResource : jsonConfig.getResources()) {
+                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+            }
         }
 
         if (jsonConfig.getApprovedGroups() != null) {
@@ -152,6 +161,10 @@ public class ConfigResourceRest extends RestHelper {
             try {
                 GitHub gitHub = GitHub.connectUsingOAuth(token);
                 GHOrganization organization = gitHub.getOrganization(organizationName);
+                System.out.println("token:" + token);
+                System.out.println("org: " + organizationName);
+               /* GitHub gitHub = GitHub.connectUsingOAuth("13c778d7f93e166c4ae692ab0aa541ee10d1e9d8");
+                GHOrganization organization = gitHub.getOrganization("Catrobat");*/
                 Collection<GHTeam> teamList = organization.getTeams().values();
 
                 if (jsonConfig.getDefaultGithubTeam() != null) {

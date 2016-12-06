@@ -19,9 +19,10 @@
     <title>Create New User</title>
     <meta name="decorator" content="atl.admin"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
-    #*$webResourceManager.requireResource("org.catrobat.jira.adminHelper:create-resources")*#
+    $webResourceManager.requireResource("org.catrobat.jira.adminhelper:create-resources")
 </head>
 <body class="aui-layout aui-theme-default">
+
 <div id="aui-message-bar"></div>
 <div class="loadingDiv"><span class="aui-icon aui-icon-wait">Loading...</span></div>
 <header class="aui-page-header">
@@ -122,5 +123,6 @@
         </section>
     </div>
 </div>
+<button onclick=check_rest()>check rest</button>
 </body>
 </html>

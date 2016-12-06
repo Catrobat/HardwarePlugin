@@ -22,7 +22,7 @@ AJS.toInit(function () {
     //AJS.$(document).ajaxStop(function () {
     //    AJS.$(".loadingDiv").hide();
     //});
-    alert("resource loaded");
+
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var teams = [];
     var localTempResources = [];
@@ -39,6 +39,7 @@ AJS.toInit(function () {
             url: baseUrl + "/rest/admin-helper/latest/config/getConfig",
             dataType: "json",
             success: function (config) {
+                console.log("current token is"+ config.githubToken);
                 if (config.githubToken)
                     AJS.$("#github_token").attr("placeholder", config.githubToken);
                 if (config.githubTokenPublic)
@@ -80,10 +81,18 @@ AJS.toInit(function () {
                     AJS.$("#teams").append("</fieldset>");
                 }
 
-
-                var singleGithubData = [];
-                for(var i = 0; i < config.availableGithubTeams.length; i++) {
-                    singleGithubData.push({id: config.availableGithubTeams[i], text: config.availableGithubTeams[i]});
+                try {
+                    var singleGithubData = [];
+                    for (var i = 0; i < config.availableGithubTeams.length; i++) {
+                        singleGithubData.push({
+                            id: config.availableGithubTeams[i],
+                            text: config.availableGithubTeams[i]
+                        });
+                    }
+                }
+                catch(err)
+                {
+                    console.log("there was an error loading github teams message is:" + err.message);
                 }
                 AJS.$(".github-single").auiSelect2({
                     placeholder: "Search for team",
@@ -261,15 +270,15 @@ AJS.toInit(function () {
         }
 
         var config = {};
-        config.githubToken = AJS.$("#github_token").val();
+       /* config.githubToken = AJS.$("#github_token").val();
         config.githubTokenPublic = AJS.$("#github_token_public").val();
-        config.githubOrganization = AJS.$("#github_organization").val();
+        config.githubOrganization = AJS.$("#github_organization").val();*/
         config.mailFromName = AJS.$("#mail-from-name").val();
         config.mailFrom = AJS.$("#mail-from").val();
         config.mailSubject = AJS.$("#mail-subject").val();
         config.mailBody = AJS.$("#mail-body").val();
         config.userDirectoryId = AJS.$("#userdirectory").auiSelect2("val");
-        config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");
+        /*config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");*/
         config.resources = [];
         for(var i = 0; i < localTempResources.length; i++) {
             var resource = {};
@@ -544,6 +553,12 @@ AJS.toInit(function () {
         scrollToAnchor('top');
     });
 
+    AJS.$("#save-github-settings").click(function (e) {
+        e.preventDefault();
+        saveGithubSettings();
+        scrollToAnchor('top');
+    });
+
     AJS.$("a[href='#tabs-general']").click(function () {
         AJS.$("#teams").html("");
         populateForm();
@@ -555,5 +570,38 @@ AJS.toInit(function () {
         } else {
             return '';
         }
+    }
+
+    function saveGithubSettings()
+    {
+        var git_config = {};
+        git_config.githubToken = AJS.$("#github_token").val();
+        git_config.githubTokenPublic = AJS.$("#github_token_public").val();
+        git_config.githubOrganization = AJS.$("#github_organization").val();
+        git_config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");
+        console.log("save pressed");
+
+        AJS.$(".loadingDiv").show();
+        AJS.$.ajax({
+            url: baseUrl + "/rest/admin-helper/1.0/config/saveConfig",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(git_config),
+            processData: false,
+            success: function () {
+                AJS.messages.success({
+                    title: "Success!",
+                    body: "Github Settings were successfully saved!"
+                });
+                AJS.$(".loadingDiv").hide();
+            },
+            error: function (error) {
+                AJS.messages.error({
+                    title: "Error!",
+                    body: error.responseText
+                });
+                AJS.$(".loadingDiv").hide();
+            }
+        });
     }
 });

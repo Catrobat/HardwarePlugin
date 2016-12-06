@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+function check_rest()
+{
+    var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
+
+    var response =  AJS.$.ajax({
+        type: 'GET',
+        url: baseUrl + "/rest/admin-helper/latest/config/getConfig",
+        dataType: "json"
+    });
+
+    AJS.$.when(response)
+        .done(function () {
+            var json = JSON.parse(response.responseText)
+            alert(json.githubTokenPublic);
+        })
+}
 
 "use strict";
 AJS.toInit(function () {
@@ -20,10 +36,11 @@ AJS.toInit(function () {
     //    AJS.$(".loadingDiv").show();
     //});
     //AJS.$(document).ajaxStop(function () {
-    //    AJS.$(".loadingDiv").hide();
+    //    AJS.$(".loadingclearDiv").hide();
     //});
 
     alert("resources loaded");
+
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var config;
 
@@ -37,7 +54,8 @@ AJS.toInit(function () {
                 url: "https://api.github.com/search/users",
                 dataType: "json",
                 data: function (term, page) {
-                    return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
+                    //return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
+                    return "q=" + term + "+type:User&order=asc&access_token=" + "13c778d7f93e166c4ae692ab0aa541ee10d1e9d8";
                 },
                 results: function (data, page) {
                     var select2data = [];
