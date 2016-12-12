@@ -20,11 +20,8 @@
     <meta name="decorator" content="atl.admin"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
     #*$webResourceManager.requireResource("org.catrobat.jira.adminHelper:admin-resources")*#
-    #*752d59b6430abbc8aaacb8f5cac51602cfc17e72
-    523763d93316b5e73b669042ca11e4f837b3f797*#
 </head>
 <body>
-<a name="top"></a>
 <div id="aui-message-bar"></div>
 <div class="loadingDiv"><span class="aui-icon aui-icon-wait">Loading...</span></div>
 <div class="aui-tabs horizontal-tabs">
@@ -172,13 +169,13 @@
                     <label for="github_organization">Organization<span
                             class="aui-icon icon-required"> required</span></label>
                     <input class="text" type="text" id="github_organization" name="github_organization"
-                           title="github_organization">
+                           title="github_organization" disabled="true">
                 </div>
                 <div class="field-group">
                     <label for="github_token_public">Public API Token<span
                             class="aui-icon icon-required"> required</span></label>
                     <input class="text" type="text" id="github_token_public" name="github_token_public"
-                           title="github_token_public">
+                           title="github_token_public" disabled="true">
 
                     <div class="description">Create a <a
                             href="https://github.com/blog/1509-personal-api-tokens">token</a> <b>without any rights</b>.
@@ -188,7 +185,7 @@
                 <div class="field-group">
                     <label for="github_token">Personal API Token<span
                             class="aui-icon icon-required"> required</span></label>
-                    <input class="text" type="password" id="github_token" name="github_token" title="github_token">
+                    <input class="text" type="text" id="github_token" name="github_token" title="github_token">
 
                     <div class="description">Create a <a
                             href="https://github.com/blog/1509-personal-api-tokens">token</a> with "admin:org" scope.
@@ -198,6 +195,13 @@
                     <label for="default-github-team">Default GitHub Team</label>
                     <input class="text github-single" type="text" id="default-github-team" name="default-github-team">
                 </div>
+                <div class = "field-group">
+                    <input class="checkbox" type="checkbox" name="enable_settings_change" id="enable_settings_change"
+                        name ="enable_settings_change">
+                    <label for="checkBoxOne">Enable to change Settings</label>
+                    <div class="description">only enable when you know what you are doing!</div>
+                </div>
+
                 <div class = "field-group">
                     <input type="submit" value="Save" id ="save-github-settings" class="aui-button aui-button-primary">
                 </div>

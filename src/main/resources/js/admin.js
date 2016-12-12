@@ -15,6 +15,9 @@
  */
 
 "use strict";
+
+var privat_token_change = false;
+
 AJS.toInit(function () {
     //AJS.$(document).ajaxStart(function () {
     //    AJS.$(".loadingDiv").show();
@@ -32,6 +35,12 @@ AJS.toInit(function () {
         var aTag = AJS.$("a[name='" + aid + "']");
         AJS.$('html,body').animate({scrollTop: aTag.offset().top}, 'slow');
     }
+
+
+    AJS.$("#github_token").on('input', function()
+    {
+        privat_token_change = true;
+    });
 
     function populateForm() {
         AJS.$(".loadingDiv").show();
@@ -251,7 +260,8 @@ AJS.toInit(function () {
             error: function (error) {
                 AJS.messages.error({
                     title: "Error!",
-                    body: "Something went wrong!"
+                    body: "Something went wrong! \n" +
+                    "error message is: " + error.responseText
                 });
 
                 AJS.$(".loadingDiv").hide();
@@ -260,25 +270,15 @@ AJS.toInit(function () {
     }
 
     function updateConfig() {
-        if ((!AJS.$("#github_token").val() && !AJS.$("#github_token").attr("placeholder")) || !AJS.$("#github_organization").val()
-            || !AJS.$("#github_token_public").val()) {
-            AJS.messages.error({
-                title: "Error!",
-                body: "API Tokens and Organisation must be filled out"
-            });
-            return;
-        }
 
         var config = {};
-       /* config.githubToken = AJS.$("#github_token").val();
-        config.githubTokenPublic = AJS.$("#github_token_public").val();
-        config.githubOrganization = AJS.$("#github_organization").val();*/
+
         config.mailFromName = AJS.$("#mail-from-name").val();
         config.mailFrom = AJS.$("#mail-from").val();
         config.mailSubject = AJS.$("#mail-subject").val();
         config.mailBody = AJS.$("#mail-body").val();
         config.userDirectoryId = AJS.$("#userdirectory").auiSelect2("val");
-        /*config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");*/
+
         config.resources = [];
         for(var i = 0; i < localTempResources.length; i++) {
             var resource = {};
@@ -572,18 +572,31 @@ AJS.toInit(function () {
         }
     }
 
-    function saveGithubSettings()
-    {
+    function saveGithubSettings() {
+        if ((!AJS.$("#github_token").val() && !AJS.$("#github_token").attr("placeholder")) || !AJS.$("#github_organization").val()
+            || !AJS.$("#github_token_public").val()) {
+            AJS.messages.error({
+                title: "Error!",
+                body: "API Tokens and Organisation must be filled out"
+            });
+            return;
+        }
+
         var git_config = {};
-        git_config.githubToken = AJS.$("#github_token").val();
+
+        if (privat_token_change) {
+            console.log("you changed the private github token");
+            git_config.githubToken = AJS.$("#github_token").val();
+        }
+
         git_config.githubTokenPublic = AJS.$("#github_token_public").val();
         git_config.githubOrganization = AJS.$("#github_organization").val();
+        alert(git_config.githubOrganization = AJS.$("#github_organization").val())
         git_config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");
-        console.log("save pressed");
 
         AJS.$(".loadingDiv").show();
         AJS.$.ajax({
-            url: baseUrl + "/rest/admin-helper/1.0/config/saveConfig",
+            url: baseUrl + "/rest/admin-helper/1.0/config/saveGithubConfig",
             type: "PUT",
             contentType: "application/json",
             data: JSON.stringify(git_config),
@@ -603,5 +616,23 @@ AJS.toInit(function () {
                 AJS.$(".loadingDiv").hide();
             }
         });
+        AJS.$(".checkbox").change(function()
+        {
+            alert("change");
+            if(this.checked)
+            {
+                alert("checked")
+            }
+            else
+            {
+                alert("unchecked");
+            }
+        })
     }
 });
+
+function enableSettingsChange()
+{
+    document.getElementByid("github_organization").disabled = false;
+    document.getElementByid("github_token_public").disabled = false;
+}

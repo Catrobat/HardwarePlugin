@@ -55,7 +55,7 @@ AJS.toInit(function () {
                 dataType: "json",
                 data: function (term, page) {
                     //return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
-                    return "q=" + term + "+type:User&order=asc&access_token=" + "13c778d7f93e166c4ae692ab0aa541ee10d1e9d8";
+                    return "q=" + term + "+type:User&order=asc&access_token=" + "b2b03aa4580f44a362daae8e4652e335404cc594";
                 },
                 results: function (data, page) {
                     var select2data = [];

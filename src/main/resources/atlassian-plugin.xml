@@ -31,6 +31,7 @@
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.auiplugin:aui-select2</dependency>
         <resource type="download" name="admin.js" location="js/admin.js"/>
+        <resource type="download" name="admin_helper.js" location="js/admin_helper.js"/>
         <resource type="download" name="admin_helper.css" location="css/admin_helper.css"/>
         <context>admin</context>
     </web-resource>

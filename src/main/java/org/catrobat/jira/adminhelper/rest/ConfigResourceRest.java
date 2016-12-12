@@ -108,12 +108,11 @@ public class ConfigResourceRest extends RestHelper {
     }
 
     @PUT
-    @Path("/saveConfig")
+    @Path("/saveGithubConfig")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
-        System.out.println("--------------------------------------");
-        System.out.println("config to save is");
-        System.out.println(jsonConfig);
+    public Response setGithubConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request)
+    {
+        System.out.println("saving Github Settings");
 
         Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
@@ -123,36 +122,12 @@ public class ConfigResourceRest extends RestHelper {
         if (jsonConfig.getGithubToken() != null && jsonConfig.getGithubToken().length() != 0) {
             configService.setApiToken(jsonConfig.getGithubToken());
         }
-        configService.setPublicApiToken(jsonConfig.getGithubTokenPublic());
-        configService.setOrganisation(jsonConfig.getGithubOrganization());
-        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
-        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
-                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
-
-        if(jsonConfig.getResources() != null)
-        {
-            for (JsonResource jsonResource : jsonConfig.getResources()) {
-                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
-            }
-        }
-
-        if (jsonConfig.getApprovedGroups() != null) {
-            configService.clearApprovedGroups();
-            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
-                configService.addApprovedGroup(approvedGroupName);
-            }
-        }
-
-        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
-        if (jsonConfig.getApprovedUsers() != null) {
-            configService.clearApprovedUsers();
-            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
-                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
-                if (user != null) {
-                    configService.addApprovedUser(user.getKey());
-                }
-            }
-        }
+        if (jsonConfig.getGithubTokenPublic() != null)
+            configService.setPublicApiToken(jsonConfig.getGithubTokenPublic());
+        if(jsonConfig.getGithubOrganization() != null)
+            configService.setOrganisation(jsonConfig.getGithubOrganization());
+        else
+            return Response.serverError().entity("Github Configuration Settings are not valid").build();
 
         if (jsonConfig.getTeams() != null) {
             String token = configService.getConfiguration().getGithubApiToken();
@@ -195,6 +170,52 @@ public class ConfigResourceRest extends RestHelper {
             } catch (IOException e) {
                 e.printStackTrace();
                 return Response.serverError().entity("Some error with GitHub API (e.g. maybe wrong tokens, organisation, teams) occured").build();
+            }
+        }
+
+        return Response.ok().build();
+    }
+    @PUT
+    @Path("/saveConfig")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
+        System.out.println("--------------------------------------");
+        System.out.println("config to save is");
+        System.out.println(jsonConfig);
+
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        System.out.println("user directory id is: " + jsonConfig.getUserDirectoryId());
+
+        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
+        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
+                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
+
+        if(jsonConfig.getResources() != null)
+        {
+            for (JsonResource jsonResource : jsonConfig.getResources()) {
+                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+            }
+        }
+
+        if (jsonConfig.getApprovedGroups() != null) {
+            configService.clearApprovedGroups();
+            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
+                configService.addApprovedGroup(approvedGroupName);
+            }
+        }
+
+        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
+        if (jsonConfig.getApprovedUsers() != null) {
+            configService.clearApprovedUsers();
+            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
+                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
+                if (user != null) {
+                    configService.addApprovedUser(user.getKey());
+                }
             }
         }
 
