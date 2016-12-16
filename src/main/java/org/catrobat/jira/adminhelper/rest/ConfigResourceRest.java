@@ -175,6 +175,31 @@ public class ConfigResourceRest extends RestHelper {
 
         return Response.ok().build();
     }
+
+    @PUT
+    @Path("/checkSettings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response checkGithubSettings(final JsonConfig jsonConfig, @Context HttpServletRequest request)
+    {
+        String token = configService.getConfiguration().getGithubApiToken();
+        String org = jsonConfig.getGithubOrganization();
+
+        System.out.println("checking settings for:" );
+        System.out.println("token:" + token);
+        System.out.println("org:" + org);
+        try
+        {
+            GitHub gitHub = GitHub.connectUsingOAuth(token);
+            GHOrganization organization = gitHub.getOrganization(org);
+        }
+        catch(Exception e)
+        {
+           return Response.serverError().entity("There was an error! \n The given Organization cant be accessed with " +
+                   "the current token!").build();
+        }
+        return Response.ok().build();
+    }
+
     @PUT
     @Path("/saveConfig")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -320,4 +345,6 @@ public class ConfigResourceRest extends RestHelper {
 
         return Response.serverError().entity("Maybe no resource with given name?").build();
     }
+
+
 }

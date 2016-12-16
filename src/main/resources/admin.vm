@@ -160,7 +160,7 @@
 
     <div div class="tabs-pane" id="tabs-github-settings">
         <h2>Change Github Settings</h2>
-        <p>change The Private Token if the owner of the Organization has Changed, or the
+        <p>Change The Private Token if the owner of the Organization has Changed, or the
             Organization itself has changed </p>
 
         <form class="aui" id ="change-github-settings">
@@ -185,7 +185,8 @@
                 <div class="field-group">
                     <label for="github_token">Personal API Token<span
                             class="aui-icon icon-required"> required</span></label>
-                    <input class="text" type="text" id="github_token" name="github_token" title="github_token">
+                    <input class="text" type="text" id="github_token" name="github_token" title="github_token"
+                    disabled ="true">
 
                     <div class="description">Create a <a
                             href="https://github.com/blog/1509-personal-api-tokens">token</a> with "admin:org" scope.

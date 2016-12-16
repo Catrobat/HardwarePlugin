@@ -41,7 +41,6 @@ public abstract class RestHelper {
 
     protected Response checkPermission(HttpServletRequest request) {
 
-        // TODO: fix it
         ApplicationUser currently_logged_in_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
 
         if (currently_logged_in_user.getUsername() == null) {

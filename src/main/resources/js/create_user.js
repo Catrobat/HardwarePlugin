@@ -54,8 +54,8 @@ AJS.toInit(function () {
                 url: "https://api.github.com/search/users",
                 dataType: "json",
                 data: function (term, page) {
-                    //return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
-                    return "q=" + term + "+type:User&order=asc&access_token=" + "b2b03aa4580f44a362daae8e4652e335404cc594";
+                    return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
+                    //return "q=" + term + "+type:User&order=asc&access_token=" + "b2b03aa4580f44a362daae8e4652e335404cc594";
                 },
                 results: function (data, page) {
                     var select2data = [];
