@@ -71,13 +71,6 @@
         <resource type="download" name="hardware_dialog_sortout.js" location="js/hardware_dialog_sortout.js"/>
         <resource type="download" name="hardware_populate_tables.js" location="js/hardware_populate_tables.js"/>
         <resource type="download" name="admin_helper.css" location="css/admin_helper.css"/>
-        <resource type="download" name ="some_test.js" location="js/test_js/some_test.js"/>
-        <context>general</context>
-    </web-resource>
-
-    <web-resource name="Test Resource" key ="test-resources">
-        <resource type="download" name ="some_test.js" location="js/test_js/some_test.js"/>
-        <resource type="download" name="another_test.js" location="js/test_js/another_test.js"/>
         <context>general</context>
     </web-resource>
 
@@ -104,11 +97,6 @@
     <servlet key="upload-servlet" class="org.catrobat.jira.adminhelper.UploadCsvServlet">
         <url-pattern>/admin_helper/upload</url-pattern>
     </servlet>
-
-    <servlet key ="test-servlet" class="org.catrobat.jira.adminhelper.TestServlet">
-        <url-pattern>/test</url-pattern>
-    </servlet>
-
 
     <component key="adminHelperConfiguration"
                class="org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigServiceImpl"/>
