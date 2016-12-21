@@ -35,13 +35,9 @@ public class GithubHelper {
     private final String organizationName;
 
     public GithubHelper(AdminHelperConfigService configService) {
-        System.out.println("Constructing Github helper....");
         this.configService = configService;
         this.token = configService.getConfiguration().getGithubApiToken();
-        //this.token = "13c778d7f93e166c4ae692ab0aa541ee10d1e9d8";
-        System.out.println("token: "+ this.token);
         this.organizationName = configService.getConfiguration().getGithubOrganisation();
-        System.out.println("org: "+ this.organizationName);
     }
 
     public boolean doesUserExist(final String userName) {

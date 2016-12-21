@@ -77,8 +77,6 @@ public class ConfigResourceRest extends RestHelper {
         }
 
         List<Directory> directoryList = directoryManager.findAllDirectories();
-        System.out.println("printing directory list");
-        System.out.println(directoryList);
         List<JsonConfig> jsonDirectoryList = new ArrayList<JsonConfig>();
         for (Directory directory : directoryList) {
             JsonConfig config = new JsonConfig();
@@ -112,7 +110,6 @@ public class ConfigResourceRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setGithubConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request)
     {
-        System.out.println("saving Github Settings");
 
         Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
@@ -129,6 +126,69 @@ public class ConfigResourceRest extends RestHelper {
         else
             return Response.serverError().entity("Github Configuration Settings are not valid").build();
 
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/checkSettings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response checkGithubSettings(final JsonConfig jsonConfig, @Context HttpServletRequest request)
+    {
+        String token = configService.getConfiguration().getGithubApiToken();
+        String org = jsonConfig.getGithubOrganization();
+
+        try
+        {
+            GitHub gitHub = GitHub.connectUsingOAuth(token);
+            GHOrganization organization = gitHub.getOrganization(org);
+        }
+        catch(Exception e)
+        {
+           return Response.serverError().entity("There was an error! \n The given Organization cant be accessed with " +
+                   "the current token!").build();
+        }
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/saveConfig")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
+
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
+        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
+                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
+
+        if(jsonConfig.getResources() != null)
+        {
+            for (JsonResource jsonResource : jsonConfig.getResources()) {
+                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+            }
+        }
+
+        if (jsonConfig.getApprovedGroups() != null) {
+            configService.clearApprovedGroups();
+            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
+                configService.addApprovedGroup(approvedGroupName);
+            }
+        }
+
+        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
+        if (jsonConfig.getApprovedUsers() != null) {
+            configService.clearApprovedUsers();
+            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
+                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
+                if (user != null) {
+                    configService.addApprovedUser(user.getKey());
+                }
+            }
+        }
+
         if (jsonConfig.getTeams() != null) {
             String token = configService.getConfiguration().getGithubApiToken();
             String organizationName = configService.getConfiguration().getGithubOrganisation();
@@ -136,10 +196,6 @@ public class ConfigResourceRest extends RestHelper {
             try {
                 GitHub gitHub = GitHub.connectUsingOAuth(token);
                 GHOrganization organization = gitHub.getOrganization(organizationName);
-                System.out.println("token:" + token);
-                System.out.println("org: " + organizationName);
-               /* GitHub gitHub = GitHub.connectUsingOAuth("13c778d7f93e166c4ae692ab0aa541ee10d1e9d8");
-                GHOrganization organization = gitHub.getOrganization("Catrobat");*/
                 Collection<GHTeam> teamList = organization.getTeams().values();
 
                 if (jsonConfig.getDefaultGithubTeam() != null) {
@@ -170,77 +226,6 @@ public class ConfigResourceRest extends RestHelper {
             } catch (IOException e) {
                 e.printStackTrace();
                 return Response.serverError().entity("Some error with GitHub API (e.g. maybe wrong tokens, organisation, teams) occured").build();
-            }
-        }
-
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Path("/checkSettings")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response checkGithubSettings(final JsonConfig jsonConfig, @Context HttpServletRequest request)
-    {
-        String token = configService.getConfiguration().getGithubApiToken();
-        String org = jsonConfig.getGithubOrganization();
-
-        System.out.println("checking settings for:" );
-        System.out.println("token:" + token);
-        System.out.println("org:" + org);
-        try
-        {
-            GitHub gitHub = GitHub.connectUsingOAuth(token);
-            GHOrganization organization = gitHub.getOrganization(org);
-        }
-        catch(Exception e)
-        {
-           return Response.serverError().entity("There was an error! \n The given Organization cant be accessed with " +
-                   "the current token!").build();
-        }
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Path("/saveConfig")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
-        System.out.println("--------------------------------------");
-        System.out.println("config to save is");
-        System.out.println(jsonConfig);
-
-        Response unauthorized = checkPermission(request);
-        if (unauthorized != null) {
-            return unauthorized;
-        }
-
-        System.out.println("user directory id is: " + jsonConfig.getUserDirectoryId());
-
-        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
-        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
-                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
-
-        if(jsonConfig.getResources() != null)
-        {
-            for (JsonResource jsonResource : jsonConfig.getResources()) {
-                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
-            }
-        }
-
-        if (jsonConfig.getApprovedGroups() != null) {
-            configService.clearApprovedGroups();
-            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
-                configService.addApprovedGroup(approvedGroupName);
-            }
-        }
-
-        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
-        if (jsonConfig.getApprovedUsers() != null) {
-            configService.clearApprovedUsers();
-            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
-                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
-                if (user != null) {
-                    configService.addApprovedUser(user.getKey());
-                }
             }
         }
 

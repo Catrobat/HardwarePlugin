@@ -32,14 +32,6 @@ function check_rest()
 
 "use strict";
 AJS.toInit(function () {
-    //AJS.$(document).ajaxStart(function () {
-    //    AJS.$(".loadingDiv").show();
-    //});
-    //AJS.$(document).ajaxStop(function () {
-    //    AJS.$(".loadingclearDiv").hide();
-    //});
-
-    alert("resources loaded");
 
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var config;
@@ -55,7 +47,6 @@ AJS.toInit(function () {
                 dataType: "json",
                 data: function (term, page) {
                     return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
-                    //return "q=" + term + "+type:User&order=asc&access_token=" + "b2b03aa4580f44a362daae8e4652e335404cc594";
                 },
                 results: function (data, page) {
                     var select2data = [];

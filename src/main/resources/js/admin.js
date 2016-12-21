@@ -16,16 +16,7 @@
 
 "use strict";
 
-
-var valid = false;
-
 AJS.toInit(function () {
-    //AJS.$(document).ajaxStart(function () {
-    //    AJS.$(".loadingDiv").show();
-    //});
-    //AJS.$(document).ajaxStop(function () {
-    //    AJS.$(".loadingDiv").hide();
-    //});
 
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var teams = [];
@@ -37,14 +28,12 @@ AJS.toInit(function () {
         AJS.$('html,body').animate({scrollTop: 0}, 'slow');
     }
 
-
     function populateForm() {
         AJS.$(".loadingDiv").show();
         AJS.$.ajax({
             url: baseUrl + "/rest/admin-helper/latest/config/getConfig",
             dataType: "json",
             success: function (config) {
-                console.log("current token is"+ config.githubToken);
                 if (config.githubToken)
                     AJS.$("#github_token").attr("placeholder", config.githubToken);
                 if (config.githubTokenPublic)
@@ -267,6 +256,7 @@ AJS.toInit(function () {
 
     function updateConfig() {
 
+        alert("update config called");
         var config = {};
 
         config.mailFromName = AJS.$("#mail-from-name").val();
@@ -552,6 +542,7 @@ AJS.toInit(function () {
     AJS.$("#save-github-settings").click(function (e) {
         e.preventDefault();
         saveGithubSettings();
+        populateForm();
         scrollToAnchor('top');
     });
 
@@ -562,7 +553,6 @@ AJS.toInit(function () {
 
     AJS.$("#enable_settings_change").change(function()
     {
-        alert("Hello darkness my old friend");
         enableSettingsChange();
     });
 
@@ -598,18 +588,18 @@ AJS.toInit(function () {
                 .done(function () {
                     sendDataToServer(baseUrl)
                 })
-                .fail(function(err)
+                .fail(function(error)
                 {
-                    console.log(err.status);
-                    if(err.status == 401) {
+                    console.log(error.status);
+                    if(error.status == 401) {
                         AJS.messages.error({
-                            title: "Error: " + err.status,
+                            title: "Error: " + error.status,
                             body: "Authentication Failed, check your private Token!"
                         })
                     }
-                    if(err.status == 404) {
+                    if(error.status == 404) {
                         AJS.messages.error({
-                            title: "Error: "+ err.status,
+                            title: "Error: "+ error.status,
                             body: "The given Organization was not found!"
                         })
                     }
@@ -617,7 +607,6 @@ AJS.toInit(function () {
         }
         else
         {
-            alert("token has not changed");
             var settings = {};
             settings.githubOrganization = AJS.$("#github_organization").val();
 
