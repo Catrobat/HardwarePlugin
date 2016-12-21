@@ -573,61 +573,20 @@ AJS.toInit(function () {
             });
             return;
         }
-        console.log(AJS.$("#github_token").val())
-        if (AJS.$("#github_token").val() !== '')
-        {
-            var new_private_token = AJS.$("#github_token").val();
-            var new_organization = AJS.$("#github_organization").val();
 
-            var res = AJS.$.ajax({
-                url: "https://api.github.com/orgs/"+ new_organization +"/teams?access_token=" + new_private_token,
-                type:"GET"
-            });
-
-            AJS.$.when(res)
-                .done(function () {
-                    sendDataToServer(baseUrl)
+        AJS.$.ajax({
+            url: "https://api.github.com/search/users?q=User&access_token=" + AJS.$("#github_token_public").val(),
+            type: "GET",
+            success : function() {
+                checkPublicTokneAndOrganization(baseUrl)
+            },
+            error : function (error) {
+                AJS.messages.error({
+                    title : "Error " + error.status,
+                    body : "Authentification Failed! \n" +
+                    "There was an error with your public token!"
                 })
-                .fail(function(error)
-                {
-                    console.log(error.status);
-                    if(error.status == 401) {
-                        AJS.messages.error({
-                            title: "Error: " + error.status,
-                            body: "Authentication Failed, check your private Token!"
-                        })
-                    }
-                    if(error.status == 404) {
-                        AJS.messages.error({
-                            title: "Error: "+ error.status,
-                            body: "The given Organization was not found!"
-                        })
-                    }
-                });
-        }
-        else
-        {
-            var settings = {};
-            settings.githubOrganization = AJS.$("#github_organization").val();
-
-            var res = AJS.$.ajax({
-                url: baseUrl + "/rest/admin-helper/1.0/config/checkSettings",
-                type: "PUT",
-                async:false,
-                contentType: "application/json",
-                data:JSON.stringify(settings)
-            });
-
-            AJS.$.when(res)
-                .done(function () {
-                    sendDataToServer(baseUrl)
-                })
-                .fail(function (error) {
-                    AJS.messages.error({
-                        title:"Error",
-                        body: error.responseText
-                    })
-                })
-        }
+            }
+        });
     }
 });

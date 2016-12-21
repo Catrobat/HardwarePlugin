@@ -55,3 +55,63 @@ function sendDataToServer(url)
         }
     });
 }
+
+function  checkPublicTokneAndOrganization(url) {
+
+    if (AJS.$("#github_token").val() !== '')
+    {
+        var new_private_token = AJS.$("#github_token").val();
+        var new_organization = AJS.$("#github_organization").val();
+
+        var res = AJS.$.ajax({
+            url: "https://api.github.com/orgs/"+ new_organization +"/teams?access_token=" + new_private_token,
+            type:"GET"
+        });
+
+        AJS.$.when(res)
+            .done(function () {
+                sendDataToServer(url)
+            })
+            .fail(function(error)
+            {
+                console.log(error.status);
+                if(error.status == 401) {
+                    AJS.messages.error({
+                        title: "Error: " + error.status,
+                        body: "Authentication Failed, check your private Token!"
+                    })
+                }
+                if(error.status == 404) {
+                    AJS.messages.error({
+                        title: "Error: "+ error.status,
+                        body: "The given Organization was not found!"
+                    })
+                }
+            });
+    }
+    else
+    {
+        var settings = {};
+        settings.githubOrganization = AJS.$("#github_organization").val();
+
+        var res = AJS.$.ajax({
+            url: url + "/rest/admin-helper/1.0/config/checkSettings",
+            type: "PUT",
+            async:false,
+            contentType: "application/json",
+            data:JSON.stringify(settings)
+        });
+
+        AJS.$.when(res)
+            .done(function () {
+                sendDataToServer(url)
+            })
+            .fail(function (error) {
+                AJS.messages.error({
+                    title:"Error",
+                    body: error.responseText
+                })
+            })
+    }
+
+}
