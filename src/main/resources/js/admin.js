@@ -255,8 +255,6 @@ AJS.toInit(function () {
     }
 
     function updateConfig() {
-
-        alert("update config called");
         var config = {};
 
         config.mailFromName = AJS.$("#mail-from-name").val();

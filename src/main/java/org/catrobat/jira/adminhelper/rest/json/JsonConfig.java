@@ -115,7 +115,7 @@ public final class JsonConfig {
 
         GithubHelper githubHelper = new GithubHelper(configService);
         this.availableGithubTeams = githubHelper.getAvailableTeams();
-        this.defaultGithubTeam = githubHelper.getTeamName(toCopy.getDefaultGithubTeamId());
+        this.defaultGithubTeam = configService.getConfiguration().getDefaultGithubTeam();
 
         this.userDirectoryId = toCopy.getUserDirectoryId();
         DirectoryManager directoryManager = ComponentAccessor.getComponent(DirectoryManager.class);

@@ -402,4 +402,18 @@ public class AdminHelperConfigServiceImpl implements AdminHelperConfigService {
 
         return getConfiguration();
     }
+
+    @Override
+    public AdminHelperConfig setDefaultGithubTeam(String defaultGithubTeam)
+    {
+        if(defaultGithubTeam.isEmpty())
+            return null;
+        else
+        {
+            AdminHelperConfig config = getConfiguration();
+            config.setDefaultGithubTeam(defaultGithubTeam);
+            config.save();
+            return config;
+        }
+    }
 }

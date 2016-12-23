@@ -126,6 +126,36 @@ public class ConfigResourceRest extends RestHelper {
         else
             return Response.serverError().entity("Github Configuration Settings are not valid").build();
 
+        System.out.println("Hello darkness my old friend");
+        if(jsonConfig.getDefaultGithubTeam() != null)
+        {
+            System.out.println("about to save Team" + jsonConfig.getDefaultGithubTeam());
+            configService.setDefaultGithubTeam(jsonConfig.getDefaultGithubTeam());
+        }
+
+
+        String token = configService.getConfiguration().getGithubApiToken();
+        String organizationName = configService.getConfiguration().getGithubOrganisation();
+
+        try {
+            GitHub gitHub = GitHub.connectUsingOAuth(token);
+            GHOrganization organization = gitHub.getOrganization(organizationName);
+            Collection<GHTeam> teamList = organization.getTeams().values();
+
+            if (jsonConfig.getDefaultGithubTeam() != null) {
+                for (GHTeam team : teamList) {
+                    if (jsonConfig.getDefaultGithubTeam().toLowerCase().equals(team.getName().toLowerCase())) {
+                        configService.setDefaultGithubTeamId(team.getId());
+                        break;
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+
         return Response.ok().build();
     }
 
@@ -198,14 +228,6 @@ public class ConfigResourceRest extends RestHelper {
                 GHOrganization organization = gitHub.getOrganization(organizationName);
                 Collection<GHTeam> teamList = organization.getTeams().values();
 
-                if (jsonConfig.getDefaultGithubTeam() != null) {
-                    for (GHTeam team : teamList) {
-                        if (jsonConfig.getDefaultGithubTeam().toLowerCase().equals(team.getName().toLowerCase())) {
-                            configService.setDefaultGithubTeamId(team.getId());
-                            break;
-                        }
-                    }
-                }
 
                 for (JsonTeam jsonTeam : jsonConfig.getTeams()) {
                     configService.removeTeam(jsonTeam.getName());

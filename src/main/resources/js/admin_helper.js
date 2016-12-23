@@ -30,7 +30,7 @@ function sendDataToServer(url)
 
     git_config.githubTokenPublic = AJS.$("#github_token_public").val();
     git_config.githubOrganization = AJS.$("#github_organization").val();
-    git_config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val");
+    git_config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val")
 
     AJS.$(".loadingDiv").show();
     AJS.$.ajax({

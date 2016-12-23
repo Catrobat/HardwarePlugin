@@ -34,6 +34,9 @@ public interface AdminHelperConfigService {
 
     public AdminHelperConfig setDefaultGithubTeamId(int defaultGithubTeamId);
 
+    AdminHelperConfig setDefaultGithubTeam(String defaultTeam);
+
+
     Team addTeam(String teamName, List<Integer> githubTeamIdList, List<String> coordinatorGroups,
                  List<String> seniorGroups, List<String> developerGroups);
 

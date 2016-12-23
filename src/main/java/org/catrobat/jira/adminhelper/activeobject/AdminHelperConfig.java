@@ -43,6 +43,10 @@ public interface AdminHelperConfig extends Entity {
 
     void setDefaultGithubTeamId(int defaultGithubTeamId);
 
+    void setDefaultGithubTeam(String defaultGithubTeam);
+
+    String getDefaultGithubTeam();
+
     String getMailFromName();
 
     void setMailFromName(String fromName);
