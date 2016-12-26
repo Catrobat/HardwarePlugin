@@ -22,6 +22,8 @@ var returnDialog;
 var removeHardwareDialog;
 var sortOutDialog;
 
+var readOnly = false;
+
 var urlRest = "/rest/admin-helper/latest";
 var urlRestHardware = urlRest + "/hardware";
 var urlSuffixUserSearch = urlRest + "/user/search";
@@ -50,6 +52,10 @@ AJS.toInit(function () {
     fillOutAllTables(baseUrl);
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
+    initGroupUserSearchField(baseUrl);
+    if(readOnly){
+        setReadOnlyProperties();
+    }
 });
 
 function fillOutAllTables(baseUrl) {
@@ -57,7 +63,7 @@ function fillOutAllTables(baseUrl) {
         url: baseUrl + urlSuffixHardwareModels,
         type: "GET",
         success: function (hardwareList) {
-            populateOverviewTable(hardwareList);
+            populateOverviewTable(hardwareList, readOnly);
             populateHardwareManagementTable(hardwareList);
         },
         error: function (error) {
@@ -201,7 +207,7 @@ function handleEvents(baseUrl) {
 
     AJS.$(document).on("click", ".device_details", function (e) {
         e.preventDefault();
-        showDeviceDetailDialog(baseUrl, e.target.id);
+        showDeviceDetailDialog(baseUrl, e.target.id, readOnly);
     });
 
     AJS.$(document).on("click", ".edit_model", function (e) {

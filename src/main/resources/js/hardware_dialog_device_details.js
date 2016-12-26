@@ -16,12 +16,12 @@
 
 "use strict";
 
-function showDeviceDetailDialog(baseUrl, deviceId) {
+function showDeviceDetailDialog(baseUrl, deviceId, readonly) {
     AJS.$.ajax({
         url: baseUrl + urlSuffixSingleDevice.replace("{0}", deviceId),
         type: "GET",
         success: function (device) {
-            showDeviceDetailDialogAjax(baseUrl, device)
+            showDeviceDetailDialogAjax(baseUrl, device, readonly)
         },
         error: function (error) {
             AJS.messages.error({
@@ -32,7 +32,7 @@ function showDeviceDetailDialog(baseUrl, deviceId) {
     });
 }
 
-function showDeviceDetailDialogAjax(baseUrl, device) {
+function showDeviceDetailDialogAjax(baseUrl, device, readonly) {
     var dialog = new AJS.Dialog({
         width: 900,
         height: 460,
@@ -108,8 +108,10 @@ function showDeviceDetailDialogAjax(baseUrl, device) {
         "            <td>" + formatString(device.sortedOutComment) + "</td>\n" +
         "        </tr>\n" +
         "    </tbody>\n" +
-        "</table>\n" +
-        "<div class=\"change-details\"><a class=\"change_details\" href=\"#\">change Device details</a></div>";
+        "</table>\n";
+
+        if(readonly === false)
+         deviceContent += "<div class=\"change-details\"><a class=\"change_details\" href=\"#\">change Device details</a></div>";
 
     var commentContent = "<table class=\"aui\">\n" +
         "    <thead>\n" +

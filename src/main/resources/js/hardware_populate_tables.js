@@ -16,7 +16,7 @@
 
 "use strict";
 
-function populateOverviewTable(hardwareList) {
+function populateOverviewTable(hardwareList, read_only_flag) {
     var tableBody = "";
 
     for (var i = 0; i < hardwareList.length; i++) {
@@ -26,11 +26,14 @@ function populateOverviewTable(hardwareList) {
             "<td class=\"type\">" + formatString(hardwareList[i].typeOfDevice) + "</td>\n" +
             "<td class=\"os\">" + formatString(hardwareList[i].operatingSystem) + "</td>\n" +
             "<td class=\"available\">" + hardwareList[i].available + "/" + hardwareList[i].sumOfDevices + "</td>\n";
-        if(hardwareList[i].available === 0) {
-            tableBody += "<td></td>";
-        } else {
+
+        if(hardwareList[i].available !== 0 && read_only_flag === false) {
             tableBody += "<td><a class=\"lending_out\" id=\"" + hardwareList[i].id + "\" href=\"#\">Lending out</a></td>\n";
         }
+        if(hardwareList[i].available === 0) {
+            tableBody += "<td></td>";
+        }
+
         tableBody += "</tr>";
 
     }
@@ -44,7 +47,7 @@ function populateOverviewTable(hardwareList) {
     });
 }
 
-function populateLentOutTable(hardwareList) {
+function populateLentOutTable(hardwareList, readonly) {
     var tableBody = "";
 
     for (var i = 0; i < hardwareList.length; i++) {
@@ -57,9 +60,11 @@ function populateLentOutTable(hardwareList) {
             "<td class=\"lent-out-by\">" + formatString(hardwareList[i].currentlyLentOutBy) + "</td>\n" +
             "<td class=\"lent-out-since\">" + currentlyLentOutSince.toISOString().split("T")[0] + "</td>\n" +
             "<td class=\"lent-out-purpose\">" + formatString(hardwareList[i].currentlyLentOutPurpose) + "</td>\n" +
-            "<td><a class=\"device_details\" id=\"" + hardwareList[i].id + "\" href=\"#\">Details</a></td>\n" +
-            "<td><a class=\"device_return\" id=\"" + hardwareList[i].id + "\" href=\"#\">Return</a></td>\n" +
-            "</tr>";
+            "<td><a class=\"device_details\" id=\"" + hardwareList[i].id + "\" href=\"#\">Details</a></td>\n";
+        if(readonly === false) {
+            tableBody += "<td><a class=\"device_return\" id=\"" + hardwareList[i].id + "\" href=\"#\">Return</a></td>\n";
+        }
+        tableBody += "</tr>";
     }
 
     AJS.$("#table-lent-out").html(tableBody);

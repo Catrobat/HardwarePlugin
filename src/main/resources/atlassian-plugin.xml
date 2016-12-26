@@ -71,6 +71,7 @@
         <resource type="download" name="hardware_dialog_sortout.js" location="js/hardware_dialog_sortout.js"/>
         <resource type="download" name="hardware_populate_tables.js" location="js/hardware_populate_tables.js"/>
         <resource type="download" name="admin_helper.css" location="css/admin_helper.css"/>
+        <resource type="download" name="hardware_helper.js" location="js/hardware_helper.js"/>
         <context>general</context>
     </web-resource>
 
