@@ -183,7 +183,7 @@
 
 
     <!-- Hardware Management Part -->
-    <web-item key="hardware_management" name="Link to Hardware Servlet" section="system.top.navigation.bar" weight="47">
+    <web-item key="hardware_management" name="Link to Hardware Servlet" section="system.user.options/personal" weight="47">
         <label>Hardware Management</label>
         <link linkId="hardware_management_link">/plugins/servlet/admin_helper/hardware</link>
         <condition class="org.catrobat.jira.adminhelper.helper.PermissionCondition">
