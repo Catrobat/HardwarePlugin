@@ -10,11 +10,13 @@ function enableSettingsChange() {
             document.getElementById("github_organization").disabled = true;
             document.getElementById("github_token_public").disabled = true;
             document.getElementById("github_token").disabled = true;
+            document.getElementById("default-github-team").disabled = true;
         }
         else {
             document.getElementById("github_organization").disabled = false;
             document.getElementById("github_token_public").disabled = false;
             document.getElementById("github_token").disabled = false;
+            document.getElementById("default-github-team").disabled = false;
         }
     }
 }

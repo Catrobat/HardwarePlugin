@@ -123,6 +123,5 @@
         </section>
     </div>
 </div>
-<button onclick=check_rest()>check rest</button>
 </body>
 </html>
