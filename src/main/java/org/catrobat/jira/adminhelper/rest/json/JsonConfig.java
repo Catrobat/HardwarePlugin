@@ -19,6 +19,7 @@ package org.catrobat.jira.adminhelper.rest.json;
 import com.atlassian.crowd.exception.DirectoryNotFoundException;
 import com.atlassian.crowd.manager.directory.DirectoryManager;
 import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.render.StrictEncoder;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.*;
@@ -68,6 +69,10 @@ public final class JsonConfig {
     private String mailSubject;
     @XmlElement
     private String mailBody;
+    @XmlElement
+    private List<String> readOnlyUsers;
+    @XmlElement
+    private List<String> readOnlyGroups;
 
     public JsonConfig() {
 
@@ -251,4 +256,8 @@ public final class JsonConfig {
     public void setMailBody(String mailBody) {
         this.mailBody = mailBody;
     }
+
+    public List<String> getReadOnlyUsers() { return this.readOnlyUsers; }
+
+    public  List<String> getReadOnlyGroups() { return this.readOnlyGroups; }
 }

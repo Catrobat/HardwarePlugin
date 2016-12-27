@@ -55,3 +55,27 @@ function initGroupUserSearchField(baseUrl)
        alert("save pressed");
     }
 }
+
+function checkPremission(baseUrl)
+{
+    AJS.$.ajax({
+        url: baseUrl + "/rest/admin-helper/latest/hardware/getReadOnlyStatus",
+        type: "GET",
+        success: function (data) {
+           if(data.isReadOnly === true)
+           {
+               readonlyRoutine();
+               AJS.messages.error({
+                   title:"Alert!",
+                   body:"You only have Read Only access, you may not change any settings!"
+                   })
+           }
+        },
+        error: function (err) {
+            AJS.messages.error({
+                    title:"There was an eror!",
+                    body:err.responseText
+                })
+        }
+    });
+}

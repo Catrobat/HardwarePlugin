@@ -48,7 +48,7 @@ public class UpgradeTask implements ActiveObjectsUpgradeTask {
             activeObjects.migrate(AdminHelperConfig.class, ApprovedGroup.class, ApprovedUser.class, Device.class,
                     DeviceComment.class, GithubTeam.class, Group.class, HardwareModel.class, Lending.class,
                     OperatingSystem.class, Producer.class, Resource.class, Team.class, TeamToGithubTeam.class,
-                    TeamToGroup.class, TypeOfDevice.class);
+                    TeamToGroup.class, TypeOfDevice.class, ReadOnlyHdwUser.class);
         }
     }
 }

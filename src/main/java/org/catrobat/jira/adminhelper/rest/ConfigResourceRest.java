@@ -126,10 +126,8 @@ public class ConfigResourceRest extends RestHelper {
         else
             return Response.serverError().entity("Github Configuration Settings are not valid").build();
 
-        System.out.println("Hello darkness my old friend");
         if(jsonConfig.getDefaultGithubTeam() != null)
         {
-            System.out.println("about to save Team" + jsonConfig.getDefaultGithubTeam());
             configService.setDefaultGithubTeam(jsonConfig.getDefaultGithubTeam());
         }
 

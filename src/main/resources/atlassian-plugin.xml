@@ -108,6 +108,8 @@
     <component key="operatingSystem" class="org.catrobat.jira.adminhelper.activeobject.OperatingSystemServiceImpl"/>
     <component key="producer" class="org.catrobat.jira.adminhelper.activeobject.ProducerServiceImpl"/>
     <component key="typeOfDevice" class="org.catrobat.jira.adminhelper.activeobject.TypeOfDeviceServiceImpl"/>
+    <component key="readOnlyUsers" class ="org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserServiceImpl" />
+    <component key="readOnlyGroups" class="org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupServiceImpl" />
 
 
     <!-- import from the product container -->
@@ -155,6 +157,8 @@
         <entity>org.catrobat.jira.adminhelper.activeobject.TeamToGithubTeam</entity>
         <entity>org.catrobat.jira.adminhelper.activeobject.TeamToGroup</entity>
         <entity>org.catrobat.jira.adminhelper.activeobject.TypeOfDevice</entity>
+        <entity>org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUser</entity>
+        <entity>org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroup</entity>
     </ao>
 
     <web-section key="admin-helper-config-section" location="admin_plugins_menu">

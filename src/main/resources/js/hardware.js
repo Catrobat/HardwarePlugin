@@ -53,10 +53,13 @@ AJS.toInit(function () {
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
     initGroupUserSearchField(baseUrl);
-    if(readOnly){
-        setReadOnlyProperties();
-    }
+    checkPremission(baseUrl);
 });
+
+function readonlyRoutine() {
+    readOnly = true;
+    setReadOnlyProperties();
+}
 
 function fillOutAllTables(baseUrl) {
     AJS.$.ajax({

@@ -16,18 +16,19 @@
 
 package org.catrobat.jira.adminhelper.rest;
 
+import com.atlassian.crowd.embedded.api.*;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
+import com.atlassian.jira.security.plugin.ProjectPermissionOverride;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
+import com.atlassian.jira.util.json.JSONException;
+import com.atlassian.jira.util.json.JSONObject;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.helper.PermissionCondition;
-import org.catrobat.jira.adminhelper.rest.json.JsonDevice;
-import org.catrobat.jira.adminhelper.rest.json.JsonDeviceComment;
-import org.catrobat.jira.adminhelper.rest.json.JsonHardwareModel;
-import org.catrobat.jira.adminhelper.rest.json.JsonLending;
+import org.catrobat.jira.adminhelper.rest.json.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -50,12 +51,15 @@ public class HardwareRest extends RestHelper {
     private final OperatingSystemService operatingSystemService;
     private final DeviceCommentService deviceCommentService;
     private final PermissionCondition permissionCondition;
+    private final ReadOnlyHdwUserService readOnlyUserService;
+    private final ReadOnlyHdwGroupService readOnlyHdwGroupService;
 
     public HardwareRest(UserManager userManager, HardwareModelService hardwareModelService, DeviceService deviceService,
                         LendingService lendingService, TypeOfDeviceService typeOfDeviceService,
                         ProducerService producerService, OperatingSystemService operatingSystemService,
                         DeviceCommentService deviceCommentService, AdminHelperConfigService configurationService,
-                        GroupManager groupManager, PermissionManager permissionManager) {
+                        GroupManager groupManager, PermissionManager permissionManager,
+                        ReadOnlyHdwUserService readOnlyUserService, ReadOnlyHdwGroupService readOnlyHdwGroupService) {
         super(permissionManager, configurationService, userManager, groupManager);
         this.userManager = checkNotNull(userManager);
         this.hardwareModelService = checkNotNull(hardwareModelService);
@@ -66,6 +70,8 @@ public class HardwareRest extends RestHelper {
         this.operatingSystemService = checkNotNull(operatingSystemService);
         this.deviceCommentService = checkNotNull(deviceCommentService);
         this.permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
+        this.readOnlyUserService = checkNotNull(readOnlyUserService);
+        this.readOnlyHdwGroupService = checkNotNull(readOnlyHdwGroupService);
     }
 
     @GET
@@ -286,7 +292,7 @@ public class HardwareRest extends RestHelper {
         }
 
         String lendingByUserName;
-        if(lendingByUser == null) {
+        if (lendingByUser == null) {
             lendingByUserName = jsonLending.getLentOutBy();
         } else {
             lendingByUserName = lendingByUser.getKey();
@@ -401,8 +407,8 @@ public class HardwareRest extends RestHelper {
         }
 
         Map<String, JsonDevice> deviceMap = new TreeMap<String, JsonDevice>();
-        for(Device device : deviceService.all()) {
-            if(device != null && device.getReceivedFrom() != null && !deviceMap.containsKey(device.getReceivedFrom())) {
+        for (Device device : deviceService.all()) {
+            if (device != null && device.getReceivedFrom() != null && !deviceMap.containsKey(device.getReceivedFrom())) {
                 JsonDevice jsonDevice = new JsonDevice();
                 jsonDevice.setReceivedFrom(device.getReceivedFrom());
                 deviceMap.put(device.getReceivedFrom(), jsonDevice);
@@ -475,10 +481,9 @@ public class HardwareRest extends RestHelper {
         }
 
 
-
         ArrayList<JsonLending> lendingArrayList = new ArrayList<JsonLending>();
         com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
-        for(Lending lending : lendingService.searchAllForUser(userKey)) {
+        for (Lending lending : lendingService.searchAllForUser(userKey)) {
             lendingArrayList.add(new JsonLending(lending, jiraUserManager));
         }
 
@@ -530,4 +535,210 @@ public class HardwareRest extends RestHelper {
         return Response.noContent().build();
     }
 
+    public boolean saveReadOnlyUsers(List<String> readonly_users) {
+
+        System.out.println("save read only users");
+        System.out.println("users are: " + readonly_users);
+
+        List<String> temp_user_keys = new ArrayList<>();
+
+        for (String user : readonly_users) {
+            user = user.trim();
+            ApplicationUser jira_user = userManager.getUserByName(user);
+            String key;
+
+            try {
+                key = jira_user.getKey();
+            } catch (Exception e) {
+                System.out.println("User does not exist");
+                return false;
+            }
+            temp_user_keys.add(key);
+        }
+
+        for(String key : temp_user_keys)
+            readOnlyUserService.addUserKey(key);
+
+        //returns true if everyting went fine
+        return true;
+    }
+
+    public boolean saveReadOnlyGroups(List<String> readonly_groups) {
+        System.out.println("save read only groups");
+        System.out.println("groups are: " + readonly_groups);
+        GroupManager group_manager = ComponentAccessor.getGroupManager();
+
+        List<String> temp_groups = new ArrayList<>();
+
+        for (String group : readonly_groups) {
+            group = group.trim();
+            com.atlassian.crowd.embedded.api.Group temp_group = group_manager.getGroup(group);
+
+            if(temp_group == null)
+                return false;
+            temp_groups.add(group);
+        }
+        for(String group_name : temp_groups)
+             readOnlyHdwGroupService.setGroupName(group_name);
+
+        return true;
+    }
+
+    @GET
+    @Path("/isReadOnlyUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response currentUserIsReadOnlyUser(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        ApplicationUser current_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+        String key = current_user.getKey();
+        boolean readonly = readOnlyUserService.isReadOnlyHardwareUser(key);
+        JsonReadOnly resp;
+
+        try{
+           resp = generateResponseObject(readonly);
+        }
+        catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+
+        return Response.ok(resp).build();
+    }
+
+    @GET
+    @Path("/isReadOnlyUser/{User}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userIsReadonlyUser(@Context HttpServletRequest request, @PathParam("User") String username)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        ApplicationUser current_user = ComponentAccessor.getUserManager().getUserByName(username);
+        String key = current_user.getKey();
+        boolean is_readonly = readOnlyUserService.isReadOnlyHardwareUser(key);
+        JsonReadOnly resp;
+
+        try{
+            resp = generateResponseObject(is_readonly);
+        }
+        catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+
+        return Response.ok(resp).build();
+    }
+
+
+    private JsonReadOnly generateResponseObject(boolean readonly) throws JSONException {
+        JsonReadOnly resp = new JsonReadOnly(readonly);
+
+        return resp;
+    }
+
+    @GET
+    @Path("/getReadOnlyStatus")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReadOnlyStatus(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        ApplicationUser current_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+        boolean is_read_only_user = readOnlyUserService.isReadOnlyHardwareUser(current_user.getKey());
+        boolean is_in_read_only_group = readOnlyHdwGroupService.isInReadOnlyGroup(current_user.getName());
+        JsonReadOnly resp;
+
+        try{
+            resp = generateResponseObject((is_in_read_only_group || is_read_only_user));
+        }
+        catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+
+        return Response.ok(resp).build();
+    }
+
+    @GET
+    @Path("/getReadOnlyUsersAndGroups")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReadOnlyUsersAndGroups(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        JsonReadOnly resp = new JsonReadOnly();
+        resp.setReadOnlyGroups(readOnlyHdwGroupService.all());
+        resp.setReadOnlyUsers(readOnlyUserService.all());
+
+        return Response.ok(resp).build();
+    }
+
+    @POST
+    @Path("/resetReadonlyUsersAndGroups")
+    public Response resetReadOnlyUsersAndGroups(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        readOnlyHdwGroupService.clearReadOnlyHdwGroups();
+        readOnlyUserService.clearReadOnlyHardwareUsers();
+
+        return  Response.ok().build();
+    }
+
+    @PUT
+    @Path("/saveReadOnlyUsersAndGroups")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveReadOnlyUsersAndGroups(@Context HttpServletRequest request, JsonReadOnly config)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+
+        String error_response_text = "There was an error, processing your data!\n ";
+
+        boolean result = true;
+        boolean user_result = true;
+
+        boolean users_present = config.getReadOnlyUsers().size() != 0;
+        boolean groups_present = config.getReadOnlyGroups().size() != 0;
+
+        if(!users_present && !groups_present)
+            return Response.serverError().entity("The given Dataset is empty! \n " +
+                    "Please check your entries and try again.").build();
+
+        if(users_present) {
+            readOnlyUserService.clearReadOnlyHardwareUsers();
+            user_result = saveReadOnlyUsers(config.getReadOnlyUsers());
+            result = user_result;
+        }
+        if(groups_present)
+        {
+            result &= saveReadOnlyGroups(config.getReadOnlyGroups());
+        }
+
+        if(!result)
+        {
+            if(!user_result)
+                error_response_text += "One or more Usernames do not exist, please check your entries!";
+            else
+                error_response_text += "One or more UserGroups do not exist, please check your entries!";
+            return Response.serverError().entity(error_response_text).build();
+        }
+
+        return Response.ok().build();
+    }
 }
