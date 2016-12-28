@@ -51,9 +51,9 @@ function initGroupUserSearchField(baseUrl)
         }
     });
 
-    AJS.$("#save-hardware-settings").submit = function() {
-       alert("save pressed");
-    }
+    AJS.$("#save-hardware-premission").click(function() {
+       formulateReadonlyJSONAndSendToServer();
+    });
 }
 
 function checkPremission(baseUrl)
@@ -64,18 +64,32 @@ function checkPremission(baseUrl)
         success: function (data) {
            if(data.isReadOnly === true)
            {
-               readonlyRoutine();
+               initHardwareVelocityReadonly(baseUrl);
                AJS.messages.error({
                    title:"Alert!",
-                   body:"You only have Read Only access, you may not change any settings!"
+                   body:"You only have Read Only access, you may not change any settings! <br>"+
+                       "For further information contact your Jira Admin."
                    })
+           }
+           else{
+               initHardwareVelocityAdmin(baseUrl);
            }
         },
         error: function (err) {
             AJS.messages.error({
-                    title:"There was an eror!",
+                    title:"There was an Error!",
                     body:err.responseText
                 })
         }
     });
+}
+
+function initHdwReadOnlyUsersAndGroups()
+{
+    
+}
+
+function formulateReadonlyJSONAndSendToServer()
+{
+
 }

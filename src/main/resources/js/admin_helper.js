@@ -99,9 +99,8 @@ function  checkPublicTokneAndOrganization(url) {
         var res = AJS.$.ajax({
             url: url + "/rest/admin-helper/1.0/config/checkSettings",
             type: "PUT",
-            async:false,
             contentType: "application/json",
-            data:JSON.stringify(settings)
+            data: JSON.stringify(settings)
         });
 
         AJS.$.when(res)

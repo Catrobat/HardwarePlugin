@@ -108,6 +108,8 @@ public class UserRest extends RestHelper {
             user.setDisplayName(jsonUser.getFirstName() + " " + jsonUser.getLastName());
             user.setActive(true);
             String password = RandomStringUtils.random(16, 0, 0, true, true, null, new SecureRandom());
+            System.out.println("----------------User Creation-------------------");
+            System.out.println("password is: " + password);
             PasswordCredential credential = new PasswordCredential(password);
             directoryManager.addUser(config.getUserDirectoryId(), user, credential);
             sendEmail(jsonUser.getFirstName(), jsonUser.getUserName(), jsonUser.getEmail(), password);

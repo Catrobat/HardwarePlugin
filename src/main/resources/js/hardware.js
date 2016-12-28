@@ -49,16 +49,24 @@ var urlSuffixReceivedFrom = urlRestHardware + "/received-from";
 
 AJS.toInit(function () {
     var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
+    checkPremission(baseUrl);
+});
+
+function initHardwareVelocityReadonly(baseUrl) {
+    readOnly = true;
     fillOutAllTables(baseUrl);
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
     initGroupUserSearchField(baseUrl);
-    checkPremission(baseUrl);
-});
-
-function readonlyRoutine() {
-    readOnly = true;
     setReadOnlyProperties();
+}
+
+function initHardwareVelocityAdmin(baseUrl)
+{
+    fillOutAllTables(baseUrl);
+    handleEvents(baseUrl);
+    initIndividualRelatedLendingTab(baseUrl);
+    initGroupUserSearchField(baseUrl);
 }
 
 function fillOutAllTables(baseUrl) {
@@ -81,7 +89,7 @@ function fillOutAllTables(baseUrl) {
         url: baseUrl + urlSuffixDevicesOngoingLending,
         type: "GET",
         success: function (deviceList) {
-            populateLentOutTable(deviceList);
+            populateLentOutTable(deviceList, readOnly);
         },
         error: function (error) {
             AJS.messages.error({
@@ -109,7 +117,7 @@ function fillOutAllTables(baseUrl) {
         url: baseUrl + urlSuffixDevices,
         type: "GET",
         success: function (deviceList) {
-            populateActiveDevicesTable(deviceList);
+            populateActiveDevicesTable(deviceList, readOnly);
             populateAllDevicesTable(deviceList);
         },
         error: function (error) {

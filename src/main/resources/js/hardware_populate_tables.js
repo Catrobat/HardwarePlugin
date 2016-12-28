@@ -101,7 +101,7 @@ function populateSortedOutTable(deviceList) {
     });
 }
 
-function populateActiveDevicesTable(deviceList) {
+function populateActiveDevicesTable(deviceList,readonly) {
     var tableBody = "";
 
     for (var i = 0; i < deviceList.length; i++) {
@@ -124,9 +124,11 @@ function populateActiveDevicesTable(deviceList) {
             "<td class=\"inventory\">" + formatString(deviceList[i].inventoryNumber) + "</td>\n" +
             "<td class=\"received-from\">" + formatString(deviceList[i].receivedFrom) + "</td>\n" +
             "<td class=\"lent-out-since\">" + getShortDate(deviceList[i].currentlyLentOutSince) + "</td>\n" +
-            "<td class=\"lent-out-by\">" + formatString(deviceList[i].currentlyLentOutBy) + "</td>\n" +
-            "<td class=\"action\">" + action + "</td>\n" +
-            "<td><a class=\"device_details\" id=\"" + deviceList[i].id + "\" href=\"#\">Details</a></td>\n" +
+            "<td class=\"lent-out-by\">" + formatString(deviceList[i].currentlyLentOutBy) + "</td>\n";
+            if(!readonly) {
+                tableBody += "<td class=\"action\">" + action + "</td>\n";
+            }
+            tableBody += "<td><a class=\"device_details\" id=\"" + deviceList[i].id + "\" href=\"#\">Details</a></td>\n" +
             "</tr>";
     }
 

@@ -226,6 +226,7 @@ AJS.toInit(function () {
                     }
                 }
 
+
                 AJS.$("#plugin-permission").auiSelect2("data", approved);
                 AJS.$("#userdirectory").auiSelect2("data", {
                     id: config.userDirectoryId,

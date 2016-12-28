@@ -34,7 +34,7 @@
         <li class="menu-item">
             <a href="#tabs-lent-out"><strong>Lent Out</strong></a>
         </li>
-        <li class="menu-item" name="hidden-if-read-only">
+        <li class="menu-item">
             <a href="#tabs-active-devices"><strong>Active Devices</strong></a>
         </li>
         <li class="menu-item" name="hidden-if-read-only">
@@ -134,7 +134,7 @@
                 <th>Received From</th>
                 <th>Lent out since</th>
                 <th>Lent out by</th>
-                <th>Action</th>
+                <th name="hidden-if-read-only">Action</th>
                 <th class="aui-table-column-unsortable">Details</th>
             </tr>
             </thead>
@@ -289,7 +289,7 @@
                         </ul>
                     </div>
                     <br><br>
-                    <input type="submit" value="Save" class="aui-button aui-button-primary" id="save-hardware-premission"/>
+                    <input type="button" value="Save" class="aui-button aui-button-primary" id="save-hardware-premission"/>
                 </div>
             </fieldset>
         </form>
