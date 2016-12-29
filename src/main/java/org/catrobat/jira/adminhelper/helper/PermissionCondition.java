@@ -25,6 +25,8 @@ import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfig;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
 
 import java.util.Collection;
 import java.util.Map;
@@ -55,7 +57,6 @@ public class PermissionCondition extends AbstractPermissionCondition {
     }
 
     public boolean isApproved(ApplicationUser applicationUser) {
-        //Todo: fix it
 
         if (applicationUser == null || !ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(applicationUser)) {
             return false;

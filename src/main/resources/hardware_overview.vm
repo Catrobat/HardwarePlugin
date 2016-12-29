@@ -279,17 +279,20 @@
         <form class="aui">
             <fieldset>
                 <div class="field-group">
-                    <label for="hardware-permission">Allowed Groups/Users</label>
-                    <input class="text" type="text" id="hardware-permission" name="hardware-permission"
+                    <label for="hardware-permission">ReadOnly Groups/Users</label>
+                    <input class="text" type="text" id="hardware-permission" name="hardware-premission"
                            title="hardware-permission">
 
                     <div class="description">
                         <ul>
                             <li>Select Users to restrict access to read only!</li>
+                            <li>If nothing is given, only Jira Admins have access to this section</li>
+                            <li>Clear All resets all current readonly users and groups.</li>
                         </ul>
                     </div>
                     <br><br>
                     <input type="button" value="Save" class="aui-button aui-button-primary" id="save-hardware-premission"/>
+                    <input type="button" value="Clear All"  class ="aui-button" id="clear-readonly-lists"/>
                 </div>
             </fieldset>
         </form>

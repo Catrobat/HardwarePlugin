@@ -23,6 +23,9 @@ import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroup;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +39,10 @@ public class HardwareServlet extends HelperServlet {
 
     public HardwareServlet(UserManager userManager, LoginUriProvider loginUriProvider, TemplateRenderer renderer,
                            WebSudoManager webSudoManager, GroupManager groupManager,
-                           AdminHelperConfigService configurationService, PageBuilderService page_service) {
+                           AdminHelperConfigService configurationService, PageBuilderService page_service,
+                           ReadOnlyHdwGroupService readOnlyHdwGroupService, ReadOnlyHdwUserService readOnlyHdwUserService) {
         super(userManager, loginUriProvider, webSudoManager, groupManager, configurationService);
+        super.setHWdUserAndGroupService(readOnlyHdwGroupService, readOnlyHdwUserService);
         this.renderer = renderer;
         this.pageBuilderService = page_service;
     }

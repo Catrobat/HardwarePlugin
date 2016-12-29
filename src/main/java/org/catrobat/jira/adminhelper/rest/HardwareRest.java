@@ -61,6 +61,7 @@ public class HardwareRest extends RestHelper {
                         GroupManager groupManager, PermissionManager permissionManager,
                         ReadOnlyHdwUserService readOnlyUserService, ReadOnlyHdwGroupService readOnlyHdwGroupService) {
         super(permissionManager, configurationService, userManager, groupManager);
+        super.setHardwareServices(readOnlyHdwGroupService, readOnlyUserService);
         this.userManager = checkNotNull(userManager);
         this.hardwareModelService = checkNotNull(hardwareModelService);
         this.deviceService = checkNotNull(deviceService);
@@ -77,7 +78,7 @@ public class HardwareRest extends RestHelper {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardwareModelList(@Context HttpServletRequest request) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -93,7 +94,7 @@ public class HardwareRest extends RestHelper {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Response putHardware(@Context HttpServletRequest request, JsonHardwareModel jsonHardwareModel) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -126,7 +127,7 @@ public class HardwareRest extends RestHelper {
     @Path("/types")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTypesOfDevices(@Context HttpServletRequest request, String query) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -143,7 +144,7 @@ public class HardwareRest extends RestHelper {
     @Path("/producers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProducers(@Context HttpServletRequest request, String query) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -160,7 +161,7 @@ public class HardwareRest extends RestHelper {
     @Path("/operating-systems")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOperatingSystems(@Context HttpServletRequest request, String query) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -177,7 +178,7 @@ public class HardwareRest extends RestHelper {
     @Path("/{hardwareId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getHardware(@Context HttpServletRequest request, @PathParam("hardwareId") int hardwareId) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -190,7 +191,7 @@ public class HardwareRest extends RestHelper {
     @Path("/{hardwareId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteHardware(@Context HttpServletRequest request, @PathParam("hardwareId") int hardwareId, JsonHardwareModel moveToHardwareJson) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -218,7 +219,7 @@ public class HardwareRest extends RestHelper {
     @Path("/{hardwareId}/devices")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addDevice(@Context HttpServletRequest request, @PathParam("hardwareId") int hardwareId, JsonDevice jsonDevice) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -256,7 +257,7 @@ public class HardwareRest extends RestHelper {
     @Path("/{hardwareId}/devices/available")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDevicesAvailableForHardware(@Context HttpServletRequest request, @PathParam("hardwareId") int hardwareId) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -274,7 +275,7 @@ public class HardwareRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response lendOutDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId, JsonLending jsonLending) {
 
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -321,7 +322,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/{deviceId}/current-lending")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurrentLendingForDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -352,7 +353,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/{deviceId}/current-lending")
     @Produces(MediaType.APPLICATION_JSON)
     public Response bringBackCurrentLendingForDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId, JsonLending jsonLending) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -401,7 +402,7 @@ public class HardwareRest extends RestHelper {
     @Path("/received-from")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReceivedFrom(@Context HttpServletRequest request) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -422,7 +423,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDevices(@Context HttpServletRequest request) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -440,7 +441,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/sorted-out")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSortedOutDevices(@Context HttpServletRequest request) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -457,7 +458,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/ongoing-lending")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCurrentlyLentOut(@Context HttpServletRequest request) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -475,7 +476,7 @@ public class HardwareRest extends RestHelper {
     @Path("/lending/all-for-user")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLendingForUser(@Context HttpServletRequest request, @FormParam("user") String userKey) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -494,7 +495,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/{deviceId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -512,7 +513,7 @@ public class HardwareRest extends RestHelper {
     @Path("/devices/{deviceId}/sort-out")
     @Produces(MediaType.APPLICATION_JSON)
     public Response sortOutDevice(@Context HttpServletRequest request, @PathParam("deviceId") int deviceId, JsonDevice jsonDevice) {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -589,7 +590,7 @@ public class HardwareRest extends RestHelper {
     @Produces(MediaType.APPLICATION_JSON)
     public Response currentUserIsReadOnlyUser(@Context HttpServletRequest request)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -614,7 +615,7 @@ public class HardwareRest extends RestHelper {
     @Produces(MediaType.APPLICATION_JSON)
     public Response userIsReadonlyUser(@Context HttpServletRequest request, @PathParam("User") String username)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -646,7 +647,7 @@ public class HardwareRest extends RestHelper {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReadOnlyStatus(@Context HttpServletRequest request)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -671,7 +672,7 @@ public class HardwareRest extends RestHelper {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReadOnlyUsersAndGroups(@Context HttpServletRequest request)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -687,7 +688,7 @@ public class HardwareRest extends RestHelper {
     @Path("/resetReadonlyUsersAndGroups")
     public Response resetReadOnlyUsersAndGroups(@Context HttpServletRequest request)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }
@@ -703,7 +704,7 @@ public class HardwareRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveReadOnlyUsersAndGroups(@Context HttpServletRequest request, JsonReadOnly config)
     {
-        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkHardwareRestPremission();
         if (unauthorized != null) {
             return unauthorized;
         }

@@ -18,11 +18,11 @@ import java.util.List;
 public class JsonReadOnly {
 
     @XmlElement
-    boolean isReadOnly;
+    private boolean isReadOnly;
     @XmlElement
-    List<String> readOnlyUsers;
+    private List<String> readOnlyUsers;
     @XmlElement
-    List<String> readOnlyGroups;
+    private List<String> readOnlyGroups;
 
     public JsonReadOnly(){}
 

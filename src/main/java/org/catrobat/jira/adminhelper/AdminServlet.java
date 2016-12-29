@@ -24,6 +24,9 @@ import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroup;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

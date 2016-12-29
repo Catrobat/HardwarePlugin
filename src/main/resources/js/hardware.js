@@ -67,6 +67,7 @@ function initHardwareVelocityAdmin(baseUrl)
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
     initGroupUserSearchField(baseUrl);
+    initHdwReadOnlyUsersAndGroups(baseUrl);
 }
 
 function fillOutAllTables(baseUrl) {

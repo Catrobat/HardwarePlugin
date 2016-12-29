@@ -21,8 +21,13 @@ import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.websudo.WebSudoManager;
+import org.apache.xml.security.c14n.implementations.Canonicalizer11_OmitComments;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import com.atlassian.jira.user.ApplicationUser;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroup;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
+import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
+import org.catrobat.jira.adminhelper.helper.HardwarePremissionCondition;
 import org.catrobat.jira.adminhelper.helper.PermissionCondition;
 
 
@@ -33,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 
+import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class HelperServlet extends HttpServlet {
@@ -41,6 +47,9 @@ public abstract class HelperServlet extends HttpServlet {
     private final WebSudoManager webSudoManager;
     private final GroupManager groupManager;
     private final AdminHelperConfigService configurationService;
+    private ReadOnlyHdwGroupService readOnlyHdwGroupService;
+    private ReadOnlyHdwUserService readOnlyHdwUserService;
+    private boolean isHdwServlet;
 
     public HelperServlet(final UserManager userManager, final LoginUriProvider loginUriProvider,
                          final WebSudoManager webSudoManager, final GroupManager groupManager,
@@ -50,11 +59,18 @@ public abstract class HelperServlet extends HttpServlet {
         this.webSudoManager = checkNotNull(webSudoManager, "webSudoManager");
         this.groupManager = checkNotNull(groupManager);
         this.configurationService = checkNotNull(configurationService);
+        this.readOnlyHdwUserService = null;
+        this.readOnlyHdwGroupService = null;
+        this.isHdwServlet = false;
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        checkPermission(request, response);
+        if(isHdwServlet)
+            checkHardwarePremission(response);
+        else
+            checkPermission(request, response);
+
     }
 
     @Override
@@ -63,7 +79,6 @@ public abstract class HelperServlet extends HttpServlet {
     }
 
     private void checkPermission(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-         //TODO: fix it
         PermissionCondition permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
         ApplicationUser currently_logged_in = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
 
@@ -77,7 +92,6 @@ public abstract class HelperServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-
         if (!webSudoManager.canExecuteRequest(request)) {
             webSudoManager.enforceWebSudoProtection(request, response);
             return;
@@ -97,5 +111,32 @@ public abstract class HelperServlet extends HttpServlet {
             builder.append(request.getQueryString());
         }
         return URI.create(builder.toString());
+    }
+
+    private void checkHardwarePremission(HttpServletResponse response) throws IOException
+    {
+        System.out.println("------------Checking Hardware Premission --------------------");
+        HardwarePremissionCondition hdwpremission = new HardwarePremissionCondition(null, userManager,
+                readOnlyHdwGroupService, readOnlyHdwUserService, configurationService, groupManager);
+
+        PermissionCondition permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
+
+        ApplicationUser applicationUser = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+        if(applicationUser == null) {
+            redirectToLogin(null, response);
+        }
+        else if(!permissionCondition.isApproved(applicationUser)) {
+            if(!hdwpremission.approvedHardwareUser(applicationUser)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            }
+        }
+    }
+
+    public void setHWdUserAndGroupService(ReadOnlyHdwGroupService readOnlyHdwGroupService,
+                                          ReadOnlyHdwUserService readOnlyHdwUserService)
+    {
+        this.readOnlyHdwGroupService = readOnlyHdwGroupService;
+        this.readOnlyHdwUserService = readOnlyHdwUserService;
+        this.isHdwServlet = true;
     }
 }
