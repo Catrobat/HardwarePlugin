@@ -15,6 +15,8 @@ import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
 import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
 
+import java.util.Collection;
+
 public class HardwarePremissionCondition extends JiraGlobalPermissionCondition {
 
     private final UserManager userManager;
@@ -49,15 +51,18 @@ public class HardwarePremissionCondition extends JiraGlobalPermissionCondition {
 
     private boolean hasPermission(ApplicationUser applicationUser)
     {
-        if(adminHelperConfigService.getConfiguration().getApprovedGroups().length == 0 &&
-                adminHelperConfigService.getConfiguration().getApprovedUsers().length == 0)
+        if(applicationUser == null || !ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(applicationUser)) {
+            return isReadonlyHardwareUser(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser());
+        }
+        else if(adminHelperConfigService.isUserApproved(applicationUser.getKey())) {
             return true;
+        }
 
-        if(isReadonlyHardwareUser(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()))
-            return true;
-
-        else if(adminHelperConfigService.isUserApproved(applicationUser.getKey()))
-            return true;
+        Collection<String> groupNameCollection = groupManager.getGroupNamesForUser(applicationUser);
+        for (String groupName : groupNameCollection) {
+            if (adminHelperConfigService.isGroupApproved(groupName))
+                return true;
+        }
 
         return false;
     }

@@ -67,10 +67,9 @@ public abstract class HelperServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if(isHdwServlet)
-            checkHardwarePremission(response);
+            checkHardwarePremission(response, request);
         else
             checkPermission(request, response);
-
     }
 
     @Override
@@ -113,7 +112,7 @@ public abstract class HelperServlet extends HttpServlet {
         return URI.create(builder.toString());
     }
 
-    private void checkHardwarePremission(HttpServletResponse response) throws IOException
+    private void checkHardwarePremission(HttpServletResponse response, HttpServletRequest request) throws IOException
     {
         System.out.println("------------Checking Hardware Premission --------------------");
         HardwarePremissionCondition hdwpremission = new HardwarePremissionCondition(null, userManager,
@@ -123,7 +122,7 @@ public abstract class HelperServlet extends HttpServlet {
 
         ApplicationUser applicationUser = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
         if(applicationUser == null) {
-            redirectToLogin(null, response);
+            redirectToLogin(request, response);
         }
         else if(!permissionCondition.isApproved(applicationUser)) {
             if(!hdwpremission.approvedHardwareUser(applicationUser)) {

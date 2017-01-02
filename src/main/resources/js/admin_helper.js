@@ -33,7 +33,7 @@ function sendDataToServer(url)
     git_config.githubTokenPublic = AJS.$("#github_token_public").val();
     git_config.githubOrganization = AJS.$("#github_organization").val();
     git_config.defaultGithubTeam = AJS.$("#default-github-team").auiSelect2("val")
-    
+
     AJS.$.ajax({
         url: url + "/rest/admin-helper/1.0/config/saveGithubConfig",
         type: "PUT",
@@ -45,7 +45,6 @@ function sendDataToServer(url)
                 title: "Success!",
                 body: "Github Settings were successfully saved!"
             });
-            populateForm();
         },
         error: function (error) {
             AJS.messages.error({
