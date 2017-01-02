@@ -541,7 +541,6 @@ AJS.toInit(function () {
     AJS.$("#save-github-settings").click(function (e) {
         e.preventDefault();
         saveGithubSettings();
-        populateForm();
         scrollToAnchor('top');
     });
 
