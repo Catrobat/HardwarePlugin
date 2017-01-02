@@ -12,7 +12,6 @@ import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
-import org.catrobat.jira.adminhelper.activeobject.Group;
 import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupService;
 import org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserService;
 
@@ -29,7 +28,6 @@ public class HardwarePremissionCondition extends JiraGlobalPermissionCondition {
                                        ReadOnlyHdwUserService readOnlyHdwUserService,
                                        AdminHelperConfigService adminHelperConfigService,
                                        GroupManager groupManager)
-
     {
         super(premissionManager);
         this.userManager = userManager;
@@ -40,7 +38,7 @@ public class HardwarePremissionCondition extends JiraGlobalPermissionCondition {
     }
     @Override
     public boolean shouldDisplay(ApplicationUser applicationUser, JiraHelper jiraHelper) {
-        return hasPremission(applicationUser);
+        return hasPermission(applicationUser);
     }
 
     private boolean isReadonlyHardwareUser(ApplicationUser applicationUser)
@@ -49,22 +47,19 @@ public class HardwarePremissionCondition extends JiraGlobalPermissionCondition {
                 readOnlyHdwGroupService.isInReadOnlyGroup(applicationUser.getName()));
     }
 
-    private boolean hasPremission(ApplicationUser applicationUser)
+    private boolean hasPermission(ApplicationUser applicationUser)
     {
-        boolean has_premission = false;
-
         if(adminHelperConfigService.getConfiguration().getApprovedGroups().length == 0 &&
-                adminHelperConfigService.getConfiguration().getApprovedUsers().length == 0 &&
-                groupManager.isUserInGroup(applicationUser, "jira-administrators"))
-            has_premission = true;
+                adminHelperConfigService.getConfiguration().getApprovedUsers().length == 0)
+            return true;
 
-        else if(isReadonlyHardwareUser(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()))
-            has_premission = true;
+        if(isReadonlyHardwareUser(ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()))
+            return true;
 
         else if(adminHelperConfigService.isUserApproved(applicationUser.getKey()))
-            has_premission = true;
+            return true;
 
-        return has_premission;
+        return false;
     }
 
     public boolean approvedHardwareUser(ApplicationUser user)

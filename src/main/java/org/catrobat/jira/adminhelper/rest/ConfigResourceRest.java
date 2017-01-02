@@ -128,9 +128,9 @@ public class ConfigResourceRest extends RestHelper {
 
         if(jsonConfig.getDefaultGithubTeam() != null)
         {
+            System.out.println("about to set default githug team " + jsonConfig.getDefaultGithubTeam());
             configService.setDefaultGithubTeam(jsonConfig.getDefaultGithubTeam());
         }
-
 
         String token = configService.getConfiguration().getGithubApiToken();
         String organizationName = configService.getConfiguration().getGithubOrganisation();

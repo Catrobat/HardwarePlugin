@@ -577,7 +577,7 @@ AJS.toInit(function () {
             url: "https://api.github.com/search/users?q=User&access_token=" + AJS.$("#github_token_public").val(),
             type: "GET",
             success : function() {
-                checkPublicTokneAndOrganization(baseUrl)
+                checkPublicTokenAndOrganization(baseUrl)
             },
             error : function (error) {
                 AJS.messages.error({

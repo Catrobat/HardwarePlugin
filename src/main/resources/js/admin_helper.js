@@ -58,7 +58,7 @@ function sendDataToServer(url)
     });
 }
 
-function  checkPublicTokneAndOrganization(url) {
+function  checkPublicTokenAndOrganization(url) {
 
     if (AJS.$("#github_token").val() !== '')
     {
