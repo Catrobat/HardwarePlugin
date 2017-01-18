@@ -734,7 +734,7 @@ public class HardwareRest extends RestHelper {
         if(!result)
         {
             if(!user_result)
-                error_response_text += "One or more Usernames do not exist, please check your entries!";
+                error_response_text += "One or more UserNames do not exist, please check your entries!";
             else
                 error_response_text += "One or more UserGroups do not exist, please check your entries!";
             return Response.serverError().entity(error_response_text).build();
@@ -742,4 +742,15 @@ public class HardwareRest extends RestHelper {
 
         return Response.ok().build();
     }
+
+    @GET
+    @Path("/download/HardwareBackup")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHardwareBackupAsJson(@Context HttpServletRequest request)
+    {
+        System.out.println("-----Downloading Hardware Backup-----");
+
+        return Response.ok().build();
+    }
+
 }

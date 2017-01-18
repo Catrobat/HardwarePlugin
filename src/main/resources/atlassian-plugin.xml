@@ -99,6 +99,10 @@
         <url-pattern>/admin_helper/upload</url-pattern>
     </servlet>
 
+    <servlet key="download-hardware-backup" class="org.catrobat.jira.adminhelper.DownloadHardwareBackupServlet">
+        <url-pattern>/admin_helper/download_hardware_backup</url-pattern>
+    </servlet>
+
     <component key="adminHelperConfiguration"
                class="org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigServiceImpl"/>
     <component key="device" class="org.catrobat.jira.adminhelper.activeobject.DeviceServiceImpl"/>
@@ -110,7 +114,6 @@
     <component key="typeOfDevice" class="org.catrobat.jira.adminhelper.activeobject.TypeOfDeviceServiceImpl"/>
     <component key="readOnlyUsers" class ="org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwUserServiceImpl" />
     <component key="readOnlyGroups" class="org.catrobat.jira.adminhelper.activeobject.ReadOnlyHdwGroupServiceImpl" />
-
 
     <!-- import from the product container -->
     <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>

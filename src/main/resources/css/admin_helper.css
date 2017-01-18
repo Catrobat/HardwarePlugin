@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+.textarea{
+    width: 500px;
+    height: 500px;
+}
 .left-from-search-field {
     width: 50%;
     float: left;
