@@ -1,0 +1,12 @@
+<html
+  <head>
+      <title>$i18n.getText("admin_helper.admin.label")</title>
+      <meta name="decorator" content="atl.general"/>
+  </head>
+  <body>
+    <h1>This is just a test</h1>
+    <form>
+        <input class="upfile" type="file"/>
+    </form>
+  </body>
+</html>

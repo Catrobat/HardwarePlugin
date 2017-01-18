@@ -239,7 +239,8 @@
         </p>
         <p>Download hardware sheet as <a href="$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/download">CSV</a>.</p>
         <p>Download Hardware Backup as <a id ="download_hardware_backup" href="#">zip</a></p>
-    </div>
+        <p>Upload Hardware Backup <a href=href="$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/upload_hardware_backup">ZIP</a></p>
+    </div>2
     <div class="tabs-pane" id="tabs-individual-lending">
         <div class="left-from-search-field">
             <h3>Individual-Related Lending</h3>
