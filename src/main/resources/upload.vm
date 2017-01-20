@@ -1,12 +1,18 @@
 <html
   <head>
       <title>$i18n.getText("admin_helper.admin.label")</title>
-      <meta name="decorator" content="atl.general"/>
+      <meta name="decorator" content="atl.admin"/>
   </head>
   <body>
-    <h1>This is just a test</h1>
-    <form>
-        <input class="upfile" type="file"/>
+    <div id="aui-message-bar"></div>
+    <form class="aui" method="POST" enctype="multipart/form-data">
+        <div class="field-group">
+            <h1>Select the backup Zip you want to upload</h1>
+            <input class="upfile" type="file" name="upload_field"/>
+        </div>
+        <div class="field-group">
+            <input type="submit" value="Submit" class="aui-button aui-button-primary">
+        </div>
     </form>
   </body>
 </html>
