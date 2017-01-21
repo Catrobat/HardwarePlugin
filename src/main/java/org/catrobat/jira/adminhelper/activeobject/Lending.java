@@ -50,5 +50,4 @@ public interface Lending extends Entity {
     String getComment();
 
     void setComment(String comment);
-
 }

@@ -18,9 +18,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
-import org.catrobat.jira.adminhelper.activeobject.DeviceService;
-import org.catrobat.jira.adminhelper.activeobject.HardwareModelService;
+import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.JSONExporter;
 import org.catrobat.jira.adminhelper.helper.JSONImporter;
 import org.catrobat.jira.adminhelper.rest.json.JsonDeviceList;
@@ -33,6 +31,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+
 /**
  * Created by dominik on 18.01.17.
  */
@@ -41,12 +40,15 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
     private final PageBuilderService pageBuilderService;
     private final JSONImporter jsonImporter;
 
+    String DEVICE_FILE = "device.JSON";
+
     public UploadHardwareBackupServlet(UserManager userManager, LoginUriProvider loginUriProvider, WebSudoManager webSudoManager,
                                        GroupManager groupManager, AdminHelperConfigService configurationService,
                                        PageBuilderService pageBuilderService, TemplateRenderer renderer, DeviceService deviceService,
-                                       HardwareModelService hardwareModelService) {
+                                       HardwareModelService hardwareModelService, LendingService lendingService,
+                                       DeviceCommentService deviceCommentService) {
         super(userManager, loginUriProvider, webSudoManager, groupManager, configurationService);
-        this.jsonImporter = new JSONImporter(deviceService,userManager,hardwareModelService);
+        this.jsonImporter = new JSONImporter(deviceService,userManager,hardwareModelService, lendingService, deviceCommentService);
         this.pageBuilderService = pageBuilderService;
         this.renderer = renderer;
     }
@@ -98,16 +100,15 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         catch (Exception e ) {
             e.printStackTrace();
         }
-        response.setStatus(200);
 
         Gson gson = new Gson();
         try {
             System.out.println("printing map");
             Map<String, File> files = extractZip(temp);
             System.out.println(files);
-            if(files.get("device.JSON") != null) {
+            if(files.get(DEVICE_FILE) != null) {
                 System.out.println("Importing device.JSON");
-                JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get("device.JSON").getAbsolutePath())));
+                JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
                 JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
                 jsonImporter.ImportDevices(deviceList);
             }
@@ -119,7 +120,7 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         }
 
         out.print("<h1>Success</h1>");
-
+        response.setStatus(200);
     }
 
     private Map<String, File> extractZip(File zip_file) throws IOException

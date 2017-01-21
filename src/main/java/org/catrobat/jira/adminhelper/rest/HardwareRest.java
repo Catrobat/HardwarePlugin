@@ -16,6 +16,7 @@
 
 package org.catrobat.jira.adminhelper.rest;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.crowd.embedded.api.*;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.PermissionManager;
@@ -53,13 +54,15 @@ public class HardwareRest extends RestHelper {
     private final PermissionCondition permissionCondition;
     private final ReadOnlyHdwUserService readOnlyUserService;
     private final ReadOnlyHdwGroupService readOnlyHdwGroupService;
+    private final ActiveObjects ao;
 
     public HardwareRest(UserManager userManager, HardwareModelService hardwareModelService, DeviceService deviceService,
                         LendingService lendingService, TypeOfDeviceService typeOfDeviceService,
                         ProducerService producerService, OperatingSystemService operatingSystemService,
                         DeviceCommentService deviceCommentService, AdminHelperConfigService configurationService,
                         GroupManager groupManager, PermissionManager permissionManager,
-                        ReadOnlyHdwUserService readOnlyUserService, ReadOnlyHdwGroupService readOnlyHdwGroupService) {
+                        ReadOnlyHdwUserService readOnlyUserService, ReadOnlyHdwGroupService readOnlyHdwGroupService,
+                        ActiveObjects ao) {
         super(permissionManager, configurationService, userManager, groupManager);
         super.setHardwareServices(readOnlyHdwGroupService, readOnlyUserService);
         this.userManager = checkNotNull(userManager);
@@ -73,6 +76,7 @@ public class HardwareRest extends RestHelper {
         this.permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
         this.readOnlyUserService = checkNotNull(readOnlyUserService);
         this.readOnlyHdwGroupService = checkNotNull(readOnlyHdwGroupService);
+        this.ao = ao;
     }
 
     @GET
@@ -743,14 +747,34 @@ public class HardwareRest extends RestHelper {
         return Response.ok().build();
     }
 
-    @GET
-    @Path("/download/HardwareBackup")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getHardwareBackupAsJson(@Context HttpServletRequest request)
+    @POST
+    @Path("/resetHardware")
+    public Response resetHardware(@Context HttpServletRequest request)
     {
-        System.out.println("-----Downloading Hardware Backup-----");
-
+        ao.executeInTransaction(() -> {
+            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
+                ao.delete(deviceComment);
+            }
+            for (Lending lending : ao.find(Lending.class)) {
+                ao.delete(lending);
+            }
+            for (Device device : ao.find(Device.class)) {
+                ao.delete(device);
+            }
+            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
+                ao.delete(hardwareModel);
+            }
+            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
+                ao.delete(typeOfDevice);
+            }
+            for (Producer producer : ao.find(Producer.class)) {
+                ao.delete(producer);
+            }
+            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
+                ao.delete(operatingSystem);
+            }
+            return null;
+        });
         return Response.ok().build();
     }
-
 }

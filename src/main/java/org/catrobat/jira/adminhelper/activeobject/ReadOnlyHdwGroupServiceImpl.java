@@ -28,8 +28,7 @@ public class ReadOnlyHdwGroupServiceImpl implements ReadOnlyHdwGroupService {
 
         ReadOnlyHdwGroup[] groups = ao.find(ReadOnlyHdwGroup.class, Query.select()
                 .where("upper(\"GROUP_NAME\") = upper(?)", group_name));
-        if(groups.length == 0)
-        {
+        if(groups.length == 0) {
             ReadOnlyHdwGroup group = ao.create(ReadOnlyHdwGroup.class);
             group.setGroupName(group_name);
             group.save();
@@ -69,8 +68,7 @@ public class ReadOnlyHdwGroupServiceImpl implements ReadOnlyHdwGroupService {
         for(Group group : groups_of_user)
         {
             if(ao.find(ReadOnlyHdwGroup.class, Query.select().where("upper(\"GROUP_NAME\") = upper(?)",
-                    group.getName().trim())).length != 0)
-            {
+                    group.getName().trim())).length != 0) {
                 isInReadOnlyGroup = true;
                 break;
             }
