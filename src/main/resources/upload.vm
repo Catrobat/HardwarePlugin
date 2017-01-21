@@ -16,13 +16,13 @@
         <li>device.JSON</li>
     </ul> <br>
     <p>If the given Backup does not include the files described above, the backup wil be rejected.</p>
-    <form class="aui" method="POST" enctype="multipart/form-data">
+    <form class="aui" method="POST" enctype="multipart/form-data" id="upload-form">
         <fieldset>
             <div class="field-group">
-                <input class="upfile" type="file" name="upload_field"/>
+                <input class="upfile" type="file" name="upload_field" id="upload-field"/>
             </div>
             <div class="field-group">
-                <input type="submit" value="Submit" class="aui-button aui-button-primary">
+                <input type="button" value="Submit" class="aui-button aui-button-primary" id="post-inputs">
             </div>
         </fieldset>
     </form>

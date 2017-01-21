@@ -56,6 +56,7 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doGet(request, response);
+        pageBuilderService.assembler().resources().requireWebResource("org.catrobat.jira.adminhelper:upload-hardware-resources");
         renderer.render("upload.vm", response.getWriter());
     }
 

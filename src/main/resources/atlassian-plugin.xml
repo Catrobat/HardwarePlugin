@@ -75,6 +75,13 @@
         <context>general</context>
     </web-resource>
 
+
+    <web-resource name="Upload Resources" key="upload-hardware-resources">
+        <resource type="download" name="upload.js" location="js/upload.js"/>
+        <context>admin</context>
+    </web-resource>
+
+
     <servlet key="create-user-servlet" class="org.catrobat.jira.adminhelper.CreateUserServlet">
     <url-pattern>/admin_helper/create_user</url-pattern>
     </servlet>

@@ -50,7 +50,6 @@ public class JSONImporter {
                 hd = hardwareModelService.add(json_hardware.getName(),json_hardware.getTypeOfDevice(),
                         json_hardware.getVersion(), json_hardware.getPrice(),json_hardware.getProducer(),
                         json_hardware.getOperatingSystem(),json_hardware.getArticleNumber());
-                System.out.println("after new model creation id is:");
                 System.out.println(hd.getID());
                 hardware_model_mapping.put(d.getHardwareModelId(), hd.getID());
             }
@@ -68,15 +67,13 @@ public class JSONImporter {
                 Lending temp = lendingService.lendOut(current_device,lending.getLentOutBy(), lending.getLentOutIssuer(),
                         lending.getPurpose(), lending.getComment(), lending.getBegin());
                 if(lending.getEnd() != null) {
-                    System.out.println("device has been lent out and returned");
                     lendingService.bringBack(temp, lending.getPurpose(), lending.getComment(), lending.getEnd());
                 }
             }
 
             for(JsonDeviceComment comment : comments)
             {
-                if(comment.getDate() != null) {
-                    System.out.println("device has a date");
+                if(comment.getDate() != null) {;
                     deviceCommentService.addDeviceComment(current_device, comment.getAuthor(), comment.getComment(),
                             comment.getDate());
                 }
