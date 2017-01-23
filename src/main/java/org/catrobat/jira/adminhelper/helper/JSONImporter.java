@@ -84,6 +84,7 @@ public class JSONImporter {
             }
         }
         System.out.println("Imported all Devices");
+        hardware_model_mapping.clear();
         return true;
     }
 }

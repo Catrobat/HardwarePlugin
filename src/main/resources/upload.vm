@@ -1,6 +1,6 @@
 <html
   <head>
-      <title>$i18n.getText("admin_helper.admin.label")</title>
+      <title>$i18n.getText("admin_helper.upload.title")</title>
       <meta name="decorator" content="atl.admin"/>
   </head>
   <body>
@@ -10,21 +10,19 @@
     <p>This Section is used to Reimport Hardware Backups. The Backup must be a singe Zip file of the follwoing structure:</p>
     <ul>
         <li>device.JSON</li>
-        <li>device.JSON</li>
-        <li>device.JSON</li>
-        <li>device.JSON</li>
-        <li>device.JSON</li>
     </ul> <br>
-    <p>If the given Backup does not include the files described above, the backup wil be rejected.</p>
+    <p>If the .zip file does not have the following structure the File will be rejected.
+        If you downloaded the Backup through this Plugin the Structure should allready be given.</p>
+    <h2> Please only upload backups if you know what you are doing!</h2>
+    <h2>The Backup procedure will delete all curent DB entries
+        and will replace them with the data given in the Backup file. </h2>
     <form class="aui" method="POST" enctype="multipart/form-data" id="upload-form">
-        <fieldset>
-            <div class="field-group">
-                <input class="upfile" type="file" name="upload_field" id="upload-field"/>
-            </div>
-            <div class="field-group">
-                <input type="button" value="Submit" class="aui-button aui-button-primary" id="post-inputs">
-            </div>
-        </fieldset>
+        <div class="field-group">
+            <input class="upfile" type="file" name="upload-field" id="upload-field"/>
+        </div>
+        <div class="field-group">
+            <input type="button" value="Submit" class="aui-button aui-button-primary" id="post-inputs">
+        </div>
     </form>
   </body>
 </html>

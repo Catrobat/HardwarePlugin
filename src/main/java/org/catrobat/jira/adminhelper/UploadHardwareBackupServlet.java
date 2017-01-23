@@ -1,5 +1,6 @@
 package org.catrobat.jira.adminhelper;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.config.util.JiraHome;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.template.TemplateSource;
@@ -18,18 +19,22 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOExceptionWithCause;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.JSONExporter;
 import org.catrobat.jira.adminhelper.helper.JSONImporter;
+import org.catrobat.jira.adminhelper.rest.json.JsonDevice;
 import org.catrobat.jira.adminhelper.rest.json.JsonDeviceList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -39,18 +44,24 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
     private final TemplateRenderer renderer;
     private final PageBuilderService pageBuilderService;
     private final JSONImporter jsonImporter;
+    private final UserManager userManager;
+    private final DeviceService deviceService;
+    private final ActiveObjects ao;
 
-    String DEVICE_FILE = "device.JSON";
+    private String DEVICE_FILE = "device.JSON";
 
     public UploadHardwareBackupServlet(UserManager userManager, LoginUriProvider loginUriProvider, WebSudoManager webSudoManager,
                                        GroupManager groupManager, AdminHelperConfigService configurationService,
                                        PageBuilderService pageBuilderService, TemplateRenderer renderer, DeviceService deviceService,
                                        HardwareModelService hardwareModelService, LendingService lendingService,
-                                       DeviceCommentService deviceCommentService) {
+                                       DeviceCommentService deviceCommentService, ActiveObjects ao) {
         super(userManager, loginUriProvider, webSudoManager, groupManager, configurationService);
         this.jsonImporter = new JSONImporter(deviceService,userManager,hardwareModelService, lendingService, deviceCommentService);
         this.pageBuilderService = pageBuilderService;
         this.renderer = renderer;
+        this.userManager = userManager;
+        this.deviceService = deviceService;
+        this.ao = ao;
     }
 
     @Override
@@ -66,6 +77,9 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+
+        File failure_file;
+        Map<String, File> files;
 
         boolean isMultipartContent = ServletFileUpload.isMultipartContent(request);
         if (!isMultipartContent) {
@@ -94,30 +108,35 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
                 response.sendError(500, "An error occurred: you may only upload Zip files");
                 return;
             }
-            System.out.print("wrote file to temp folder");
+            System.out.println("wrote file to temp folder");
             fileItem.write(temp);
-
+            failure_file = generateFailureBackup();
         }
         catch (Exception e ) {
             e.printStackTrace();
+            return;
         }
-
-        Gson gson = new Gson();
         try {
-            System.out.println("printing map");
-            Map<String, File> files = extractZip(temp);
-            System.out.println(files);
-            if(files.get(DEVICE_FILE) != null) {
-                System.out.println("Importing device.JSON");
-                JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
-                JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
-                jsonImporter.ImportDevices(deviceList);
-            }
+            files = extractZip(temp);
         }
-        catch (Exception e)
-        {
+        catch (IOException e) {
             e.printStackTrace();
             response.sendError(500, "There was an error extracting the backup Zip");
+            return;
+        }
+        try {
+            importDataFromZip(files);
+        }
+        catch (Exception e){
+            System.out.println("[INFO] An error uncured while importing reinstancing old data");
+            files = extractZip(failure_file);
+            try {
+                importDataFromZip(files);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+                response.sendError(500, "something went horribly wrong");
+            }
         }
 
         out.print("<h1>Success</h1>");
@@ -151,6 +170,75 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         zip.close();
 
         return uniziped_files;
+    }
+
+    private File generateFailureBackup() throws IOException
+    {
+        System.out.println("Generating failure Backup");
+
+        JSONExporter exporter = new JSONExporter(deviceService, userManager);
+        List<JsonDevice> devices = exporter.getDevicesAsJSON();
+        JsonDeviceList device_list = new JsonDeviceList(devices);
+
+        File save = File.createTempFile("upload_failure", ".zip");
+
+        Gson gson = new Gson();
+        String json_string = gson.toJson(device_list);
+
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(save));
+        ZipEntry e = new ZipEntry(DEVICE_FILE);
+
+        out.putNextEntry(e);
+        out.write(json_string.getBytes());
+        out.closeEntry();
+        out.close();
+
+        return save;
+    }
+
+    private void importDataFromZip(Map<String, File> files) throws Exception {
+        System.out.println("Importing Zip deleting old entries");
+        resetHardwareData();
+        Gson gson = new Gson();
+        System.out.println("printing map");
+        System.out.println(files);
+        if (files.get(DEVICE_FILE) != null) {
+            System.out.println("Importing device.JSON");
+            JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
+            JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
+            jsonImporter.ImportDevices(deviceList);
+        }
+        else {
+            throw new Exception("The Zip Archive does not contain the following file: " + DEVICE_FILE);
+        }
+    }
+
+    private void resetHardwareData()
+    {
+        ao.executeInTransaction(() -> {
+            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
+                ao.delete(deviceComment);
+            }
+            for (Lending lending : ao.find(Lending.class)) {
+                ao.delete(lending);
+            }
+            for (Device device : ao.find(Device.class)) {
+                ao.delete(device);
+            }
+            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
+                ao.delete(hardwareModel);
+            }
+            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
+                ao.delete(typeOfDevice);
+            }
+            for (Producer producer : ao.find(Producer.class)) {
+                ao.delete(producer);
+            }
+            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
+                ao.delete(operatingSystem);
+            }
+            return null;
+        });
     }
 }
 

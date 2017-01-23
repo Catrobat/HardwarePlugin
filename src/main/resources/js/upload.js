@@ -4,12 +4,9 @@
 AJS.toInit(function () {
     var file = undefined;
 
-    AJS.$('#upload-field').change(function () {
-        file = AJS.$("#upload-field").value;
-    });
-
     AJS.$("#post-inputs").click(function () {
         console.log("about to post inputs");
+        file = document.getElementById("upload-field").value;
         if(file === undefined) {
             AJS.messages.error({
                 title: "Error !",
@@ -17,13 +14,15 @@ AJS.toInit(function () {
             })
         }
         else {
-            if(!file.contains(".zip")){
+            if(!file.includes(".zip")){
                 AJS.messages.error({
                     title: "Error !",
                     body: "The Datatype of the Backup must be .zip!"
                 })
             }
-            AJS.$("#upload-form").submit();
+            else {
+                AJS.$("#upload-form").submit();
+            }
         }
     })
 });
