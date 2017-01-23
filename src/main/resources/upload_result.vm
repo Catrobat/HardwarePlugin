@@ -1,0 +1,51 @@
+<html>
+    <title>Results of Upload Procedure</title>
+    <head>
+        <meta name="decorator" content="atl.admin"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r224/prettify.js"></script>
+        <script type="text/javascript">
+            AJS.toInit(function () {
+                if($success === true){
+                    AJS.messages.success({
+                        title:"Success",
+                        body:"The Backup import was Successful"
+                    })
+                    document.getElementById("data-type").innerHTML =
+                            "Backup JSON: ";
+                }
+                else{
+                    AJS.messages.error({
+                        title:"Error:",
+                        body:"An error uccured during the Backup process </br>"+
+                        "<h1>Server message: $message</h1"
+                    })
+
+                    document.getElementById("failure-field").innerHTML =
+                            "<strong>The Backup was Unsuccessful, the Hardware Data has been reinitiated, to the Status before " +
+                            "the Backup!</strong>";
+
+                    document.getElementById("data-type").innerHTML =
+                            "Data Has been reinitiated to: ";
+                }
+                var string = "$device";
+                string = string.replace(/&quot;/g ,"\"");
+                var json = JSON.parse(string);
+
+                AJS.$("#json-field").text(JSON.stringify(json,null, 2));
+                prettyPrint();
+            });
+            function redirect() {
+                window.open("$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/hardware","_self");
+            }
+        </script>
+    </head>
+    <body>
+        <div id="aui-message-bar"></div>
+        <h2 id="failure-field"></h2>
+        <h2 id="data-type"></h2>
+        <pre id="json-field" class ="prettyprint lang-json"></pre></br>
+        <input type="button" value="redirect to HDW Overview" class="aui-button aui-button-primary"
+               onclick="redirect()"/>
+    </body>
+</html>

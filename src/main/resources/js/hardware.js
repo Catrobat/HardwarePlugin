@@ -241,11 +241,6 @@ function handleEvents(baseUrl) {
         e.preventDefault();
         showNewDeviceDialog(baseUrl);
     });
-
-    AJS.$("#download_hardware_backup").click(function (e) {
-        e.preventDefault();
-        downloadHardwareBackup(baseUrl);
-    });
 }
 
 function getShortDate(dateString) {

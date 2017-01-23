@@ -12,6 +12,8 @@ import com.atlassian.webresource.api.assembler.PageBuilderService;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.ByteString;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.fileupload.FileItem;
@@ -76,7 +78,6 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         super.doPost(request, response);
 
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
 
         File failure_file;
         Map<String, File> files;
@@ -89,6 +90,8 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
 
         FileItemFactory factory = new DiskFileItemFactory();
         ServletFileUpload upload = new ServletFileUpload(factory);
+        JsonDeviceList devices = null;
+        Gson gson = new Gson();
 
         File temp = File.createTempFile("backup", ".zip");
 
@@ -96,7 +99,6 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
             List<FileItem> fields = upload.parseRequest(request);
             Iterator<FileItem> it = fields.iterator();
             if (!it.hasNext()) {
-                out.println("No fields found");
                 return;
             }
             if (fields.size() != 1) {
@@ -125,13 +127,22 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
             return;
         }
         try {
-            importDataFromZip(files);
+            devices = importDataFromZip(files);
         }
         catch (Exception e){
             System.out.println("[INFO] An error uncured while importing reinstancing old data");
             files = extractZip(failure_file);
             try {
-                importDataFromZip(files);
+                devices = importDataFromZip(files);
+
+                response.setStatus(200);
+
+                Map<String, Object> params = prepareParams(gson.toJson(devices));
+                params.put("success", false);
+                params.put("message", e.getMessage());
+
+                renderer.render("upload_result.vm", params,response.getWriter());
+                return;
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -139,8 +150,11 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
             }
         }
 
-        out.print("<h1>Success</h1>");
         response.setStatus(200);
+        Map<String, Object> params = prepareParams(gson.toJson(devices));
+        params.put("success", true);
+
+        renderer.render("upload_result.vm", params,response.getWriter());
     }
 
     private Map<String, File> extractZip(File zip_file) throws IOException
@@ -196,7 +210,7 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         return save;
     }
 
-    private void importDataFromZip(Map<String, File> files) throws Exception {
+    private JsonDeviceList importDataFromZip(Map<String, File> files) throws Exception {
         System.out.println("Importing Zip deleting old entries");
         resetHardwareData();
         Gson gson = new Gson();
@@ -207,6 +221,8 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
             JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
             JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
             jsonImporter.ImportDevices(deviceList);
+
+            return deviceList;
         }
         else {
             throw new Exception("The Zip Archive does not contain the following file: " + DEVICE_FILE);
@@ -240,5 +256,15 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
             return null;
         });
     }
+
+    private Map<String, Object> prepareParams(String json_string)
+    {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("device", json_string);
+        params.put("success", true);
+        return params;
+    }
+
 }
 

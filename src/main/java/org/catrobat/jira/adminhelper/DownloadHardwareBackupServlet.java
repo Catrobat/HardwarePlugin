@@ -49,7 +49,8 @@ public class DownloadHardwareBackupServlet extends HelperServlet {
         super.doGet(req, resp);
 
         resp.setContentType("application/zip; charset=utf-8");
-        resp.setHeader("Content-Disposition", "attachment; filename=\"test.zip\"");
+        String file_name = "hardwareBackup_" + new Date() +".zip";
+        resp.setHeader("Content-Disposition", "attachment; filename=\""+file_name+"\"");
 
         JSONExporter exporter = new JSONExporter(deviceService, userManager);
 
@@ -66,12 +67,6 @@ public class DownloadHardwareBackupServlet extends HelperServlet {
         out.putNextEntry(e);
         out.write(json_string.getBytes());
         out.closeEntry();
-
-        String test = "hello darkness my old friend";
-
-        ZipEntry ent = new ZipEntry("test.json");
-        out.putNextEntry(ent);
-        out.write(test.getBytes());
         out.close();
     }
 }

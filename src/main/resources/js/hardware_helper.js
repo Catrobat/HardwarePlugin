@@ -170,16 +170,3 @@ function clearAllReadOnlyLists(baseUrl) {
         }
     })
 }
-
-function downloadHardwareBackup(baseUrl) {
-    AJS.$.ajax({
-        url: baseUrl + "/rest/admin-helper/latest/hardware/download/HardwareBackup",
-        type: "GET",
-        success: function () {
-            alert("download call successfull");
-        },
-        error: function () {
-            alert("download call error");
-        }
-    })
-}
