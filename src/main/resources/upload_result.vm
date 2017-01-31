@@ -16,24 +16,34 @@
                 }
                 else{
                     AJS.messages.error({
-                        title:"Error:",
+                        title:"Error !",
                         body:"An error uccured during the Backup process </br>"+
                         "<h1>Server message: $message</h1"
                     })
+                    if($error_type === "import"){
+                        document.getElementById("failure-field").innerHTML =
+                                "<strong>The Backup was Unsuccessful, the Hardware Data has been reinitiated, to the Status before " +
+                                "the Backup!</strong>";
 
-                    document.getElementById("failure-field").innerHTML =
-                            "<strong>The Backup was Unsuccessful, the Hardware Data has been reinitiated, to the Status before " +
-                            "the Backup!</strong>";
+                        document.getElementById("data-type").innerHTML =
+                                "Data Has been reinitiated to: ";
+                    }
+                    else{
+                        document.getElementById("failure-field").innerHTML =
+                                "<strong>There was an error, parsing the given Bakup files, no actions were taken.</br>" +
+                                "The Hardware DB entries have not been changed ! </strong>";
 
-                    document.getElementById("data-type").innerHTML =
-                            "Data Has been reinitiated to: ";
+                       document.getElementById("json-field").style.visibility = "hidden";
+                    }
                 }
-                var string = "$device";
-                string = string.replace(/&quot;/g ,"\"");
-                var json = JSON.parse(string);
+                if($error_type === "import"){
+                    var string = "$device";
+                    string = string.replace(/&quot;/g, "\"");
+                    var json = JSON.parse(string);
 
-                AJS.$("#json-field").text(JSON.stringify(json,null, 2));
-                prettyPrint();
+                    AJS.$("#json-field").text(JSON.stringify(json, null, 2));
+                    prettyPrint();
+                }
             });
             function redirect() {
                 window.open("$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/hardware","_self");

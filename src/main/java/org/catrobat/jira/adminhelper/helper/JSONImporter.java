@@ -73,7 +73,7 @@ public class JSONImporter {
 
             for(JsonDeviceComment comment : comments)
             {
-                if(comment.getDate() != null) {;
+                if(comment.getDate() != null) {
                     deviceCommentService.addDeviceComment(current_device, comment.getAuthor(), comment.getComment(),
                             comment.getDate());
                 }

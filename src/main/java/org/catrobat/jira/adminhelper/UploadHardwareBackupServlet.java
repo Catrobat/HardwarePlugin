@@ -10,6 +10,8 @@ import com.atlassian.sal.api.websudo.WebSudoManager;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.google.protobuf.ByteString;
 import org.apache.commons.collections.iterators.ObjectArrayIterator;
@@ -42,6 +44,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Created by dominik on 18.01.17.
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class UploadHardwareBackupServlet extends HelperServlet  {
     private final TemplateRenderer renderer;
     private final PageBuilderService pageBuilderService;
@@ -50,7 +53,8 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
     private final DeviceService deviceService;
     private final ActiveObjects ao;
 
-    private String DEVICE_FILE = "device.JSON";
+    private final String DEVICE_FILE = "device.JSON";
+    private final String CONFIG_FILE = "config.JSON";
 
     public UploadHardwareBackupServlet(UserManager userManager, LoginUriProvider loginUriProvider, WebSudoManager webSudoManager,
                                        GroupManager groupManager, AdminHelperConfigService configurationService,
@@ -110,20 +114,25 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
                 response.sendError(500, "An error occurred: you may only upload Zip files");
                 return;
             }
-            System.out.println("wrote file to temp folder");
             fileItem.write(temp);
+            try {
+                files = extractZip(temp);
+                validateBackup(files);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+                response.sendError(500, "There was an error extracting the backup Zip\n" +
+                    e.getMessage());
+                temp.delete();
+                return;
+            }
             failure_file = generateFailureBackup();
         }
         catch (Exception e ) {
             e.printStackTrace();
-            return;
-        }
-        try {
-            files = extractZip(temp);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            response.sendError(500, "There was an error extracting the backup Zip");
+            response.sendError(500, e.getMessage());
+
+            temp.delete();
             return;
         }
         try {
@@ -131,28 +140,51 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         }
         catch (Exception e){
             System.out.println("[INFO] An error uncured while importing reinstancing old data");
-            files = extractZip(failure_file);
-            try {
-                devices = importDataFromZip(files);
+            if(e.getClass() == JsonIOException.class || e.getClass() == JsonSyntaxException.class) {
 
                 response.setStatus(200);
 
-                Map<String, Object> params = prepareParams(gson.toJson(devices));
+                Map<String, Object> params = new HashMap<>();
                 params.put("success", false);
                 params.put("message", e.getMessage());
+                params.put("error_type", "json");
 
-                renderer.render("upload_result.vm", params,response.getWriter());
+                renderer.render("upload_result.vm", params, response.getWriter());
                 return;
             }
-            catch (Exception ex) {
-                ex.printStackTrace();
-                response.sendError(500, "something went horribly wrong");
+            else {
+                try {
+                    files = extractZip(failure_file);
+
+                    devices = importDataFromZip(files);
+
+                    response.setStatus(200);
+
+                    Map<String, Object> params = prepareParams(gson.toJson(devices));
+                    params.put("success", false);
+                    params.put("message", e.getMessage());
+                    params.put("error_type", "import");
+
+                    temp.delete();
+                    failure_file.delete();
+
+                    renderer.render("upload_result.vm", params, response.getWriter());
+                    return;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    response.sendError(500, "something went horribly wrong");
+                }
             }
         }
 
         response.setStatus(200);
         Map<String, Object> params = prepareParams(gson.toJson(devices));
         params.put("success", true);
+        temp.delete();
+        failure_file.delete();
+
+        for(File file : files.values())
+            file.delete();
 
         renderer.render("upload_result.vm", params,response.getWriter());
     }
@@ -212,21 +244,19 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
 
     private JsonDeviceList importDataFromZip(Map<String, File> files) throws Exception {
         System.out.println("Importing Zip deleting old entries");
-        resetHardwareData();
         Gson gson = new Gson();
+
         System.out.println("printing map");
         System.out.println(files);
-        if (files.get(DEVICE_FILE) != null) {
-            System.out.println("Importing device.JSON");
-            JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
-            JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
-            jsonImporter.ImportDevices(deviceList);
+        System.out.println("Importing device.JSON");
 
-            return deviceList;
-        }
-        else {
-            throw new Exception("The Zip Archive does not contain the following file: " + DEVICE_FILE);
-        }
+        JsonReader jsonReader = new JsonReader(new FileReader(new File(files.get(DEVICE_FILE).getAbsolutePath())));
+        JsonDeviceList deviceList = gson.fromJson(jsonReader, JsonDeviceList.class);
+
+        resetHardwareData();
+        jsonImporter.ImportDevices(deviceList);
+
+        return deviceList;
     }
 
     private void resetHardwareData()
@@ -264,6 +294,29 @@ public class UploadHardwareBackupServlet extends HelperServlet  {
         params.put("device", json_string);
         params.put("success", true);
         return params;
+    }
+
+    private boolean validateBackup(Map<String, File> to_check) throws Exception
+    {
+        if(to_check.size() > 2) {
+            throw(new Exception("The Backup may only consist of either one or two files. \n" +
+                    "allowed files are: device.JSON and config.JSON"));
+        }
+        if(to_check.size() == 2) {
+            if(!(to_check.containsKey(DEVICE_FILE) && to_check.containsKey(CONFIG_FILE))){
+                throw(new Exception("The structure of the Backup has been violated! \n" +
+                        "allowed files are: " + DEVICE_FILE +" or " + CONFIG_FILE + "or both \n" +
+                        "Structure was: " + to_check.keySet()));
+            }
+        }
+        if(to_check.size() == 1){
+            if(!(to_check.containsKey(DEVICE_FILE) || to_check.containsKey(CONFIG_FILE))){
+                throw(new Exception("The structure of the Backup has been violated! \n" +
+                        "allowed files are: device.JSON or config.JSON or both \n" +
+                        "given: "+ to_check.keySet()));
+            }
+        }
+        return true;
     }
 
 }

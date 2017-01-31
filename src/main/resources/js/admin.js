@@ -554,6 +554,13 @@ AJS.toInit(function () {
         enableSettingsChange();
     });
 
+    AJS.$("#download_backup").click(function (e) {
+        e.preventDefault();
+        alert("download pressed");
+        scrollToAnchor('top');
+    });
+
+
     function unescapeHtml(safe) {
         if(safe) {
             return AJS.$('<div />').html(safe).text();

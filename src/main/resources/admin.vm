@@ -125,6 +125,11 @@
                 <input type="submit" value="Save" class="aui-button aui-button-primary">
             </div>
         </form>
+        <div id="backup">
+            <input class="checkbox" type="checkbox" name="enable_full_download" id="enable_full_download">
+            <label for="enable_full_download">Enable to change Settings</label>
+            <input type="button" class="aui-button-primary" value="Download" id="download_backup">
+        </div>
     </div>
     <div class="tabs-pane" id="tabs-teams">
         <h2>Teams</h2>
@@ -205,7 +210,7 @@
                 </div>
 
                 <div class = "field-group">
-                    <input type="submit" value="Save" id ="save-github-settings" class="aui-button aui-button-primary">
+                    <input type="submit" value="Save" id="save-github-settings" class="aui-button aui-button-primary">
                 </div>
             </fieldset>
         </form>

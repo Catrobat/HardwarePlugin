@@ -7,15 +7,20 @@
     <div id="aui-message-bar"></div>
     <h1>Select the backup Zip you want to upload</h1>
     <br>
-    <p>This Section is used to Reimport Hardware Backups. The Backup must be a singe Zip file of the follwoing structure:</p>
+    <p>This Section is used to reimport Backups for the User Management and the Hardware Section.
+        The Backup must be a singe Zip file of the follwoing structure:</p>
     <ul>
         <li>device.JSON</li>
+        <li>config.JSON</li>
     </ul> <br>
-    <p>If the .zip file does not have the following structure the File will be rejected.
+    <p>The file may contain only one of these files or both, but nothing else. If the Bakup does not hava the decribed structure
+        the file will be rejected!
         If you downloaded the Backup through this Plugin the Structure should allready be given.</p>
-    <h2> Please only upload backups if you know what you are doing!</h2>
-    <h2>The Backup procedure will delete all curent DB entries
+    <h2> Please only upload Backups if you know what you are doing!</h2>
+
+    <h2>The Backup procedure will delete all current DB entries
         and will replace them with the data given in the Backup file. </h2>
+
     <form class="aui" method="POST" enctype="multipart/form-data" id="upload-form">
         <div class="field-group">
             <input class="upfile" type="file" name="upload-field" id="upload-field"/>
