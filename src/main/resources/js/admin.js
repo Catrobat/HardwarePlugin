@@ -15,10 +15,11 @@
  */
 
 "use strict";
+var baseUrl;
 
 AJS.toInit(function () {
 
-    var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
+    baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
     var teams = [];
     var localTempResources = [];
     var editNameDialog;
@@ -556,10 +557,13 @@ AJS.toInit(function () {
 
     AJS.$("#download_backup").click(function (e) {
         e.preventDefault();
-        alert("download pressed");
-        scrollToAnchor('top');
+        redirectToDownload();
     });
 
+    AJS.$("#upload_backup").click(function (e) {
+        e.preventDefault();
+        redirectToUpload();
+    });
 
     function unescapeHtml(safe) {
         if(safe) {

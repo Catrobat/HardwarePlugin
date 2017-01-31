@@ -2,8 +2,10 @@ package org.catrobat.jira.adminhelper.helper;
 
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.util.json.JSONObject;
+import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Device;
 import org.catrobat.jira.adminhelper.activeobject.DeviceService;
+import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonDevice;
 
 import java.util.ArrayList;
@@ -16,11 +18,13 @@ public class JSONExporter {
 
     private final DeviceService deviceService;
     private final UserManager userManager;
+    private final AdminHelperConfigService configService;
 
-    public JSONExporter(DeviceService deviceService, UserManager userManager) {
+    public JSONExporter(DeviceService deviceService, UserManager userManager, AdminHelperConfigService configService) {
         System.out.println("constructing JSON exporter");
         this.deviceService = deviceService;
         this.userManager = userManager;
+        this.configService = configService;
     }
 
     public List<JsonDevice> getDevicesAsJSON()
@@ -35,5 +39,10 @@ public class JSONExporter {
         }
 
         return json_list;
+    }
+
+    public JsonConfig getConfig()
+    {
+        return new JsonConfig(configService);
     }
 }

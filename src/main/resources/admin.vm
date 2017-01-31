@@ -126,9 +126,19 @@
             </div>
         </form>
         <div id="backup">
-            <input class="checkbox" type="checkbox" name="enable_full_download" id="enable_full_download">
-            <label for="enable_full_download">Enable to change Settings</label>
-            <input type="button" class="aui-button-primary" value="Download" id="download_backup">
+            <form id="download_form" class="aui">
+                <h2>Download Section</h2>
+                <fieldset>
+                    <div class ="field-group">
+                        <input class="checkbox" type="checkbox" name="enable_full_download" id="enable_full_download">
+                        <label for="enable_full_download">download HDW</label>
+                    </div>
+                    <div class="field-group">
+                        <input type="button" class="aui-button-primary aui-button" value="Download" id="download_backup">
+                        <input type="button" class="aui-button-primary aui-button" value="Upload" id="upload_backup">
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
     <div class="tabs-pane" id="tabs-teams">

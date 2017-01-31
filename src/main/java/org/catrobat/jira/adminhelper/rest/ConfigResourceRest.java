@@ -26,6 +26,7 @@ import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Team;
+import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonResource;
 import org.catrobat.jira.adminhelper.rest.json.JsonTeam;
@@ -115,39 +116,9 @@ public class ConfigResourceRest extends RestHelper {
         if (unauthorized != null) {
             return unauthorized;
         }
-
-        if (jsonConfig.getGithubToken() != null && jsonConfig.getGithubToken().length() != 0) {
-            configService.setApiToken(jsonConfig.getGithubToken());
-        }
-        if (jsonConfig.getGithubTokenPublic() != null)
-            configService.setPublicApiToken(jsonConfig.getGithubTokenPublic());
-        if(jsonConfig.getGithubOrganization() != null)
-            configService.setOrganisation(jsonConfig.getGithubOrganization());
-        else
-            return Response.serverError().entity("Github Configuration Settings are not valid").build();
-
-        if(jsonConfig.getDefaultGithubTeam() != null)
+        try
         {
-            System.out.println("about to set default githug team " + jsonConfig.getDefaultGithubTeam());
-            configService.setDefaultGithubTeam(jsonConfig.getDefaultGithubTeam());
-        }
-
-        String token = configService.getConfiguration().getGithubApiToken();
-        String organizationName = configService.getConfiguration().getGithubOrganisation();
-
-        try {
-            GitHub gitHub = GitHub.connectUsingOAuth(token);
-            GHOrganization organization = gitHub.getOrganization(organizationName);
-            Collection<GHTeam> teamList = organization.getTeams().values();
-
-            if (jsonConfig.getDefaultGithubTeam() != null) {
-                for (GHTeam team : teamList) {
-                    if (jsonConfig.getDefaultGithubTeam().toLowerCase().equals(team.getName().toLowerCase())) {
-                        configService.setDefaultGithubTeamId(team.getId());
-                        break;
-                    }
-                }
-            }
+            HelperUtil.saveGithubConfig(jsonConfig, configService);
         }
         catch(Exception e)
         {
@@ -188,65 +159,12 @@ public class ConfigResourceRest extends RestHelper {
             return unauthorized;
         }
 
-        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
-        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
-                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
-
-        if(jsonConfig.getResources() != null)
-        {
-            for (JsonResource jsonResource : jsonConfig.getResources()) {
-                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
-            }
+        try{
+            HelperUtil.saveConfig(jsonConfig, configService);
         }
-
-        if (jsonConfig.getApprovedGroups() != null) {
-            configService.clearApprovedGroups();
-            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
-                configService.addApprovedGroup(approvedGroupName);
-            }
-        }
-
-        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
-        if (jsonConfig.getApprovedUsers() != null) {
-            configService.clearApprovedUsers();
-            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
-                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
-                if (user != null) {
-                    configService.addApprovedUser(user.getKey());
-                }
-            }
-        }
-
-        if (jsonConfig.getTeams() != null) {
-            String token = configService.getConfiguration().getGithubApiToken();
-            String organizationName = configService.getConfiguration().getGithubOrganisation();
-
-            try {
-                GitHub gitHub = GitHub.connectUsingOAuth(token);
-                GHOrganization organization = gitHub.getOrganization(organizationName);
-                Collection<GHTeam> teamList = organization.getTeams().values();
-
-
-                for (JsonTeam jsonTeam : jsonConfig.getTeams()) {
-                    configService.removeTeam(jsonTeam.getName());
-
-                    List<Integer> githubIdList = new ArrayList<Integer>();
-                    for (String teamName : jsonTeam.getGithubTeams()) {
-                        for (GHTeam team : teamList) {
-                            if (teamName.toLowerCase().equals(team.getName().toLowerCase())) {
-                                githubIdList.add(team.getId());
-                                break;
-                            }
-                        }
-                    }
-
-                    configService.addTeam(jsonTeam.getName(), githubIdList, jsonTeam.getCoordinatorGroups(),
-                            jsonTeam.getSeniorGroups(), jsonTeam.getDeveloperGroups());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return Response.serverError().entity("Some error with GitHub API (e.g. maybe wrong tokens, organisation, teams) occured").build();
-            }
+         catch (IOException e) {
+            e.printStackTrace();
+            return Response.serverError().entity("Some error with GitHub API (e.g. maybe wrong tokens, organisation, teams) occured").build();
         }
 
         return Response.noContent().build();

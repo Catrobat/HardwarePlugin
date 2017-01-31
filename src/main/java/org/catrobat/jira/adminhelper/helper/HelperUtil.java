@@ -16,9 +16,20 @@
 
 package org.catrobat.jira.adminhelper.helper;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import com.atlassian.jira.component.ComponentAccessor;
+import com.atlassian.jira.user.ApplicationUser;
+import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfig;
+import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
+import org.catrobat.jira.adminhelper.rest.json.JsonResource;
+import org.catrobat.jira.adminhelper.rest.json.JsonTeam;
+import org.kohsuke.github.GHOrganization;
+import org.kohsuke.github.GHTeam;
+import org.kohsuke.github.GitHub;
+
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
@@ -44,5 +55,99 @@ public class HelperUtil {
         beginCalendar.clear(Calendar.MILLISECOND);
 
         return beginCalendar.getTime();
+    }
+
+    public static void saveConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException {
+        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
+        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
+                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
+
+        if (jsonConfig.getResources() != null) {
+            for (JsonResource jsonResource : jsonConfig.getResources()) {
+                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+            }
+        }
+
+        if (jsonConfig.getApprovedGroups() != null) {
+            configService.clearApprovedGroups();
+            for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
+                configService.addApprovedGroup(approvedGroupName);
+            }
+        }
+
+        com.atlassian.jira.user.util.UserManager jiraUserManager = ComponentAccessor.getUserManager();
+        if (jsonConfig.getApprovedUsers() != null) {
+            configService.clearApprovedUsers();
+            for (String approvedUserName : jsonConfig.getApprovedUsers()) {
+                ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
+                if (user != null) {
+                    configService.addApprovedUser(user.getKey());
+                }
+            }
+        }
+
+        if (jsonConfig.getTeams() != null) {
+            String token = configService.getConfiguration().getGithubApiToken();
+            String organizationName = configService.getConfiguration().getGithubOrganisation();
+
+
+            GitHub gitHub = GitHub.connectUsingOAuth(token);
+            GHOrganization organization = gitHub.getOrganization(organizationName);
+            Collection<GHTeam> teamList = organization.getTeams().values();
+
+
+            for (JsonTeam jsonTeam : jsonConfig.getTeams()) {
+                configService.removeTeam(jsonTeam.getName());
+
+                List<Integer> githubIdList = new ArrayList<Integer>();
+                for (String teamName : jsonTeam.getGithubTeams()) {
+                    for (GHTeam team : teamList) {
+                        if (teamName.toLowerCase().equals(team.getName().toLowerCase())) {
+                            githubIdList.add(team.getId());
+                            break;
+                        }
+                    }
+                }
+
+                configService.addTeam(jsonTeam.getName(), githubIdList, jsonTeam.getCoordinatorGroups(),
+                        jsonTeam.getSeniorGroups(), jsonTeam.getDeveloperGroups());
+            }
+        }
+    }
+
+    public static void saveGithubConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws Exception
+    {
+        if (jsonConfig.getGithubToken() != null && jsonConfig.getGithubToken().length() != 0) {
+            configService.setApiToken(jsonConfig.getGithubToken());
+        }
+        if (jsonConfig.getGithubTokenPublic() != null)
+            configService.setPublicApiToken(jsonConfig.getGithubTokenPublic());
+        if(jsonConfig.getGithubOrganization() != null)
+            configService.setOrganisation(jsonConfig.getGithubOrganization());
+        else
+            throw(new Exception("Github Configuration Settings are not valid"));
+
+        if(jsonConfig.getDefaultGithubTeam() != null)
+        {
+            System.out.println("about to set default githug team " + jsonConfig.getDefaultGithubTeam());
+            configService.setDefaultGithubTeam(jsonConfig.getDefaultGithubTeam());
+        }
+
+        String token = configService.getConfiguration().getGithubApiToken();
+        String organizationName = configService.getConfiguration().getGithubOrganisation();
+
+
+        GitHub gitHub = GitHub.connectUsingOAuth(token);
+        GHOrganization organization = gitHub.getOrganization(organizationName);
+        Collection<GHTeam> teamList = organization.getTeams().values();
+
+        if (jsonConfig.getDefaultGithubTeam() != null) {
+            for (GHTeam team : teamList) {
+                if (jsonConfig.getDefaultGithubTeam().toLowerCase().equals(team.getName().toLowerCase())) {
+                    configService.setDefaultGithubTeamId(team.getId());
+                    break;
+                }
+            }
+        }
     }
 }

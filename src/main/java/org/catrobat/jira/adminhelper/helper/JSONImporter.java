@@ -22,9 +22,11 @@ public class JSONImporter {
     private final LendingService lendingService;
     private final DeviceCommentService deviceCommentService;
     private Map<Integer, Integer> hardware_model_mapping;
+    private final AdminHelperConfigService configService;
 
     public JSONImporter(DeviceService deviceService, UserManager userManager, HardwareModelService hardwareModelService,
-                        LendingService lendingService, DeviceCommentService deviceCommentService)
+                        LendingService lendingService, DeviceCommentService deviceCommentService,
+                        AdminHelperConfigService configService)
     {
         this.deviceService = deviceService;
         this.userManager = userManager;
@@ -32,6 +34,7 @@ public class JSONImporter {
         this.lendingService = lendingService;
         this.deviceCommentService = deviceCommentService;
         this.hardware_model_mapping = new HashMap<>();
+        this.configService = configService;
     }
 
     public boolean ImportDevices(JsonDeviceList deviceList)
@@ -85,6 +88,19 @@ public class JSONImporter {
         }
         System.out.println("Imported all Devices");
         hardware_model_mapping.clear();
+        return true;
+    }
+
+    public boolean importConfig(JsonConfig config)
+    {
+        System.out.println("importing config");
+        try {
+            HelperUtil.saveConfig(config, configService);
+            HelperUtil.saveGithubConfig(config, configService);
+        }
+        catch (Exception e) {
+            return false;
+        }
         return true;
     }
 }

@@ -11,8 +11,6 @@
                         title:"Success",
                         body:"The Backup import was Successful"
                     })
-                    document.getElementById("data-type").innerHTML =
-                            "Backup JSON: ";
                 }
                 else{
                     AJS.messages.error({
@@ -20,7 +18,7 @@
                         body:"An error uccured during the Backup process </br>"+
                         "<h1>Server message: $message</h1"
                     })
-                    if($error_type === "import"){
+                    if("$error_type" === "import"){
                         document.getElementById("failure-field").innerHTML =
                                 "<strong>The Backup was Unsuccessful, the Hardware Data has been reinitiated, to the Status before " +
                                 "the Backup!</strong>";
@@ -32,30 +30,58 @@
                         document.getElementById("failure-field").innerHTML =
                                 "<strong>There was an error, parsing the given Bakup files, no actions were taken.</br>" +
                                 "The Hardware DB entries have not been changed ! </strong>";
-
-                       document.getElementById("json-field").style.visibility = "hidden";
                     }
                 }
-                if($error_type === "import"){
-                    var string = "$device";
-                    string = string.replace(/&quot;/g, "\"");
-                    var json = JSON.parse(string);
+                if("$error_type" === "import" || "$device" != "none"){
 
-                    AJS.$("#json-field").text(JSON.stringify(json, null, 2));
-                    prettyPrint();
+                    var device_string = "$device";
+                    device_string = device_string.replace(/&quot;/g, "\"");
+                    var device_json = JSON.parse(device_string);
+
+                    AJS.$("#json-field").text(JSON.stringify(device_json, null, 2))
+
+                    document.getElementById("data-type").innerHTML =
+                            "Backup JSON: ";
+
+                    document.getElementById("json-field").style.visibility = "visible";
                 }
+                if($success === true && "$config" != "none"){
+
+                    var config_string = "$config";
+                    config_string = config_string.replace(/&quot;/g, "\"");
+                    var config_json = JSON.parse(config_string);
+
+                    AJS.$("#json-field-config").text(JSON.stringify(config_json, null, 2));
+
+                    document.getElementById("config-header").innerHTML =
+                            "Imported Config: ";
+
+                    document.getElementById("json-field-config").style.visibility = "visible";
+                }
+                prettyPrint();
             });
-            function redirect() {
+            function redirectToHdw() {
                 window.open("$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/hardware","_self");
+            }
+            function redirectToConfiguration() {
+                window.open("$applicationProperties.getBaseUrl()/plugins/servlet/admin_helper/admin","_self");
             }
         </script>
     </head>
     <body>
         <div id="aui-message-bar"></div>
+
         <h2 id="failure-field"></h2>
         <h2 id="data-type"></h2>
-        <pre id="json-field" class ="prettyprint lang-json"></pre></br>
-        <input type="button" value="redirect to HDW Overview" class="aui-button aui-button-primary"
-               onclick="redirect()"/>
+
+        <pre id="json-field" class="prettyprint lang-json" style="visibility: hidden"></pre></br>
+        <h2 id="config-header"></h2>
+        <pre id="json-field-config" class="prettyprint lang-json" style="visibility: hidden"></pre></br>
+        <div class ="field-group">
+            <input type="button" value="redirect to HDW Overview" class="aui-button aui-button-primary"
+               onclick="redirectToHdw()"/>
+            <input type="button" value="redirect to Configuration" class="aui-button aui-button-primary"
+                   onclick="redirectToConfiguration()"/>
+        </div>
     </body>
 </html>

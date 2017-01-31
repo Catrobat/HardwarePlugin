@@ -1,8 +1,6 @@
 /**
  * Created by dominik on 12.12.16.
  */
-var baseUrl = AJS.$("meta[name='application-base-url']").attr("content");
-
 function enableSettingsChange() {
     var status = document.getElementById("github_organization").disabled;
     {
@@ -113,5 +111,15 @@ function  checkPublicTokenAndOrganization(url) {
                 })
             })
     }
+}
 
+function redirectToDownload()
+{
+    var checked = document.getElementById("enable_full_download").checked;
+    window.open(baseUrl+"/plugins/servlet/admin_helper/download_backup?config=true&hardware="+checked,"_self");
+}
+
+function redirectToUpload()
+{
+    window.open(baseUrl+"/plugins/servlet/admin_helper/upload_backup","_self");
 }
