@@ -136,7 +136,6 @@ public class HelperUtil {
         String token = configService.getConfiguration().getGithubApiToken();
         String organizationName = configService.getConfiguration().getGithubOrganisation();
 
-
         GitHub gitHub = GitHub.connectUsingOAuth(token);
         GHOrganization organization = gitHub.getOrganization(organizationName);
         Collection<GHTeam> teamList = organization.getTeams().values();

@@ -95,7 +95,6 @@ public class JSONImporter {
     {
         System.out.println("importing config");
         try {
-            HelperUtil.saveConfig(config, configService);
             HelperUtil.saveGithubConfig(config, configService);
         }
         catch (Exception e) {

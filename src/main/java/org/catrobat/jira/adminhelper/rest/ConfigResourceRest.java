@@ -24,6 +24,7 @@ import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
+import com.google.gson.Gson;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Team;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
@@ -111,7 +112,8 @@ public class ConfigResourceRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setGithubConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request)
     {
-
+        Gson gson = new Gson();
+        System.out.println("config to save is: " + gson.toJson(jsonConfig));
         Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
@@ -144,7 +146,7 @@ public class ConfigResourceRest extends RestHelper {
         catch(Exception e)
         {
            return Response.serverError().entity("There was an error! \n The given Organization cant be accessed with " +
-                   "the current token!").build();
+                   "the current private token!").build();
         }
         return Response.ok().build();
     }

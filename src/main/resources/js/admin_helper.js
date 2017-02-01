@@ -23,7 +23,7 @@ function sendDataToServer(url)
 {
     var git_config = {};
 
-    if (!AJS.$("#github_token").attr("placeholder"))
+    if (AJS.$("#github_token").val() !== '')
     {
         git_config.githubToken = AJS.$("#github_token").val();
     }
