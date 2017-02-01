@@ -149,6 +149,17 @@ public class UploadBackupServlet extends HelperServlet  {
             System.out.println("[INFO] An error uncured while importing reinstancing old data");
             if(e.getClass() == JsonIOException.class || e.getClass() == JsonSyntaxException.class) {
 
+                files = extractZip(failure_file);
+
+                resetHardwareData();
+                try {
+                    importDataFromZip(files);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                    response.sendError(500, "something went horribly wrong");
+                }
+
                 response.setStatus(200);
 
                 Map<String, Object> params = new HashMap<>();
@@ -156,15 +167,23 @@ public class UploadBackupServlet extends HelperServlet  {
                 params.put("message", e.getMessage());
                 params.put("error_type", "json");
 
+                for(File file : files.values())
+                    file.delete();
+
                 renderer.render("upload_result.vm", params, response.getWriter());
+
+                this.config = null;
+                this.deviceList = null;
+
                 return;
             }
             else {
                 try {
                     files = extractZip(failure_file);
 
-                    importDataFromZip(files);
+                    resetHardwareData();
 
+                    importDataFromZip(files);
                     response.setStatus(200);
 
                     Map<String, Object> params = prepareParams();
@@ -175,7 +194,14 @@ public class UploadBackupServlet extends HelperServlet  {
                     temp.delete();
                     failure_file.delete();
 
+                    for(File file : files.values())
+                        file.delete();
+
                     renderer.render("upload_result.vm", params, response.getWriter());
+
+                    this.config = null;
+                    this.deviceList = null;
+
                     return;
                 }
                 catch (Exception ex) {
@@ -197,6 +223,9 @@ public class UploadBackupServlet extends HelperServlet  {
 
         for(File file : files.values())
             file.delete();
+
+        this.config = null;
+        this.deviceList = null;
 
         renderer.render("upload_result.vm", params,response.getWriter());
     }
@@ -236,19 +265,28 @@ public class UploadBackupServlet extends HelperServlet  {
 
         JSONExporter exporter = new JSONExporter(deviceService, userManager, configService);
         List<JsonDevice> devices = exporter.getDevicesAsJSON();
+
         JsonDeviceList device_list = new JsonDeviceList(devices);
+        JsonConfig config = exporter.getConfig();
 
         File save = File.createTempFile("upload_failure", ".zip");
 
         Gson gson = new Gson();
-        String json_string = gson.toJson(device_list);
+        String dev_json = gson.toJson(device_list);
+        String conf_json = gson.toJson(config);
 
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(save));
-        ZipEntry e = new ZipEntry(DEVICE_FILE);
+        ZipEntry dev_entry = new ZipEntry(DEVICE_FILE);
+        ZipEntry conf_entry = new ZipEntry(CONFIG_FILE);
 
-        out.putNextEntry(e);
-        out.write(json_string.getBytes());
+        out.putNextEntry(dev_entry);
+        out.write(dev_json.getBytes());
         out.closeEntry();
+
+        out.putNextEntry(conf_entry);
+        out.write(conf_json.getBytes());
+        out.closeEntry();
+
         out.close();
 
         return save;
