@@ -16,10 +16,10 @@
 
 package org.catrobat.jira.adminhelper.helper;
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.user.ApplicationUser;
-import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfig;
-import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonResource;
 import org.catrobat.jira.adminhelper.rest.json.JsonTeam;
@@ -148,5 +148,33 @@ public class HelperUtil {
                 }
             }
         }
+    }
+
+    public static void resetHardware(ActiveObjects ao)
+    {
+        ao.executeInTransaction(() -> {
+            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
+                ao.delete(deviceComment);
+            }
+            for (Lending lending : ao.find(Lending.class)) {
+                ao.delete(lending);
+            }
+            for (Device device : ao.find(Device.class)) {
+                ao.delete(device);
+            }
+            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
+                ao.delete(hardwareModel);
+            }
+            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
+                ao.delete(typeOfDevice);
+            }
+            for (Producer producer : ao.find(Producer.class)) {
+                ao.delete(producer);
+            }
+            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
+                ao.delete(operatingSystem);
+            }
+            return null;
+        });
     }
 }

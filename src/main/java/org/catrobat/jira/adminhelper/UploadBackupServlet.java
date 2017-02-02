@@ -25,6 +25,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOExceptionWithCause;
 import org.catrobat.jira.adminhelper.activeobject.*;
+import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.helper.JSONExporter;
 import org.catrobat.jira.adminhelper.helper.JSONImporter;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
@@ -89,6 +90,9 @@ public class UploadBackupServlet extends HelperServlet  {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         super.doPost(request, response);
 
+        this.config = null;
+        this.deviceList = null;
+
         System.out.println("--------NEW IMPORT-----------");
         response.setContentType("text/html");
 
@@ -117,7 +121,8 @@ public class UploadBackupServlet extends HelperServlet  {
                 return;
             }
             FileItem fileItem = it.next();
-            if(!fileItem.getContentType().equals("application/zip")) {
+            if(!(fileItem.getContentType().equals("application/zip") ||
+                    fileItem.getContentType().equals("application/octet-stream"))) {
                 response.sendError(500, "An error occurred: you may only upload Zip files");
                 return;
             }
@@ -171,10 +176,6 @@ public class UploadBackupServlet extends HelperServlet  {
                     file.delete();
 
                 renderer.render("upload_result.vm", params, response.getWriter());
-
-                this.config = null;
-                this.deviceList = null;
-
                 return;
             }
             else {
@@ -198,10 +199,6 @@ public class UploadBackupServlet extends HelperServlet  {
                         file.delete();
 
                     renderer.render("upload_result.vm", params, response.getWriter());
-
-                    this.config = null;
-                    this.deviceList = null;
-
                     return;
                 }
                 catch (Exception ex) {
@@ -210,7 +207,7 @@ public class UploadBackupServlet extends HelperServlet  {
                 }
             }
         }
-
+        //everything went fine without any errors
         response.setStatus(200);
         Map<String, Object> params = prepareParams();
         System.out.println("params are: ");
@@ -223,9 +220,6 @@ public class UploadBackupServlet extends HelperServlet  {
 
         for(File file : files.values())
             file.delete();
-
-        this.config = null;
-        this.deviceList = null;
 
         renderer.render("upload_result.vm", params,response.getWriter());
     }
@@ -320,30 +314,7 @@ public class UploadBackupServlet extends HelperServlet  {
 
     private void resetHardwareData()
     {
-        ao.executeInTransaction(() -> {
-            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
-                ao.delete(deviceComment);
-            }
-            for (Lending lending : ao.find(Lending.class)) {
-                ao.delete(lending);
-            }
-            for (Device device : ao.find(Device.class)) {
-                ao.delete(device);
-            }
-            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
-                ao.delete(hardwareModel);
-            }
-            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
-                ao.delete(typeOfDevice);
-            }
-            for (Producer producer : ao.find(Producer.class)) {
-                ao.delete(producer);
-            }
-            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
-                ao.delete(operatingSystem);
-            }
-            return null;
-        });
+        HelperUtil.resetHardware(ao);
     }
 
     private boolean validateBackup(Map<String, File> to_check) throws Exception

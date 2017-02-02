@@ -156,10 +156,10 @@ public class ConfigResourceRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
 
-        Response unauthorized = checkPermission(request);
+/*        Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
-        }
+        }*/
 
         try{
             HelperUtil.saveConfig(jsonConfig, configService);

@@ -30,7 +30,7 @@ public class UpgradeTask implements ActiveObjectsUpgradeTask {
 
     @Override
     public ModelVersion getModelVersion() {
-        return ModelVersion.valueOf("4");
+        return ModelVersion.valueOf("5");
     }
 
     @Override
@@ -44,11 +44,11 @@ public class UpgradeTask implements ActiveObjectsUpgradeTask {
 
 
         // adding Resource to Active Objects
-        if (modelVersion.isOlderThan(ModelVersion.valueOf("4"))) {
+        if (modelVersion.isOlderThan(ModelVersion.valueOf("5"))) {
             activeObjects.migrate(AdminHelperConfig.class, ApprovedGroup.class, ApprovedUser.class, Device.class,
                     DeviceComment.class, GithubTeam.class, Group.class, HardwareModel.class, Lending.class,
                     OperatingSystem.class, Producer.class, Resource.class, Team.class, TeamToGithubTeam.class,
-                    TeamToGroup.class, TypeOfDevice.class, ReadOnlyHdwUser.class);
+                    TeamToGroup.class, TypeOfDevice.class, ReadOnlyHdwUser.class, ReadOnlyHdwGroup.class);
         }
     }
 }
