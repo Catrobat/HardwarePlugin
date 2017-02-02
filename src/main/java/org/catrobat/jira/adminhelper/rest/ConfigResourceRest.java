@@ -17,6 +17,7 @@
 package org.catrobat.jira.adminhelper.rest;
 
 
+import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.crowd.embedded.api.Directory;
 import com.atlassian.crowd.manager.directory.DirectoryManager;
 import com.atlassian.jira.component.ComponentAccessor;
@@ -28,6 +29,7 @@ import com.google.gson.Gson;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Team;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
+import org.catrobat.jira.adminhelper.helper.JSONExporter;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonResource;
 import org.catrobat.jira.adminhelper.rest.json.JsonTeam;
@@ -49,12 +51,15 @@ import java.util.List;
 public class ConfigResourceRest extends RestHelper {
     private final AdminHelperConfigService configService;
     private final DirectoryManager directoryManager;
+    private final ActiveObjects ao;
 
     public ConfigResourceRest(final UserManager userManager, final AdminHelperConfigService configService,
-                              final PermissionManager permissionManager, final GroupManager groupManager, final DirectoryManager directoryManager) {
+                              final PermissionManager permissionManager, final GroupManager groupManager,
+                              final DirectoryManager directoryManager, ActiveObjects ao) {
         super(permissionManager, configService, userManager, groupManager);
         this.configService = configService;
         this.directoryManager = directoryManager;
+        this.ao = ao;
     }
 
     @GET
@@ -271,5 +276,21 @@ public class ConfigResourceRest extends RestHelper {
         return Response.serverError().entity("Maybe no resource with given name?").build();
     }
 
+    @PUT
+    @Path("/resetConfig")
+    public Response restConfig(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
 
+        try {
+            HelperUtil.resetConfig(configService, ao);
+        }
+        catch (Exception e){
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+        return Response.ok().build();
+    }
 }

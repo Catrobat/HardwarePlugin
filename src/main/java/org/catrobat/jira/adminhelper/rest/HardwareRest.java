@@ -749,32 +749,8 @@ public class HardwareRest extends RestHelper {
 
     @POST
     @Path("/resetHardware")
-    public Response resetHardware(@Context HttpServletRequest request)
-    {
-        ao.executeInTransaction(() -> {
-            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
-                ao.delete(deviceComment);
-            }
-            for (Lending lending : ao.find(Lending.class)) {
-                ao.delete(lending);
-            }
-            for (Device device : ao.find(Device.class)) {
-                ao.delete(device);
-            }
-            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
-                ao.delete(hardwareModel);
-            }
-            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
-                ao.delete(typeOfDevice);
-            }
-            for (Producer producer : ao.find(Producer.class)) {
-                ao.delete(producer);
-            }
-            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
-                ao.delete(operatingSystem);
-            }
-            return null;
-        });
+    public Response resetHardware(@Context HttpServletRequest request) {
+        HelperUtil.resetHardware(ao);
         return Response.ok().build();
     }
 }

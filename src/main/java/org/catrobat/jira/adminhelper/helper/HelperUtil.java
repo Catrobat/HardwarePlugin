@@ -177,4 +177,15 @@ public class HelperUtil {
             return null;
         });
     }
+
+    public static void resetConfig(AdminHelperConfigService configService, ActiveObjects ao) throws Exception
+    {
+        JSONExporter exporter = new JSONExporter(null, null, configService);
+        JsonConfig current = exporter.getConfig();
+        saveConfig(new JsonConfig(), configService);
+        for(JsonTeam team: current.getTeams())
+        {
+            configService.removeTeam(team.getName());
+        }
+    }
 }

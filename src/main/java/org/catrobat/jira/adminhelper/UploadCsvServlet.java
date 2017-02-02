@@ -23,6 +23,7 @@ import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.websudo.WebSudoManager;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.CsvImporter;
+import org.catrobat.jira.adminhelper.helper.HelperUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -108,29 +109,6 @@ public class UploadCsvServlet extends HelperServlet {
     }
 
     private void dropEntries() {
-        ao.executeInTransaction(() -> {
-            for (DeviceComment deviceComment : ao.find(DeviceComment.class)) {
-                ao.delete(deviceComment);
-            }
-            for (Lending lending : ao.find(Lending.class)) {
-                ao.delete(lending);
-            }
-            for (Device device : ao.find(Device.class)) {
-                ao.delete(device);
-            }
-            for (HardwareModel hardwareModel : ao.find(HardwareModel.class)) {
-                ao.delete(hardwareModel);
-            }
-            for (TypeOfDevice typeOfDevice : ao.find(TypeOfDevice.class)) {
-                ao.delete(typeOfDevice);
-            }
-            for (Producer producer : ao.find(Producer.class)) {
-                ao.delete(producer);
-            }
-            for (OperatingSystem operatingSystem : ao.find(OperatingSystem.class)) {
-                ao.delete(operatingSystem);
-            }
-            return null;
-        });
+        HelperUtil.resetHardware(ao);
     }
 }

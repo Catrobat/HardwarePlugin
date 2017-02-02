@@ -12,14 +12,19 @@
     <ul>
         <li>device.JSON</li>
         <li>config.JSON</li>
-    </ul> <br>
-    <p>The file may contain only one of these files or both, but nothing else. If the Bakup does not hava the decribed structure
-        the file will be rejected!
-        If you downloaded the Backup through this Plugin the Structure should allready be given.</p>
+    </ul>
+    <br>
+    <p>The file may contain only one of these files or both, but nothing else. If the given Backup does not hava the
+        described structurethe file will be rejected!
+        If you downloaded the Backup through this Plugin the Structure should allready be given!</p>
     <h2> Please only upload Backups if you know what you are doing!</h2>
 
     <h2>The Backup procedure will delete all current DB entries
-        and will replace them with the data given in the Backup file. </h2>
+        and will replace them with the data given in the Backup file.
+        </br>
+        If one of the Files is faulty, or an error occurres during the backup process the System will be reset to the
+        state before the Backup.
+    </h2>
 
     <form class="aui" method="POST" enctype="multipart/form-data" id="upload-form">
         <div class="field-group">

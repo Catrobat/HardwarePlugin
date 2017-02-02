@@ -29,7 +29,7 @@
                     else{
                         document.getElementById("failure-field").innerHTML =
                                 "<strong>There was an error, parsing the given Bakup files, no actions were taken.</br>" +
-                                "The Hardware DB entries have not been changed ! </strong>";
+                                "No Settings have been changed </strong>";
                     }
                 }
                 if("$error_type" === "import" || "$device" != "none"){

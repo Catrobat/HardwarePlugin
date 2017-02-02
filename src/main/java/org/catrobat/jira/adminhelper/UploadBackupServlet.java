@@ -307,6 +307,7 @@ public class UploadBackupServlet extends HelperServlet  {
             JsonConfig config = gson.fromJson(jsonReader, JsonConfig.class);
             this.config = config;
 
+            HelperUtil.resetConfig(configService,ao);
             jsonImporter.importConfig(config);
         }
         return true;
