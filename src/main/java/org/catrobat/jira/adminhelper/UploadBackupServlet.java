@@ -230,7 +230,7 @@ public class UploadBackupServlet extends HelperServlet  {
 
         ZipInputStream zip = new ZipInputStream(new FileInputStream(zip_file));
         ZipEntry ze = zip.getNextEntry();
-        Map<String, File> uniziped_files = new HashMap<>();
+        Map<String, File> unziped_files = new HashMap<>();
         byte[] buffer = new byte[1024];
 
         while(ze != null) {
@@ -242,7 +242,7 @@ public class UploadBackupServlet extends HelperServlet  {
             while((len = zip.read(buffer)) >0) {
                 fos.write(buffer, 0, len);
             }
-            uniziped_files.put(ze.getName(),temp_unzip);
+            unziped_files.put(ze.getName(),temp_unzip);
             fos.close();
             zip.closeEntry();
             ze = zip.getNextEntry();
@@ -250,7 +250,7 @@ public class UploadBackupServlet extends HelperServlet  {
         zip.closeEntry();
         zip.close();
 
-        return uniziped_files;
+        return unziped_files;
     }
 
     private File generateFailureBackup() throws IOException

@@ -140,6 +140,7 @@ public class HardwareRest extends RestHelper {
         for (TypeOfDevice typeOfDevice : typeOfDeviceService.searchTypeOfDevice(query)) {
             typeList.add(typeOfDevice.getTypeOfDeviceName());
         }
+        Collections.sort(typeList);
 
         return Response.ok(typeList).build();
     }
@@ -157,6 +158,7 @@ public class HardwareRest extends RestHelper {
         for (Producer producer : producerService.searchProducers(query)) {
             producerList.add(producer.getProducerName());
         }
+        Collections.sort(producerList);
 
         return Response.ok(producerList).build();
     }
@@ -174,6 +176,7 @@ public class HardwareRest extends RestHelper {
         for (OperatingSystem operatingSystem : operatingSystemService.searchOperatingSystems(query)) {
             operatingSystemList.add(operatingSystem.getOperatingSystemName());
         }
+        Collections.sort(operatingSystemList);
 
         return Response.ok(operatingSystemList).build();
     }
