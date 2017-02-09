@@ -56,7 +56,7 @@ public class DownloadBackupServlet extends HelperServlet {
         if(req.getParameterMap().size() == 0) {
            packHardware(resp);
         }
-        if(req.getParameterMap().size() == 2) {
+        else if(req.getParameterMap().size() == 2) {
             String download_hardware = req.getParameter("hardware");
             if(download_hardware.equals("false")){
                 packConfig(resp);

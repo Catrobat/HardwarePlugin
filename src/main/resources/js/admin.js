@@ -29,6 +29,9 @@ AJS.toInit(function () {
         AJS.$('html,body').animate({scrollTop: 0}, 'slow');
     }
 
+    initGroupUserSearchField(baseUrl);
+    initHdwReadOnlyUsersAndGroups(baseUrl);
+
     function populateForm() {
         AJS.$(".loadingDiv").show();
         AJS.$.ajax({
