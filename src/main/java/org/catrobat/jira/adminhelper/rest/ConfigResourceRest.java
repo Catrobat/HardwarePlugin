@@ -27,6 +27,8 @@ import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.user.util.UserManager;
 import com.google.gson.Gson;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
+import org.catrobat.jira.adminhelper.activeobject.HardwareModel;
+import org.catrobat.jira.adminhelper.activeobject.HardwareModelService;
 import org.catrobat.jira.adminhelper.activeobject.Team;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.helper.JSONExporter;
@@ -52,14 +54,16 @@ public class ConfigResourceRest extends RestHelper {
     private final AdminHelperConfigService configService;
     private final DirectoryManager directoryManager;
     private final ActiveObjects ao;
+    private final HardwareModelService hardwareModelService;
 
     public ConfigResourceRest(final UserManager userManager, final AdminHelperConfigService configService,
                               final PermissionManager permissionManager, final GroupManager groupManager,
-                              final DirectoryManager directoryManager, ActiveObjects ao) {
+                              final DirectoryManager directoryManager, ActiveObjects ao, HardwareModelService hardwareModelService) {
         super(permissionManager, configService, userManager, groupManager);
         this.configService = configService;
         this.directoryManager = directoryManager;
         this.ao = ao;
+        this.hardwareModelService = hardwareModelService;
     }
 
     @GET
@@ -286,7 +290,7 @@ public class ConfigResourceRest extends RestHelper {
         }
 
         try {
-            HelperUtil.resetConfig(configService, ao);
+            HelperUtil.resetConfig(configService, ao, hardwareModelService);
         }
         catch (Exception e){
             return Response.serverError().entity(e.getMessage()).build();

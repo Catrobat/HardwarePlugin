@@ -1,9 +1,9 @@
 package org.catrobat.jira.adminhelper;
 
 import com.atlassian.activeobjects.external.ActiveObjects;
-import com.atlassian.jira.config.util.JiraHome;
+
 import com.atlassian.jira.security.groups.GroupManager;
-import com.atlassian.jira.template.TemplateSource;
+
 import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.websudo.WebSudoManager;
@@ -13,17 +13,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
-import com.google.protobuf.ByteString;
-import org.apache.commons.collections.iterators.ObjectArrayIterator;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.compress.utils.IOUtils;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
+
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOExceptionWithCause;
+
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.helper.HelperUtil;
 import org.catrobat.jira.adminhelper.helper.JSONExporter;
@@ -56,6 +52,7 @@ public class UploadBackupServlet extends HelperServlet  {
     private final DeviceService deviceService;
     private final ActiveObjects ao;
     private final AdminHelperConfigService configService;
+    private final HardwareModelService hardwareModelService;
 
     private final String DEVICE_FILE = "device.JSON";
     private final String CONFIG_FILE = "config.JSON";
@@ -77,6 +74,7 @@ public class UploadBackupServlet extends HelperServlet  {
         this.deviceService = deviceService;
         this.ao = ao;
         this.configService = configService;
+        this.hardwareModelService = hardwareModelService;
     }
 
     @Override
@@ -257,7 +255,7 @@ public class UploadBackupServlet extends HelperServlet  {
     {
         System.out.println("Generating failure Backup");
 
-        JSONExporter exporter = new JSONExporter(deviceService, userManager, configService);
+        JSONExporter exporter = new JSONExporter(deviceService, userManager, configService, hardwareModelService);
         List<JsonDevice> devices = exporter.getDevicesAsJSON();
 
         JsonDeviceList device_list = new JsonDeviceList(devices);
@@ -307,7 +305,7 @@ public class UploadBackupServlet extends HelperServlet  {
             JsonConfig config = gson.fromJson(jsonReader, JsonConfig.class);
             this.config = config;
 
-            HelperUtil.resetConfig(configService,ao);
+            HelperUtil.resetConfig(configService,ao,hardwareModelService);
             jsonImporter.importConfig(config);
         }
         return true;

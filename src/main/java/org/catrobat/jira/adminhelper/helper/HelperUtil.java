@@ -178,9 +178,10 @@ public class HelperUtil {
         });
     }
 
-    public static void resetConfig(AdminHelperConfigService configService, ActiveObjects ao) throws Exception
+    public static void resetConfig(AdminHelperConfigService configService, ActiveObjects ao,
+                                   HardwareModelService hardwareModelService) throws Exception
     {
-        JSONExporter exporter = new JSONExporter(null, null, configService);
+        JSONExporter exporter = new JSONExporter(null, null, configService, hardwareModelService);
         JsonConfig current = exporter.getConfig();
         saveConfig(new JsonConfig(), configService);
         for(JsonTeam team: current.getTeams())

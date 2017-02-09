@@ -41,13 +41,11 @@ public class JSONImporter {
     {
         System.out.println("Importing Devices");
         Gson gson = new Gson();
-        for(JsonDevice d : deviceList.getDeviceList())
-        {
+        for(JsonDevice d : deviceList.getDeviceList()) {
             System.out.println("importing Device:");
             System.out.println(gson.toJson(d));
             HardwareModel hd;
-            if(!hardware_model_mapping.containsKey(d.getHardwareModelId()))
-            {
+            if(!hardware_model_mapping.containsKey(d.getHardwareModelId())) {
                 System.out.println("Hardware Model does not exist, about to create new model");
                 JsonHardwareModel json_hardware = d.getHardwareModel();
                 hd = hardwareModelService.add(json_hardware.getName(),json_hardware.getTypeOfDevice(),
@@ -59,14 +57,23 @@ public class JSONImporter {
             else {
                 hd = hardwareModelService.get(hardware_model_mapping.get(d.getHardwareModelId()));
             }
+            if(d.getId() == -1) {
+                System.out.println("only model without devices found, continue");
+                continue;
+            }
+
             Device current_device = deviceService.add(hd,d.getImei(), d.getSerialNumber(), d.getInventoryNumber(),
                     d.getReceivedFrom(), d.getReceivedDate(),d.getUsefulLiveOfAsset());
+
+            if(d.getSortedOutDate() != null) {
+                System.out.println("device has been sorted out");
+                deviceService.sortOutDevice(current_device.getID(), d.getSortedOutDate(), d.getSortedOutComment());
+            }
 
             List<JsonLending> lendings = d.getLendings();
             List<JsonDeviceComment> comments = d.getComments();
 
-            for(JsonLending lending : lendings)
-            {
+            for(JsonLending lending : lendings) {
                 Lending temp = lendingService.lendOut(current_device,lending.getLentOutBy(), lending.getLentOutIssuer(),
                         lending.getPurpose(), lending.getComment(), lending.getBegin());
                 if(lending.getEnd() != null) {
@@ -74,8 +81,7 @@ public class JSONImporter {
                 }
             }
 
-            for(JsonDeviceComment comment : comments)
-            {
+            for(JsonDeviceComment comment : comments) {
                 if(comment.getDate() != null) {
                     deviceCommentService.addDeviceComment(current_device, comment.getAuthor(), comment.getComment(),
                             comment.getDate());

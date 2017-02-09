@@ -92,6 +92,11 @@ public class JsonDevice {
 
     }
 
+    public JsonDevice(JsonHardwareModel hardwareModel)
+    {
+        this.hardwareModel = hardwareModel;
+    }
+
     public JsonDevice(Device toCopy) {
         id = toCopy.getID();
         hardwareModelName = toCopy.getHardwareModel().getName();

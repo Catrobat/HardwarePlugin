@@ -211,7 +211,7 @@
     <web-item key="hardware_user_configuration" name="Link to Hardware User Config" section="system.user.options/personal" weight="50">
         <label>Hardware/User Configuration</label>
         <link linkId="hardware_user_config_link">/plugins/servlet/admin_helper/admin</link>
-        <condition class="org.catrobat.jira.adminhelper.helper.HardwarePremissionCondition">
+        <condition class="org.catrobat.jira.adminhelper.helper.PermissionCondition">
         </condition>
     </web-item>
 
