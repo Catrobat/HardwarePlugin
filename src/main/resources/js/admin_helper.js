@@ -164,12 +164,9 @@ function initGroupUserSearchField(baseUrl)
         }
     });
 
-    AJS.$("#save-hardware-premission").click(function() {
-        formulateReadonlyJSONAndSendToServer(baseUrl);
-    });
-
-    AJS.$("#clear-readonly-lists").click(function () {
+    AJS.$("#clear-permissions").click(function () {
         clearAllReadOnlyLists(baseUrl);
+        clearPluginPermission(baseUrl);
     });
 }
 
@@ -251,7 +248,7 @@ function clearAllReadOnlyLists(baseUrl) {
         success: function () {
             AJS.messages.success({
                 title:"Success",
-                body:"Reset was successful!"
+                body:"Readonly Reset was successful!"
             });
             //location.reload(true);
         },
@@ -262,4 +259,81 @@ function clearAllReadOnlyLists(baseUrl) {
             })
         }
     })
+}
+
+function clearPluginPermission(baseUrl) {
+    AJS.$.ajax({
+        url: baseUrl+"/rest/admin-helper/latest/config/resetPluginPermission",
+        type: "Post",
+        success: function () {
+            AJS.messages.success({
+                title: "Success",
+                body: "Permission Reset was successful!"
+            })
+        },
+        error: function (err) {
+            AJS.$.message.error({
+                title:"Error!",
+                body:"There was an error processing your data <br>" + err.responseText
+            })
+        }
+    })
+}
+
+function saveConfig(baseUrl, config)
+{
+    AJS.$(".loadingDiv").show();
+    AJS.$.ajax({
+        url: baseUrl + "/rest/admin-helper/1.0/config/saveConfig",
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(config),
+        processData: false,
+        success: function () {
+            AJS.messages.success({
+                title: "Success!",
+                body: "Permission Settings saved!"
+            });
+            AJS.$(".loadingDiv").hide();
+        },
+        error: function (error) {
+            AJS.messages.error({
+                title: "Error!",
+                body: error.responseText
+            });
+            AJS.$(".loadingDiv").hide();
+        }
+    });
+}
+
+function savePermission(baseUrl)
+{
+    var config = {};
+
+    var usersAndGroups = AJS.$("#plugin-permission").auiSelect2("val");
+    var approvedUsers = [];
+    var approvedGroups = [];
+    config.onlyPermission = true;
+
+    for (var i = 0; i < usersAndGroups.length; i++) {
+        if (usersAndGroups[i].match("^users-")) {
+            approvedUsers.push(usersAndGroups[i].split("users-")[1]);
+        } else if (usersAndGroups[i].match("^groups-")) {
+            approvedGroups.push(usersAndGroups[i].split("groups-")[1]);
+        }
+    }
+
+    config.approvedUsers = approvedUsers;
+    config.approvedGroups = approvedGroups;
+
+    saveConfig(baseUrl, config)
+}
+
+function savePluginPermission(baseUrl)
+{
+    savePermission(baseUrl);
+    if(AJS.$("#hardware-permission").auiSelect2("val").length > 0) {
+        formulateReadonlyJSONAndSendToServer(baseUrl);
+    }
+    location.reload(true);
 }

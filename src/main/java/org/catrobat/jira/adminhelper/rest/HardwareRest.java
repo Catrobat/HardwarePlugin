@@ -547,6 +547,7 @@ public class HardwareRest extends RestHelper {
 
         System.out.println("save read only users");
         System.out.println("users are: " + readonly_users);
+        readOnlyUserService.clearReadOnlyHardwareUsers();
 
         List<String> temp_user_keys = new ArrayList<>();
 
@@ -567,13 +568,13 @@ public class HardwareRest extends RestHelper {
         for(String key : temp_user_keys)
             readOnlyUserService.addUserKey(key);
 
-        //returns true if everyting went fine
         return true;
     }
 
     public boolean saveReadOnlyGroups(List<String> readonly_groups) {
         System.out.println("save read only groups");
         System.out.println("groups are: " + readonly_groups);
+        readOnlyHdwGroupService.clearReadOnlyHdwGroups();
         GroupManager group_manager = ComponentAccessor.getGroupManager();
 
         List<String> temp_groups = new ArrayList<>();

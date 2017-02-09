@@ -40,6 +40,8 @@ import java.util.TreeMap;
 public final class JsonConfig {
 
     @XmlElement
+    private boolean onlyPermission;
+    @XmlElement
     private String githubToken;
     @XmlElement
     private String githubTokenPublic;
@@ -193,9 +195,7 @@ public final class JsonConfig {
         this.approvedUsers = approvedUsers;
     }
 
-    public long getUserDirectoryId() {
-        return userDirectoryId;
-    }
+    public long getUserDirectoryId() {return userDirectoryId;}
 
     public void setUserDirectoryId(long userDirectoryId) {
         this.userDirectoryId = userDirectoryId;
@@ -260,4 +260,8 @@ public final class JsonConfig {
     public List<String> getReadOnlyUsers() { return this.readOnlyUsers; }
 
     public  List<String> getReadOnlyGroups() { return this.readOnlyGroups; }
+
+    public boolean isOnlyPermission() {return onlyPermission;}
+
+    public void setOnlyPermission(boolean onlyPermission) {this.onlyPermission = onlyPermission;}
 }

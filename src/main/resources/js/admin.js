@@ -277,19 +277,6 @@ AJS.toInit(function () {
             config.resources.push(resource);
         }
 
-        var usersAndGroups = AJS.$("#plugin-permission").auiSelect2("val");
-        var approvedUsers = [];
-        var approvedGroups = [];
-        for (var i = 0; i < usersAndGroups.length; i++) {
-            if (usersAndGroups[i].match("^users-")) {
-                approvedUsers.push(usersAndGroups[i].split("users-")[1]);
-            } else if (usersAndGroups[i].match("^groups-")) {
-                approvedGroups.push(usersAndGroups[i].split("groups-")[1]);
-            }
-        }
-
-        config.approvedUsers = approvedUsers;
-        config.approvedGroups = approvedGroups;
         config.teams = [];
         for (var i = 0; i < teams.length; i++) {
             var tempTeamName = teams[i].replace(/\W/g, '-');
@@ -315,28 +302,7 @@ AJS.toInit(function () {
             config.teams.push(tempTeam);
         }
 
-        AJS.$(".loadingDiv").show();
-        AJS.$.ajax({
-            url: baseUrl + "/rest/admin-helper/1.0/config/saveConfig",
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(config),
-            processData: false,
-            success: function () {
-                AJS.messages.success({
-                    title: "Success!",
-                    body: "Settings saved!"
-                });
-                AJS.$(".loadingDiv").hide();
-            },
-            error: function (error) {
-                AJS.messages.error({
-                    title: "Error!",
-                    body: error.responseText
-                });
-                AJS.$(".loadingDiv").hide();
-            }
-        });
+        saveConfig(baseUrl, config);
     }
 
     function addTeam() {
@@ -545,6 +511,13 @@ AJS.toInit(function () {
     AJS.$("#save-github-settings").click(function (e) {
         e.preventDefault();
         saveGithubSettings();
+        scrollToAnchor('top');
+    });
+
+    AJS.$("#save-permission").click(function (e) {
+        savePluginPermission(baseUrl);
+        populateForm();
+        e.preventDefault();
         scrollToAnchor('top');
     });
 

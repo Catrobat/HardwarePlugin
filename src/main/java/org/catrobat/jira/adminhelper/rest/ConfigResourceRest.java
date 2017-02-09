@@ -180,6 +180,19 @@ public class ConfigResourceRest extends RestHelper {
 
         return Response.noContent().build();
     }
+    @POST
+    @Path("/resetPluginPermission")
+    public Response resetPluginPermission(@Context HttpServletRequest request)
+    {
+        Response unauthorized = checkPermission(request);
+        if (unauthorized != null) {
+            return unauthorized;
+        }
+        configService.clearApprovedGroups();
+        configService.clearApprovedUsers();
+
+        return Response.ok().build();
+    }
 
     @PUT
     @Path("/addTeam")

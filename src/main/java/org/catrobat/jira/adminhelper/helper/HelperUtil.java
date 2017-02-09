@@ -58,6 +58,24 @@ public class HelperUtil {
     }
 
     public static void saveConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException {
+        if(jsonConfig.isOnlyPermission())
+        {
+            if (jsonConfig.getApprovedGroups() != null) {
+                configService.clearApprovedGroups();
+                for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
+                    configService.addApprovedGroup(approvedGroupName);
+                }
+            }
+
+            if (jsonConfig.getApprovedGroups() != null) {
+                configService.clearApprovedGroups();
+                for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
+                    configService.addApprovedGroup(approvedGroupName);
+                }
+            }
+
+            return;
+        }
         configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
         configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
                 jsonConfig.getMailSubject(), jsonConfig.getMailBody());
