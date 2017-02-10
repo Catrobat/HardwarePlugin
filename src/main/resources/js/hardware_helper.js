@@ -2,12 +2,12 @@
  * Created by dominik on 26.12.16.
  */
 
-function setReadOnlyProperties()
+function setAdminProperties()
 {
     var tabs = document.getElementsByName("hidden-if-read-only");
     for(var i = 0; i < tabs.length; i++)
     {
-        tabs[i].style.display="none";
+        tabs[i].style.display="initial";
     }
 }
 

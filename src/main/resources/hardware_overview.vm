@@ -37,16 +37,16 @@
         <li class="menu-item">
             <a href="#tabs-active-devices"><strong>Active Devices</strong></a>
         </li>
-        <li class="menu-item" name="hidden-if-read-only">
+        <li class="menu-item" name="hidden-if-read-only" style="display: none">
             <a href="#tabs-sorted-out"><strong>Sorted Out</strong></a>
         </li>
-        <li class="menu-item" name="hidden-if-read-only">
+        <li class="menu-item" name="hidden-if-read-only" style="display: none">
             <a href="#tabs-all-devices"><strong>All Devices</strong></a>
         </li>
-        <li class="menu-item" name="hidden-if-read-only">
+        <li class="menu-item" name="hidden-if-read-only" style="display: none">
             <a href="#tabs-hardware-management"><strong>Hardware Management</strong></a>
         </li>
-        <li class="menu-item" name="hidden-if-read-only">
+        <li class="menu-item" name="hidden-if-read-only" style="display: none">
             <a href="#tabs-individual-lending"><strong>Individual-Related Lending</strong></a>
         </li>
     </ul>

@@ -54,7 +54,6 @@ AJS.toInit(function () {
 
 function initHardwareVelocityReadonly(baseUrl) {
     readOnly = true;
-    setReadOnlyProperties();
     fillOutAllTables(baseUrl);
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
@@ -63,6 +62,7 @@ function initHardwareVelocityReadonly(baseUrl) {
 
 function initHardwareVelocityAdmin(baseUrl)
 {
+    setAdminProperties();
     fillOutAllTables(baseUrl);
     handleEvents(baseUrl);
     initIndividualRelatedLendingTab(baseUrl);
