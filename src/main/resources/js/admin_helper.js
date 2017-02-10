@@ -113,10 +113,13 @@ function  checkPublicTokenAndOrganization(url) {
     }
 }
 
-function redirectToDownload()
+function redirectToDownloadConfig()
 {
-    var checked = document.getElementById("enable_full_download").checked;
-    window.open(baseUrl+"/plugins/servlet/admin_helper/download_backup?config=true&hardware="+checked,"_self");
+    window.open(baseUrl+"/plugins/servlet/admin_helper/download_backup?config=true&hardware=false","_self");
+}
+
+function redirectToDownloadHDWConfig() {
+    window.open(baseUrl+"/plugins/servlet/admin_helper/download_backup?config=true&hardware=true","_self");
 }
 
 function redirectToUpload()
@@ -162,11 +165,6 @@ function initGroupUserSearchField(baseUrl)
             }
             callback(data);
         }
-    });
-
-    AJS.$("#clear-permissions").click(function () {
-        clearAllReadOnlyLists(baseUrl);
-        clearPluginPermission(baseUrl);
     });
 }
 
@@ -290,10 +288,24 @@ function saveConfig(baseUrl, config)
         data: JSON.stringify(config),
         processData: false,
         success: function () {
-            AJS.messages.success({
-                title: "Success!",
-                body: "Permission Settings saved!"
-            });
+            if(config.onlyPermission) {
+                AJS.messages.success({
+                    title: "Success!",
+                    body: "Permission Settings saved!"
+                });
+            }
+            else if(config.teamAndResources) {
+                AJS.messages.success({
+                    title: "Success!",
+                    body: "Teams and Resources were successfully saved!"
+                });
+            }
+            else {
+                AJS.messages.success({
+                    title: "Success!",
+                    body: "Config Settings saved!"
+                });
+            }
             AJS.$(".loadingDiv").hide();
         },
         error: function (error) {
@@ -335,5 +347,13 @@ function savePluginPermission(baseUrl)
     if(AJS.$("#hardware-permission").auiSelect2("val").length > 0) {
         formulateReadonlyJSONAndSendToServer(baseUrl);
     }
-    location.reload(true);
+    else{
+        clearAllReadOnlyLists(baseUrl);
+    }
+}
+
+function reloadPage()
+{
+    setTimeout(function () {
+        location.reload(true);}, 2000)
 }

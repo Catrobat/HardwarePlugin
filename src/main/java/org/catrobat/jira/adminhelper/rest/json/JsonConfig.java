@@ -40,6 +40,10 @@ import java.util.TreeMap;
 public final class JsonConfig {
 
     @XmlElement
+    private boolean isConfigImport;
+    @XmlElement
+    private boolean teamAndResources;
+    @XmlElement
     private boolean onlyPermission;
     @XmlElement
     private String githubToken;
@@ -264,4 +268,12 @@ public final class JsonConfig {
     public boolean isOnlyPermission() {return onlyPermission;}
 
     public void setOnlyPermission(boolean onlyPermission) {this.onlyPermission = onlyPermission;}
+
+    public boolean isTeamAndResources() {return teamAndResources;}
+
+    public void setTeamAndResources(boolean teamAndResources) {this.teamAndResources = teamAndResources;}
+
+    public boolean isConfigImport() {return isConfigImport;}
+
+    public void setConfigImport(boolean configImport) {isConfigImport = configImport;}
 }

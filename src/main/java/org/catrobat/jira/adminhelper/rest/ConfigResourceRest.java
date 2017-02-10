@@ -127,12 +127,10 @@ public class ConfigResourceRest extends RestHelper {
         if (unauthorized != null) {
             return unauthorized;
         }
-        try
-        {
+        try {
             HelperUtil.saveGithubConfig(jsonConfig, configService);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
         }
 
@@ -147,8 +145,7 @@ public class ConfigResourceRest extends RestHelper {
         String token = configService.getConfiguration().getGithubApiToken();
         String org = jsonConfig.getGithubOrganization();
 
-        try
-        {
+        try {
             GitHub gitHub = GitHub.connectUsingOAuth(token);
             GHOrganization organization = gitHub.getOrganization(org);
         }
@@ -165,10 +162,10 @@ public class ConfigResourceRest extends RestHelper {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response setConfig(final JsonConfig jsonConfig, @Context HttpServletRequest request) {
 
-/*        Response unauthorized = checkPermission(request);
+        Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
-        }*/
+        }
 
         try{
             HelperUtil.saveConfig(jsonConfig, configService);
@@ -180,14 +177,15 @@ public class ConfigResourceRest extends RestHelper {
 
         return Response.noContent().build();
     }
+
     @POST
     @Path("/resetPluginPermission")
     public Response resetPluginPermission(@Context HttpServletRequest request)
     {
-        Response unauthorized = checkPermission(request);
+/*        Response unauthorized = checkPermission(request);
         if (unauthorized != null) {
             return unauthorized;
-        }
+        }*/
         configService.clearApprovedGroups();
         configService.clearApprovedUsers();
 
@@ -242,7 +240,6 @@ public class ConfigResourceRest extends RestHelper {
         if (unauthorized != null) {
             return unauthorized;
         }
-
         boolean successful = configService.removeTeam(modifyTeam) != null;
 
         if (successful)
@@ -301,7 +298,6 @@ public class ConfigResourceRest extends RestHelper {
         if (unauthorized != null) {
             return unauthorized;
         }
-
         try {
             HelperUtil.resetConfig(configService, ao, hardwareModelService);
         }

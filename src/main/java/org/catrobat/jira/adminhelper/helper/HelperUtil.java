@@ -57,35 +57,8 @@ public class HelperUtil {
         return beginCalendar.getTime();
     }
 
-    public static void saveConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException {
-        if(jsonConfig.isOnlyPermission())
-        {
-            if (jsonConfig.getApprovedGroups() != null) {
-                configService.clearApprovedGroups();
-                for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
-                    configService.addApprovedGroup(approvedGroupName);
-                }
-            }
-
-            if (jsonConfig.getApprovedGroups() != null) {
-                configService.clearApprovedGroups();
-                for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
-                    configService.addApprovedGroup(approvedGroupName);
-                }
-            }
-
-            return;
-        }
-        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
-        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
-                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
-
-        if (jsonConfig.getResources() != null) {
-            for (JsonResource jsonResource : jsonConfig.getResources()) {
-                configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
-            }
-        }
-
+    private static void SaveUsersAndGroups(JsonConfig jsonConfig, AdminHelperConfigService configService)
+    {
         if (jsonConfig.getApprovedGroups() != null) {
             configService.clearApprovedGroups();
             for (String approvedGroupName : jsonConfig.getApprovedGroups()) {
@@ -100,6 +73,20 @@ public class HelperUtil {
                 ApplicationUser user = jiraUserManager.getUserByName(approvedUserName);
                 if (user != null) {
                     configService.addApprovedUser(user.getKey());
+                }
+            }
+        }
+    }
+
+    private static void SaveTeamsAndResources(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException
+    {
+        if (jsonConfig.getResources() != null) {
+            for (JsonResource jsonResource : jsonConfig.getResources()) {
+                if(jsonConfig.isConfigImport()) {
+                    configService.addResource(jsonResource.getResourceName(), jsonResource.getGroupName());
+                }
+                else{
+                    configService.editResource(jsonResource.getResourceName(), jsonResource.getGroupName());
                 }
             }
         }
@@ -131,6 +118,32 @@ public class HelperUtil {
                         jsonTeam.getSeniorGroups(), jsonTeam.getDeveloperGroups());
             }
         }
+    }
+
+    private static void saveGeneralConfig(JsonConfig jsonConfig, AdminHelperConfigService configService)
+    {
+        configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
+        configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
+                jsonConfig.getMailSubject(), jsonConfig.getMailBody());
+    }
+
+    public static void saveConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException {
+        if(jsonConfig.isConfigImport())
+        {
+            saveGeneralConfig(jsonConfig, configService);
+            SaveTeamsAndResources(jsonConfig, configService);
+            SaveUsersAndGroups(jsonConfig, configService);
+            return;
+        }
+        if(jsonConfig.isOnlyPermission()) {
+            SaveUsersAndGroups(jsonConfig, configService);
+            return;
+        }
+        if(jsonConfig.isTeamAndResources()) {
+            SaveTeamsAndResources(jsonConfig, configService);
+            return;
+        }
+        saveGeneralConfig(jsonConfig, configService);
     }
 
     public static void saveGithubConfig(JsonConfig jsonConfig, AdminHelperConfigService configService) throws Exception

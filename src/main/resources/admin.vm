@@ -29,17 +29,17 @@
         <li class="menu-item active-tab">
             <a href="#tabs-general"><strong>General Configuration</strong></a>
         </li>
+        <li class = "menu-item">
+            <a href="#tabs-permission-settings"><strong>Change Permissions</strong></a>
+        </li>
+        <li class = "menu-item">
+            <a href="#tabs-team-overview"><strong>Team overview</strong></a>
+        </li>
         <li class="menu-item">
             <a href="#tabs-teams"><strong>Add/Remove Teams</strong></a>
         </li>
         <li class = "menu-item">
             <a href="#tabs-github-settings"><strong>Change GitHub Settings</strong></a>
-        </li>
-        <li class = "menu-item">
-            <a href="#tabs-permission-settings"><strong>Change Premissions</strong></a>
-        </li>
-        <li class = "menu-item">
-            <a href="#tabs-team-overview"><strong>Team overview</strong></a>
         </li>
     </ul>
     <div class="tabs-pane active-pane" id="tabs-general">
@@ -212,7 +212,7 @@
                     </div>
                 </div>
             </fieldset>
-            <h2>Read Only Hardware Premission</h2>
+            <h2>Read Only Hardware Permission</h2>
             <fieldset>
                 <div class="field-group">
                     <label for="hardware-permission">ReadOnly Groups/Users</label>
@@ -221,7 +221,6 @@
                     <div class="description">
                         <ul>
                             <li>Select Users to restrict access to read only!</li>
-                            <li>Clear All resets all current readonly users and groups.</li>
                         </ul>
                     </div>
                 </div>
@@ -230,14 +229,20 @@
             <div id="backup">
                 <form id="download_form" class="aui">
                     <h2>Download/Upload Section</h2>
+                    <br>
                     <fieldset>
-                        <div class ="field-group">
-                            <input class="checkbox" type="checkbox" name="enable_full_download" id="enable_full_download">
-                            <label for="enable_full_download">download HDW</label>
-                        </div>
                         <div class="field-group">
-                            <input type="button" class="aui-button-primary aui-button" value="Download" id="download_backup">
+                            <input type="button" class="aui-button-primary aui-button" value="Download Config" id="download_config_backup">
+                            <input type="button" class="aui-button-primary aui-button" value="Download Hdw/Config" id="download_hdw_config_backup">
                             <input type="button" class="aui-button-primary aui-button" value="Upload" id="upload_backup">
+                        </div>
+                        <br>
+                        <div class="description">
+                            <ul>
+                                <li>Download Config downloads a Zip with a backup config file.</li>
+                                <li>Download Hdw/Config downloads a Zip with both config and Hdw backup.</li>
+                                <li>Upload redirects you to the upload Servlet.</li>
+                            </ul>
                         </div>
                     </fieldset>
                 </form>
@@ -254,12 +259,15 @@
         <form id="general" class="aui">
             <h2>Individual Resources</h2>
             <fieldset id="resources">
-
             </fieldset>
 
             <h2>Team Configuration</h2>
-            <br><br>
+            <br>
             <div id="teams"></div>
+            <br>
+            <div class="field-group">
+                <input type="button" value="Save" class="aui-button-primary aui-button" id="save-team-resources">
+            </div>
         </form>
     </div>
 </div>

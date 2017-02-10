@@ -268,6 +268,14 @@ AJS.toInit(function () {
         config.mailBody = AJS.$("#mail-body").val();
         config.userDirectoryId = AJS.$("#userdirectory").auiSelect2("val");
 
+        saveConfig(baseUrl, config);
+    }
+
+    function saveTeamsAndResources()
+    {
+        var config = {};
+        config.teamAndResources = true;
+
         config.resources = [];
         for(var i = 0; i < localTempResources.length; i++) {
             var resource = {};
@@ -487,12 +495,14 @@ AJS.toInit(function () {
     AJS.$("#modify-teams").submit(function (e) {
         e.preventDefault();
         addTeam();
+        populateForm();
         scrollToAnchor('top');
     });
 
     AJS.$("#modify-resources").submit(function (e) {
         e.preventDefault();
         addResource();
+        populateForm();
         scrollToAnchor('top');
     });
 
@@ -515,9 +525,9 @@ AJS.toInit(function () {
     });
 
     AJS.$("#save-permission").click(function (e) {
+        e.preventDefault();
         savePluginPermission(baseUrl);
         populateForm();
-        e.preventDefault();
         scrollToAnchor('top');
     });
 
@@ -531,14 +541,31 @@ AJS.toInit(function () {
         enableSettingsChange();
     });
 
-    AJS.$("#download_backup").click(function (e) {
+    AJS.$("#download_config_backup").click(function (e) {
         e.preventDefault();
-        redirectToDownload();
+        redirectToDownloadConfig();
+    });
+
+    AJS.$("#download_hdw_config_backup").click(function (e) {
+        e.preventDefault();
+        redirectToDownloadHDWConfig();
     });
 
     AJS.$("#upload_backup").click(function (e) {
         e.preventDefault();
         redirectToUpload();
+    });
+
+    AJS.$("#clear-permissions").click(function (e) {
+        e.preventDefault();
+        clearAllReadOnlyLists(baseUrl);
+        clearPluginPermission(baseUrl);
+        populateForm();
+    });
+
+    AJS.$("#save-team-resources").click(function(e){
+        e.preventDefault();
+        saveTeamsAndResources();
     });
 
     function unescapeHtml(safe) {
