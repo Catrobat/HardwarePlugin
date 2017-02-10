@@ -235,6 +235,7 @@
                             <input type="button" class="aui-button-primary aui-button" value="Download Config" id="download_config_backup">
                             <input type="button" class="aui-button-primary aui-button" value="Download Hdw/Config" id="download_hdw_config_backup">
                             <input type="button" class="aui-button-primary aui-button" value="Upload" id="upload_backup">
+                            <input type="button" class="aui-button-primary aui-button" value="Reset Hardware" id="reset-hardware" style="background: red">
                         </div>
                         <br>
                         <div class="description">
@@ -242,6 +243,7 @@
                                 <li>Download Config downloads a Zip with a backup config file.</li>
                                 <li>Download Hdw/Config downloads a Zip with both config and Hdw backup.</li>
                                 <li>Upload redirects you to the upload Servlet.</li>
+                                <li>Reset Hardware deletes all Hardware DB-entries</li>
                             </ul>
                         </div>
                     </fieldset>

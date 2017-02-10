@@ -568,6 +568,11 @@ AJS.toInit(function () {
         saveTeamsAndResources();
     });
 
+    AJS.$("#reset-hardware").click(function (e) {
+        e.preventDefault();
+        showHardwareDeletionDialog();
+    });
+
     function unescapeHtml(safe) {
         if(safe) {
             return AJS.$('<div />').html(safe).text();
