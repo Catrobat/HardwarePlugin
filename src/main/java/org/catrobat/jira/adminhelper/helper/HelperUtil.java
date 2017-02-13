@@ -19,6 +19,7 @@ package org.catrobat.jira.adminhelper.helper;
 import com.atlassian.activeobjects.external.ActiveObjects;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.user.ApplicationUser;
+import com.google.gson.Gson;
 import org.catrobat.jira.adminhelper.activeobject.*;
 import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonResource;
@@ -80,6 +81,7 @@ public class HelperUtil {
 
     private static void SaveTeamsAndResources(JsonConfig jsonConfig, AdminHelperConfigService configService) throws IOException
     {
+        System.out.println("importing teams and resources");
         if (jsonConfig.getResources() != null) {
             for (JsonResource jsonResource : jsonConfig.getResources()) {
                 if(jsonConfig.isConfigImport()) {
@@ -122,6 +124,10 @@ public class HelperUtil {
 
     private static void saveGeneralConfig(JsonConfig jsonConfig, AdminHelperConfigService configService)
     {
+        System.out.println("saving gerneral config is: ");
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(jsonConfig));
+
         configService.setUserDirectoryId(jsonConfig.getUserDirectoryId());
         configService.editMail(jsonConfig.getMailFromName(), jsonConfig.getMailFrom(),
                 jsonConfig.getMailSubject(), jsonConfig.getMailBody());
@@ -215,9 +221,11 @@ public class HelperUtil {
         JSONExporter exporter = new JSONExporter(null, null, configService, hardwareModelService);
         JsonConfig current = exporter.getConfig();
         saveConfig(new JsonConfig(), configService);
-        for(JsonTeam team: current.getTeams())
-        {
+        for(JsonTeam team: current.getTeams()) {
             configService.removeTeam(team.getName());
+        }
+        for(JsonResource resource : current.getResources()) {
+            configService.removeResource(resource.getResourceName());
         }
     }
 }

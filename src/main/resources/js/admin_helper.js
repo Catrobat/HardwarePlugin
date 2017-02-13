@@ -362,8 +362,8 @@ function showHardwareDeletionDialog()
     });
 
     var content = "<h1>You are about to Delete all Hardware Entries</h1> <br>" +
-        "<h2>This action cannot be undone, only proceed, if you know what you are doing!</h2>" +
-        "<h2 style='color: red'><strong>Please confirm your action!<strong></strong></h2>";
+        "<h2>This action cannot be undone, only proceed, if you know what you are doing!</h2><br>" +
+        "<center><h2 style='color: red'><strong>Please confirm your action!<strong></strong></h2></center>";
 
     dialog.addHeader("Hardware Deletion");
     dialog.addPanel("Confirm", content, "panel-body");
