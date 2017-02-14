@@ -102,10 +102,6 @@
         <url-pattern>/admin_helper/download</url-pattern>
     </servlet>
 
-    <servlet key="upload-servlet" class="org.catrobat.jira.adminhelper.UploadCsvServlet">
-        <url-pattern>/admin_helper/upload</url-pattern>
-    </servlet>
-
     <servlet key="download-hardware-backup" class="org.catrobat.jira.adminhelper.DownloadBackupServlet">
         <url-pattern>/admin_helper/download_backup</url-pattern>
     </servlet>
