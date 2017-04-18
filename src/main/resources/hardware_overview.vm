@@ -20,6 +20,7 @@
     <meta name="decorator" content="atl.general"/>
     <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script sry="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     #*$webResourceManager.requireResource("org.catrobat.jira.adminHelper:hardware-resources")*#
 </head>
 <body>
@@ -61,14 +62,14 @@
                        title="search-filter-overview" autocomplete="off">
             </form>
         </div>
-        <table id="table-overview" class="aui aui-table-interactive  ">
+        <table id="sort_table_0" class="aui aui-table-interactive">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Version</th>
-                <th>Type of Device</th>
-                <th>OS</th>
-                <th>Available</th>
+                <th onclick="sortTable(0, 0)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1, 0)">Version</th>
+                <th onclick="sortTable(2, 0)">Type of Device</th>
+                <th onclick="sortTable(3, 0)">OS</th>
+                <th onclick="sortTable(4, 0)">Available</th>
                 <th class="aui-table-column-unsortable" name="hidden-if-read-only">Lend Device Out</th>
             </tr>
             </thead>
@@ -90,16 +91,16 @@
                        title="search-filter-lent-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table id="sort_table_1" class="aui aui-table-interactive tablesorter">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Serialnumber</th>
-                <th>IMEI</th>
-                <th>Inventorynumber</th>
-                <th>Lent out by</th>
-                <th>Lent out since</th>
-                <th>Lent out Purpose</th>
+                <th onclick="sortTable(0, 1)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1, 1)">Serialnumber</th>
+                <th onclick="sortTable(2, 1)">IMEI</th>
+                <th onclick="sortTable(3, 1)">Inventorynumber</th>
+                <th onclick="sortTable(4, 1)">Lent out by </th>
+                <th onclick="sortTable(5, 1)">Lent out since</th>
+                <th onclick="sortTable(6, 1)">Lent out Purpose</th>
                 <th class="aui-table-column-unsortable">Details</th>
                 <th class="aui-table-column-unsortable" name="hidden-if-read-only">Return Device</th>
             </tr>
@@ -121,16 +122,16 @@
                        title="search-filter-sorted-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table id="sort_table_2" class="aui aui-table-interactive  ">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Serialnumber</th>
-                <th>IMEI</th>
-                <th>Inventorynumber</th>
-                <th>Received From</th>
-                <th>Lent out since</th>
-                <th>Lent out by</th>
+                <th onclick="sortTable(0,2)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1,2)">Serialnumber</th>
+                <th onclick="sortTable(2,2)">IMEI</th>
+                <th onclick="sortTable(3,2)">Inventorynumber</th>
+                <th onclick="sortTable(4,2)">Received From</th>
+                <th onclick="sortTable(5,2)">Lent out since</th>
+                <th onclick="sortTable(6,2)">Lent out by</th>
                 <th name="hidden-if-read-only">Action</th>
                 <th class="aui-table-column-unsortable">Details</th>
             </tr>
@@ -152,15 +153,15 @@
                        title="search-filter-sorted-out" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table id="sort_table_3" class="aui aui-table-interactive  ">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Serialnumber</th>
-                <th>IMEI</th>
-                <th>Inventorynumber</th>
-                <th>Received From</th>
-                <th>Sorted out since</th>
+                <th onclick="sortTable(0,3)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1,3)">Serialnumber</th>
+                <th onclick="sortTable(2,3)">IMEI</th>
+                <th onclick="sortTable(3,3)">Inventorynumber</th>
+                <th onclick="sortTable(4,3)">Received From</th>
+                <th onclick="sortTable(5,3)">Sorted out since</th>
                 <th class="aui-table-column-unsortable">Details</th>
             </tr>
             </thead>
@@ -181,18 +182,18 @@
                        title="search-filter-all-devices" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table id="sort_table_4" class="aui aui-table-interactive  ">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Serialnumber</th>
-                <th>IMEI</th>
-                <th>Inventorynumber</th>
-                <th>Received From</th>
-                <th>Lent out since</th>
-                <th>Lent out by</th>
-                <th>Sorted out since</th>
-                <th>Action</th>
+                <th onclick="sortTable(0,4)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1,4)">Serialnumber</th>
+                <th onclick="sortTable(2,4)">IMEI</th>
+                <th onclick="sortTable(3,4)">Inventorynumber</th>
+                <th onclick="sortTable(4,4)">Received From</th>
+                <th onclick="sortTable(5,4)">Lent out since</th>
+                <th onclick="sortTable(6,4)">Lent out by</th>
+                <th onclick="sortTable(7,4)">Sorted out since</th>
+                <th onclick="sortTable(8,4)">Action</th>
                 <th class="aui-table-column-unsortable">Details</th>
             </tr>
             </thead>
@@ -213,14 +214,14 @@
                        title="search-filter-management" autocomplete="off">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table id="sort_table_5" class="aui aui-table-interactive  ">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Version</th>
-                <th>Type of Device</th>
-                <th>OS</th>
-                <th>Allocated Devices</th>
+                <th onclick="sortTable(0,5)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1,5)" >Version</th>
+                <th onclick="sortTable(2,5)" >Type of Device</th>
+                <th onclick="sortTable(3,5)" >OS</th>
+                <th onclick="sortTable(4,5)" >Allocated Devices</th>
                 <th class="aui-table-column-unsortable">Edit</th>
                 <th class="aui-table-column-unsortable">Remove</th>
             </tr>
@@ -256,18 +257,18 @@
                 <input autocomplete="off" class="text" type="text" id="individual-lending-search" name="user" title="username">
             </form>
         </div>
-        <table id="mySortableTable" class="aui aui-table-interactive  ">
+        <table <table id="sort_table_6" class="aui aui-table-interactive  ">
             <thead>
             <tr>
-                <th class="aui-table-column-issue-key">Name</th>
-                <th>Serialnumber</th>
-                <th>IMEI</th>
-                <th>Inventorynumber</th>
-                <th>Lending Issuer</th>
-                <th>Begin</th>
-                <th>End</th>
-                <th>Purpose</th>
-                <th>Comment</th>
+                <th onclick="sortTable(0,6)" class="aui-table-column-issue-key">Name</th>
+                <th onclick="sortTable(1,6)">Serialnumber</th>
+                <th onclick="sortTable(2,6)">IMEI</th>
+                <th onclick="sortTable(3,6)">Inventorynumber</th>
+                <th onclick="sortTable(4,6)">Lending Issuer</th>
+                <th onclick="sortTable(5,6)">Begin</th>
+                <th onclick="sortTable(6,6)">End</th>
+                <th onclick="sortTable(7,6)">Purpose</th>
+                <th onclick="sortTable(8,6)">Comment</th>
                 <th class="aui-table-column-unsortable">Details</th>
             </tr>
             </thead>
