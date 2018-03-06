@@ -54,6 +54,8 @@ public class HardwareRest extends RestHelper {
     private final PermissionCondition permissionCondition;
     private final ReadOnlyHdwUserService readOnlyUserService;
     private final ReadOnlyHdwGroupService readOnlyHdwGroupService;
+    private final AdminHelperConfigService configService;
+    private final GroupManager groupManager;
     private final ActiveObjects ao;
 
     public HardwareRest(UserManager userManager, HardwareModelService hardwareModelService, DeviceService deviceService,
@@ -76,6 +78,8 @@ public class HardwareRest extends RestHelper {
         this.permissionCondition = new PermissionCondition(null, configurationService, userManager, groupManager);
         this.readOnlyUserService = checkNotNull(readOnlyUserService);
         this.readOnlyHdwGroupService = checkNotNull(readOnlyHdwGroupService);
+        this.configService = configurationService;
+        this.groupManager = groupManager;
         this.ao = ao;
     }
 
@@ -606,6 +610,7 @@ public class HardwareRest extends RestHelper {
         ApplicationUser current_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
         String key = current_user.getKey();
         boolean readonly = readOnlyUserService.isReadOnlyHardwareUser(key);
+
         JsonReadOnly resp;
 
         try{
@@ -661,12 +666,28 @@ public class HardwareRest extends RestHelper {
         }
 
         ApplicationUser current_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+
         boolean is_read_only_user = readOnlyUserService.isReadOnlyHardwareUser(current_user.getKey());
         boolean is_in_read_only_group = readOnlyHdwGroupService.isInReadOnlyGroup(current_user.getName());
+
+        boolean is_hw_admin = false;
+
+        if (configService.isUserApproved(current_user.getKey())) {
+            is_hw_admin = true;
+        }
+
+        Collection<String> groupNameCollection = groupManager.getGroupNamesForUser(current_user);
+        for (String groupName : groupNameCollection) {
+            if (configService.isGroupApproved(groupName)) {
+                is_hw_admin = true;
+                break;
+            }
+        }
+
         JsonReadOnly resp;
 
         try{
-            resp = generateResponseObject((is_in_read_only_group || is_read_only_user));
+            resp = generateResponseObject((is_in_read_only_group || is_read_only_user) && !is_hw_admin);
         }
         catch (Exception e) {
             return Response.serverError().entity(e.getMessage()).build();
@@ -757,4 +778,17 @@ public class HardwareRest extends RestHelper {
         HelperUtil.resetHardware(ao);
         return Response.ok().build();
     }
+
+/*    @POST
+    @Path("/resetJustForTest")
+    public Response resetJustForTest(@Context HttpServletRequest request){
+        for(ApprovedGroup current : ao.find(ApprovedGroup.class)){
+            ao.delete(current);
+        }
+
+        for(ApprovedUser current : ao.find(ApprovedUser.class))
+            ao.delete(current);
+
+        return Response.ok().build();
+    }*/
 }

@@ -137,6 +137,7 @@
                       interface="com.atlassian.activeobjects.external.ActiveObjects">
         <description>Component to access Active Objects functionality from the plugin</description>
     </component-import>
+
     <component key="tx-processor" name="Transactional Annotation Processor"
                class="com.atlassian.activeobjects.external.TransactionalAnnotationProcessor">
         <decription>Processes @Transactional annotations.</decription>

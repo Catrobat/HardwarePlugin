@@ -36,6 +36,7 @@ public class PermissionCondition extends AbstractPermissionCondition {
     private final AdminHelperConfigService configurationService;
     private final GroupManager groupManager;
     private final UserManager userManager;
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PermissionCondition.class);
 
     public PermissionCondition(PermissionManager permissionManager, AdminHelperConfigService configurationService,
                                UserManager userManager, GroupManager groupManager) {
@@ -53,10 +54,13 @@ public class PermissionCondition extends AbstractPermissionCondition {
 
     @Override
     public boolean shouldDisplay(ApplicationUser applicationUser, JiraHelper jiraHelper) {
-        return isApproved(applicationUser);
+        ApplicationUser current_user = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser();
+        return isApproved(current_user);
     }
 
     public boolean isApproved(ApplicationUser applicationUser) {
+
+        LOGGER.error("current user: " + applicationUser);
 
         if (applicationUser == null || !ComponentAccessor.getUserUtil().getJiraSystemAdministrators().contains(applicationUser)) {
             return false;

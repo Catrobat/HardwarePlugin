@@ -1,7 +1,3 @@
-/**
- * Created by dominik on 26.12.16.
- */
-
 function setAdminProperties()
 {
     var tabs = document.getElementsByName("hidden-if-read-only");
