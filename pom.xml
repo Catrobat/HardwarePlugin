@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.catrobat.jira</groupId>
     <artifactId>adminhelper</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <organization>
         <name>Catrobat Org.</name>
@@ -204,13 +204,6 @@
         <!-- end of powermock test dep-->
 
         <dependency>
-            <groupId>com.atlassian.activeobjects</groupId>
-            <artifactId>activeobjects-test</artifactId>
-            <version>1.1.5</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.atlassian.jira</groupId>
             <artifactId>jira-tests</artifactId>
             <version>6.1.5</version>
@@ -221,13 +214,6 @@
             <groupId>com.atlassian.jira</groupId>
             <artifactId>jira-core</artifactId>
             <version>${jira.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.atlassian.templaterenderer</groupId>
-            <artifactId>atlassian-template-renderer-api</artifactId>
-            <version>1.5.5</version>
             <scope>provided</scope>
         </dependency>
 

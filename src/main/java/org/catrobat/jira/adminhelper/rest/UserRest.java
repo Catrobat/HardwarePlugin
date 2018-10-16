@@ -36,8 +36,10 @@ import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.mail.Email;
 import com.atlassian.mail.queue.SingleMailQueueItem;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfig;
 import org.catrobat.jira.adminhelper.activeobject.AdminHelperConfigService;
 import org.catrobat.jira.adminhelper.activeobject.Lending;
@@ -53,6 +55,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -86,12 +89,12 @@ public class UserRest extends RestHelper {
             return unauthorized;
         }
 
-        /* Todo: refactor that
+        // TODO: refactor that ... WHY?
         if (jsonUser.getFirstName() == null || jsonUser.getLastName() == null ||
                 jsonUser.getUserName() == null || !EmailValidator.getInstance().isValid(jsonUser.getEmail())) {
             return Response.serverError().entity("Please check all input fields.").build();
         }
-        */
+        
 
         UserManager userManager = ComponentAccessor.getUserManager();
         if (userManager.getUserByName(jsonUser.getUserName()) != null) {
