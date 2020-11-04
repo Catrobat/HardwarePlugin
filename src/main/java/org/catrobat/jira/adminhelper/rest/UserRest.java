@@ -557,12 +557,8 @@ public class UserRest extends RestHelper {
             return Response.serverError().entity(e.getMessage()).build();
         }
 
-        GithubHelper githubHelper = new GithubHelper(configService);
-        if (jsonUser.getGithubName() != null && !jsonUser.getGithubName().equals("") && jsonUser.isAddToDefaultGithubTeam()) {
-            String error = githubHelper.addUserToDefaultTeam(jsonUser.getGithubName());
-            if (error != null) {
-                return Response.serverError().entity(error).build();
-            }
+        if (jsonUser.getGithubName() != null && !jsonUser.getGithubName().equals("")) {
+            return addUserToGithubTeams(jsonUser);
         }
 
         return Response.ok().build();
