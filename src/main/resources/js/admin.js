@@ -592,7 +592,10 @@ AJS.toInit(function () {
         }
 
         AJS.$.ajax({
-            url: "https://api.github.com/search/users?q=User&access_token=" + AJS.$("#github_token_public").val(),
+            headers:{
+                "Authorization": "token " + config.githubTokenPublic
+            },
+            url: "https://api.github.com/search/users?q=User",
             type: "GET",
             success : function() {
                 checkPublicTokenAndOrganization(baseUrl)
