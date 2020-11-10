@@ -64,7 +64,7 @@ function  checkPublicTokenAndOrganization(url) {
         var res = AJS.$.ajax({
             url: "https://api.github.com/orgs/"+ new_organization +"/teams",
             headers: {
-                "Authorization": "token " + config.githubToken
+                "Authorization": "token " + new_private_token
             },
             type:"GET"
         });
