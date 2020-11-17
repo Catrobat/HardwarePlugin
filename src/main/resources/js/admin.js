@@ -484,11 +484,11 @@ AJS.toInit(function () {
 
     AJS.$("#general").submit(function (e) {
         e.preventDefault();
-        if (AJS.$(document.activeElement).val() === 'Save') {
+        if (e.originalEvent.submitter.value === 'Save') {
             updateConfig();
             scrollToAnchor('top');
         } else {
-            editTeam(AJS.$(document.activeElement).val());
+            editTeam(e.originalEvent.submitter.value);
         }
     });
 
