@@ -191,7 +191,7 @@
     </web-item>
 
     <web-item key="admin-helper-config-item" section="admin_plugins_menu/admin-helper-config-section"
-              name="Helper Configuration" weight="30">
+              name="Configuration" weight="30">
         <description>Link to AdminHelper-admin page.</description>
         <label key="admin_helper.admin.label"/>
         <link linkId="admin_helper-admin-link">/plugins/servlet/admin_helper/admin</link>
