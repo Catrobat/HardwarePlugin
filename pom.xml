@@ -10,12 +10,12 @@
     <version>1.3</version>
 
     <organization>
-        <name>Catrobat Org.</name>
-        <url>http://catrobat.org/</url>
+        <name>International Catrobat Association</name>
+        <url>https://catrobat.org</url>
     </organization>
 
-    <name>adminhelper</name>
-    <description>This is the org.catrobat.jira:adminhelper plugin for Atlassian JIRA.</description>
+    <name>Hardware and User Management</name>
+    <description>Manage hardware inventory, users and teams.</description>
     <packaging>atlassian-plugin</packaging>
 
     <dependencies>
