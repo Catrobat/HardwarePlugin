@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.catrobat.jira</groupId>
     <artifactId>adminhelper</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <organization>
         <name>International Catrobat Association</name>
@@ -146,13 +146,6 @@
         </dependency>
 
         <!-- add some more dependencies here -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>com.atlassian.templaterenderer</groupId>
             <artifactId>atlassian-template-renderer-api</artifactId>
