@@ -327,7 +327,7 @@
     </build>
 
     <properties>
-        <jira.version>7.2.4</jira.version>
+        <jira.version>8.13.2</jira.version>
         <amps.version>6.2.6</amps.version>
         <ao.version>1.2.0</ao.version>
         <atlassian.dev.mode>false</atlassian.dev.mode>
@@ -336,8 +336,8 @@
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
-        <!-- TestKit version 6.x for JIRA 6.x -->
-        <testkit.version>6.3.11</testkit.version>
+        <!-- TestKit version 8.x for JIRA 8.x -->
+        <testkit.version>8.1.26</testkit.version>
     </properties>
 
 </project>
