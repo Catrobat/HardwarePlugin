@@ -195,7 +195,7 @@
     </div>
 
     <div div class="tabs-pane" id="tabs-permission-settings">
-        <form id="general" class="aui">
+        <form id="permissions" class="aui">
             <h2>Permission</h2>
             <fieldset>
                 <div class="field-group">
@@ -258,7 +258,7 @@
     </form>
 
     <div div class="tabs-pane" id="tabs-team-overview">
-        <form id="general" class="aui">
+        <form id="team-overview" class="aui">
             <h2>Individual Resources</h2>
             <fieldset id="resources">
             </fieldset>

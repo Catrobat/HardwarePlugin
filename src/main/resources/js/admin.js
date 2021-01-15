@@ -482,7 +482,7 @@ AJS.toInit(function () {
 
     populateForm();
 
-    AJS.$("#general").submit(function (e) {
+    AJS.$("#general, #permissions, #team-overview").submit(function (e) {
         e.preventDefault();
         if (e.originalEvent.submitter.value === 'Save') {
             updateConfig();
@@ -582,8 +582,10 @@ AJS.toInit(function () {
     }
 
     function saveGithubSettings() {
+        var publicToken = AJS.$("#github_token_public").val();
+
         if ((!AJS.$("#github_token").val() && !AJS.$("#github_token").attr("placeholder")) || !AJS.$("#github_organization").val()
-            || !AJS.$("#github_token_public").val()) {
+            || !publicToken) {
             AJS.messages.error({
                 title: "Error!",
                 body: "API Tokens and Organisation must be filled out"
@@ -593,7 +595,7 @@ AJS.toInit(function () {
 
         AJS.$.ajax({
             headers:{
-                "Authorization": "token " + config.githubTokenPublic
+                "Authorization": "token " + publicToken
             },
             url: "https://api.github.com/search/users?q=User",
             type: "GET",
