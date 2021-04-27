@@ -75,7 +75,7 @@
             </thead>
             <tbody class="list" id="table-overview-body">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="6"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="6"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
     </div>
@@ -107,7 +107,7 @@
             </thead>
             <tbody class="list" id="table-lent-out">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="8"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="8"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
     </div>
@@ -138,7 +138,7 @@
             </thead>
             <tbody class="list" id="table-active-devices">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="9"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="9"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
     </div>
@@ -167,7 +167,7 @@
             </thead>
             <tbody class="list" id="table-sorted-out">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="6"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="6"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
     </div>
@@ -199,7 +199,7 @@
             </thead>
             <tbody class="list" id="table-all-devices">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="9"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="9"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
     </div>
@@ -228,7 +228,7 @@
             </thead>
             <tbody class="list" id="table-management">
             #* will be filled out by JavaScript *#
-            <tr><td colspan="7"><span class="aui-icon aui-icon-wait">Loading...</span></td></tr>
+            <tr><td colspan="7"><aui-spinner></aui-spinner></td></tr>
             </tbody>
         </table>
         <p>

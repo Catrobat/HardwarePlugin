@@ -24,7 +24,7 @@
 <body class="aui-layout aui-theme-default">
 
 <div id="aui-message-bar"></div>
-<div class="loadingDiv"><span class="aui-icon aui-icon-wait">Loading...</span></div>
+<div class="loadingDiv"><aui-spinner></aui-spinner></div>
 <header class="aui-page-header">
     <div class="aui-page-header-inner">
         <h2>Create New User</h2>
