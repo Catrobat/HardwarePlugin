@@ -191,9 +191,12 @@ AJS.toInit(function () {
             placeholder: "Search for user",
             ajax: {
                 url: "https://api.github.com/search/users",
+                headers: {
+                    "Authorization": "token " + config.githubTokenPublic
+                },
                 dataType: "json",
                 data: function (term, page) {
-                    return "q=" + term + "+type:User&order=asc&access_token=" + config.githubTokenPublic;
+                    return "q=" + term + "+type:User&order=asc";
                 },
                 results: function (data, page) {
                     var select2data = [];

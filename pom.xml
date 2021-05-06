@@ -7,15 +7,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.catrobat.jira</groupId>
     <artifactId>adminhelper</artifactId>
-    <version>1.3</version>
+    <version>1.5</version>
 
     <organization>
-        <name>Catrobat Org.</name>
-        <url>http://catrobat.org/</url>
+        <name>International Catrobat Association</name>
+        <url>https://catrobat.org</url>
     </organization>
 
-    <name>adminhelper</name>
-    <description>This is the org.catrobat.jira:adminhelper plugin for Atlassian JIRA.</description>
+    <name>Hardware and User Management</name>
+    <description>Manage hardware inventory, users and teams.</description>
     <packaging>atlassian-plugin</packaging>
 
     <dependencies>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.atlassian.activeobjects</groupId>
             <artifactId>activeobjects-test</artifactId>
-            <version>1.1.5</version>
+            <version>${ao.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- SAL, the Active Objects plugin uses SAL's API for transactions -->
@@ -147,13 +147,6 @@
 
         <!-- add some more dependencies here -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.atlassian.templaterenderer</groupId>
             <artifactId>atlassian-template-renderer-api</artifactId>
             <version>1.5.5</version>
@@ -170,7 +163,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
         </dependency>
 
         <!-- powermock test dep-->
@@ -220,13 +213,13 @@
         <dependency>
             <groupId>org.kohsuke</groupId>
             <artifactId>github-api</artifactId>
-            <version>1.59</version>
+            <version>1.88</version>
         </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.2</version>
+            <version>1.3.3</version>
         </dependency>
         <dependency>
             <groupId>portlet-api</groupId>
@@ -240,7 +233,7 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-jira-plugin</artifactId>
+                <artifactId>jira-maven-plugin</artifactId>
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
@@ -258,7 +251,6 @@
                     </pluginArtifacts>
                     -->
                     <enableQuickReload>true</enableQuickReload>
-                    <enableFastdev>false</enableFastdev>
                     <allowGoogleTracking>false</allowGoogleTracking>
                     <compressResources>false</compressResources>
 
@@ -282,7 +274,7 @@
                             javax.xml.bind*;version="[2.1,3)",
                             *;version="0";resolution:=optional,
                             org.springframework*;version="2.5",
-                            junit*;version="[4.10,5)",
+                            junit*;version="[4.12,5)",
                         </Import-Package>
 
                         <!-- Ensure plugin is spring powered -->
@@ -327,17 +319,17 @@
     </build>
 
     <properties>
-        <jira.version>7.2.4</jira.version>
-        <amps.version>6.2.6</amps.version>
-        <ao.version>1.2.0</ao.version>
+        <jira.version>8.13.3</jira.version>
+        <amps.version>8.0.2</amps.version>
+        <ao.version>3.0.0</ao.version>
         <atlassian.dev.mode>false</atlassian.dev.mode>
         <atlassian.webresource.disable.minification>true</atlassian.webresource.disable.minification>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
-        <!-- TestKit version 6.x for JIRA 6.x -->
-        <testkit.version>6.3.11</testkit.version>
+        <!-- TestKit version 8.x for JIRA 8.x -->
+        <testkit.version>8.1.26</testkit.version>
     </properties>
 
 </project>
