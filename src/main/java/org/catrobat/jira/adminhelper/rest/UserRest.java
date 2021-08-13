@@ -27,6 +27,7 @@ import com.atlassian.crowd.model.user.UserTemplate;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.exception.PermissionException;
 import com.atlassian.jira.exception.RemoveException;
+import com.atlassian.jira.ofbiz.OfBizDelegator;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
@@ -49,6 +50,7 @@ import org.catrobat.jira.adminhelper.rest.json.JsonConfig;
 import org.catrobat.jira.adminhelper.rest.json.JsonResource;
 import org.catrobat.jira.adminhelper.rest.json.JsonTeam;
 import org.catrobat.jira.adminhelper.rest.json.JsonUser;
+import org.ofbiz.core.entity.GenericValue;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -57,7 +59,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.security.SecureRandom;
+import java.sql.Timestamp;
 import java.util.*;
+import com.google.gson.Gson;
 
 @Path("/user")
 public class UserRest extends RestHelper {
@@ -203,6 +207,10 @@ public class UserRest extends RestHelper {
         List<JsonUser> jsonUserList = new ArrayList<JsonUser>();
         Collection<ApplicationUser> allUsers = ComponentAccessor.getUserManager().getAllUsers();
         Collection<ApplicationUser> systemAdmins = userUtil.getJiraSystemAdministrators();
+
+        OfBizDelegator delegator = ComponentAccessor.getOfBizDelegator();
+        List<GenericValue> ofBisUsers = delegator.findAll("User");
+
         for (ApplicationUser user : allUsers) {
             if (systemAdmins.contains(user)) {
                 continue;
@@ -229,6 +237,15 @@ public class UserRest extends RestHelper {
                 }
             }
             jsonUser.setActive(isActive);
+
+            for(GenericValue ofBizUser : ofBisUsers)
+            {
+                String obUserName = ofBizUser.getString("userName");
+                if(obUserName.equals(user.getUsername())) {
+                    Timestamp timestamp = ofBizUser.getTimestamp("createdDate");
+                    jsonUser.setCreatedDate(new Date(timestamp.getTime()));
+                }
+            }
 
             ExtendedPreferences extendedPreferences = userPreferencesManager.getExtendedPreferences(user);
             jsonUser.setGithubName(extendedPreferences.getText(GITHUB_PROPERTY));

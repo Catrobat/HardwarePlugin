@@ -57,6 +57,7 @@
                 <table id="user-table" class="aui aui-table-interactive aui-table-sortable">
                     <thead>
                     <tr>
+                        <th id="basic-created-date">Creation Date</th>
                         <th id="basic-username">Username</th>
                         <th id="basic-fist-name">First Name</th>
                         <th id="basic-last-name">Last Name</th>
