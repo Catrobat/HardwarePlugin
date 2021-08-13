@@ -99,13 +99,16 @@ AJS.toInit(function () {
                 AJS.$("#user-body").empty();
                 for (var i = 0; i < users.length; i++) {
                     var obj = users[i];
+                    var createdDate = new Date(obj['createdDate']);
                     var username = obj['active'] ? obj['userName'] : "<del>" + obj['userName'] + "</del>";
                     var actionClass = obj['active'] ? "disable" : "enable";
                     var githubColumnText = obj['githubName'] ? obj['githubName'] : "add GitHub name";
                     var githubColumn = obj['active'] ?
                     "<a id=\"" + obj['userName'] + "\" class=\"change-github\" href=\"#\">" + githubColumnText + "</a>" :
                         (obj['githubName'] ? obj['githubName'] : "");
-                    AJS.$("#user-body").append("<tr><td headers=\"basic-username\" class=\"username\">" + username + "</td>" +
+                    AJS.$("#user-body").append("<tr>" +
+                    "<td headers=\"basic-created-date\" class=\"creatied-date\">" + createdDate.toLocaleDateString() + "</td>" +
+                    "<td headers=\"basic-username\" class=\"username\">" + username + "</td>" +
                     "<td headers=\"basic-first-name\" class=\"first-name\">" + obj['firstName'] + "</td>" +
                     "<td headers=\"basic-last-name\" class=\"last-name\">" + obj['lastName'] + "</td>" +
                     "<td headers=\"basic-email\" class=\"email\">" + obj['email'] + "</td>" +

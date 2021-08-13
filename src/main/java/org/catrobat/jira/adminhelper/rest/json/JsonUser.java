@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -50,6 +51,8 @@ public final class JsonUser {
     private boolean active;
     @XmlElement
     private boolean addToDefaultGithubTeam;
+    @XmlElement
+    private Date createdDate;
 
     public String getUserName() {
         return userName;
@@ -145,5 +148,13 @@ public final class JsonUser {
 
     public void setAddToDefaultGithubTeam(boolean addToDefaultGithubTeam) {
         this.addToDefaultGithubTeam = addToDefaultGithubTeam;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
